@@ -14,7 +14,7 @@ import com.punuo.sys.app.agedcare.util.IntentUtil;
 
 
 /**
- * https://pet.qinqingonline.com/developers/appUpgrade?versionName=10002&versionCode=3
+ * http://sip.qinqingonline.com:8000/users/updateMachineNewVersion?versionName=1.0.1&versionCode=1
  * Created by han.chen.
  * Date on 2020/8/3.
  **/
