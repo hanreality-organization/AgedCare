@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_eat"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.punuo.sys.app.agedcare.ui.EatActivity">
+    <com.punuo.sys.app.agedcare.ui.TitleLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </com.punuo.sys.app.agedcare.ui.TitleLayout>
+    <android.support.v7.widget.CardView
+        android:layout_width="1104px"
+        android:layout_height="568px"
+        android:layout_marginTop="65px"
+        android:layout_gravity="center"
+        app:cardCornerRadius="20dp"
+        app:elevation="10dp">
+
+    <ImageView
+        android:src="@drawable/dise"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="132px"
+            android:layout_marginTop="85px">
+            <com.punuo.sys.app.agedcare.view.CircleImageView
+                android:src="@drawable/waiquanliangcen"
+                android:layout_width="398px"
+                android:layout_height="398px"
+
+                />
+            <com.punuo.sys.app.agedcare.view.CircleImageView
+                android:id="@+id/CIV_avatar"
+                android:layout_width="318px"
+                android:layout_height="318px"
+                android:layout_gravity="center"
+                android:src="@drawable/diancan1"
+                android:scaleType="centerCrop"
+
+
+                />
+        </FrameLayout>
+        <Button
+            android:background="@drawable/yuanjiaolv"
+            android:id="@+id/eat_call"
+            android:text="拨打"
+            android:textColor="@color/white"
+            android:textSize="65px"
+            android:layout_width="278px"
+            android:layout_height="131px"
+            android:layout_marginTop="150px"
+            android:layout_marginLeft="662px"/>
+        <Button
+            android:id="@+id/eat_cancel"
+            android:layout_width="278px"
+            android:layout_height="131px"
+            android:layout_marginTop="300px"
+            android:layout_marginLeft="662px"
+            android:background="@drawable/yuanjiao"
+            android:text="取消"
+            android:textColor="@color/white"
+            android:textSize="65px"/>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

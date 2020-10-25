@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_service_call"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical"
+    tools:context="com.punuo.sys.app.agedcare.ui.ServiceCallActivity">
+    <com.punuo.sys.app.agedcare.ui.TitleLayout2
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></com.punuo.sys.app.agedcare.ui.TitleLayout2>
+    <android.support.v7.widget.CardView
+        android:layout_width="1104px"
+        android:layout_height="568px"
+        android:layout_marginTop="65px"
+        android:layout_gravity="center"
+        android:background="@drawable/dise"
+        app:cardCornerRadius="20dp"
+        app:elevation="10dp">
+        <ImageView
+            android:src="@drawable/dise"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
+<LinearLayout
+    android:baselineAligned="false"
+    android:layout_gravity="center_vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        >
+        <com.punuo.sys.app.agedcare.view.CircleImageView
+            android:src="@drawable/waiquanliangcen"
+            android:layout_width="340dp"
+            android:layout_height="340dp"
+            android:layout_gravity="center"
+
+            />
+        <com.punuo.sys.app.agedcare.view.CircleImageView
+            android:id="@+id/jiazheng"
+            android:layout_width="280dp"
+            android:layout_height="280dp"
+            android:layout_gravity="center"
+            android:src="@drawable/jiazheng1"
+            android:scaleType="centerCrop"
+
+
+            />
+    </FrameLayout>
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        >
+        <com.punuo.sys.app.agedcare.view.CircleImageView
+            android:src="@drawable/waiquanliangcen"
+            android:layout_width="340dp"
+            android:layout_height="340dp"
+            android:layout_gravity="center"
+            />
+        <com.punuo.sys.app.agedcare.view.CircleImageView
+            android:id="@+id/wuye"
+            android:layout_width="280dp"
+            android:layout_height="280dp"
+            android:layout_gravity="center"
+            android:src="@drawable/wuye1"
+            android:scaleType="centerCrop"
+
+
+            />
+    </FrameLayout>
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        >
+        <com.punuo.sys.app.agedcare.view.CircleImageView
+            android:src="@drawable/waiquanliangcen"
+            android:layout_width="340dp"
+            android:layout_height="340dp"
+            android:layout_gravity="center"
+            />
+        <com.punuo.sys.app.agedcare.view.CircleImageView
+            android:id="@+id/dingcan"
+            android:layout_width="280dp"
+            android:layout_height="280dp"
+            android:layout_gravity="center"
+            android:src="@drawable/diancan1"
+            android:scaleType="centerCrop"
+
+
+            />
+    </FrameLayout>
+</LinearLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

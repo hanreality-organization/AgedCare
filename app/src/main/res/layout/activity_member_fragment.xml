@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_member_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+        android:orientation="vertical"
+    tools:context="com.punuo.sys.app.agedcare.ui.MemberFragment">
+    <android.support.v7.widget.CardView
+        android:layout_width="1200px"
+        android:layout_height="626px"
+        android:layout_marginTop="80dp"
+        android:layout_gravity="center"
+        app:cardCornerRadius="20dp"
+        app:elevation="10dp">
+
+        <ImageView
+            android:src="@drawable/diseqian"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:layout_marginTop="48dp"
+            android:layout_marginLeft="49dp"
+            android:layout_marginRight="49dp"
+            android:id="@+id/gank_swipe_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            >
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:id="@+id/farmily_rv"
+            />
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

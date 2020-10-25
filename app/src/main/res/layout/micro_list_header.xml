@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <RelativeLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="220dp"
+        android:background="@drawable/fenmian"
+    >
+        <com.app.view.CircleImageView
+            android:id="@+id/alarm"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/alarm1"
+            android:visibility="invisible"/>
+
+        <com.app.view.CircleImageView
+            android:id="@+id/MicroIcon"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="40dp"
+            android:src="@drawable/empty_photo"/>
+
+        <TextView
+            android:id="@+id/MicroName"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/MicroIcon"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="666"
+            android:textSize="20dp"
+            android:textColor="#474646"/>
+            <!--android:textColor="@color/black"-->
+
+        <TextView
+            android:id="@+id/t3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="应用"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="40dp"
+            android:layout_marginBottom="5dp"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:textColor="@drawable/color_white_yellow"
+            />
+        <TextView
+            android:id="@+id/t0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="视频"
+            android:layout_toRightOf="@+id/t3"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="5dp"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:layout_marginStart="35dp"
+            android:textColor="@drawable/color_white_yellow"
+            />
+
+        <TextView
+            android:id="@+id/t1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="浏览"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/t0"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="5dp"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:layout_marginStart="35dp"
+            android:textColor="@drawable/color_white_yellow"
+            />
+        <TextView
+            android:id="@+id/t2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="亲聊"
+            android:layout_toRightOf="@+id/t1"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="5dp"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:layout_marginStart="35dp"
+            android:textColor="@drawable/color_white_yellow"
+            />
+
+        <TextView
+            android:id="@+id/t4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="家人"
+            android:layout_toRightOf="@+id/t2"
+            android:layout_marginLeft="20dp"
+            android:layout_alignParentBottom="true"
+            android:textStyle="bold"
+            android:layout_marginBottom="5dp"
+            android:textSize="15dp"
+            android:layout_marginStart="35dp"
+            android:textColor="@drawable/color_white_yellow"
+            />
+    </RelativeLayout>
+    
+
+</LinearLayout>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <com.punuo.sys.app.agedcare.ui.TitleLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></com.punuo.sys.app.agedcare.ui.TitleLayout>
+
+    <android.support.v7.widget.GridLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+
+       app:rowCount="2"
+       app:columnCount="4">
+         <ImageView
+             android:id="@+id/icon1"
+             android:layout_width="320dp"
+             android:layout_height="310dp"
+             android:src="@drawable/defaultavator"
+
+             android:scaleType="fitXY"
+
+             />
+
+       <ImageView
+             android:id="@+id/icon2"
+           android:layout_width="320dp"
+           android:layout_height="310dp"
+           android:src="@drawable/defaultavator"
+
+           android:scaleType="fitXY"
+             />
+
+       <ImageView
+           android:id="@+id/icon3"
+           android:layout_width="320dp"
+           android:layout_height="310dp"
+           android:src="@drawable/defaultavator"
+
+           android:scaleType="fitXY"
+           />
+
+       <ImageView
+             android:id="@+id/icon4"
+           android:layout_width="320dp"
+           android:layout_height="310dp"
+           android:src="@drawable/defaultavator"
+
+           android:scaleType="fitXY"
+             />
+       <ImageView
+           android:id="@+id/icon5"
+           android:layout_width="320dp"
+           android:layout_height="310dp"
+           android:src="@drawable/defaultavator"
+
+           android:scaleType="fitXY"
+           />
+       <ImageView
+           android:id="@+id/icon6"
+           android:layout_width="320dp"
+           android:layout_height="310dp"
+           android:src="@drawable/defaultavator"
+
+           android:scaleType="fitXY"
+           />
+       <ImageView
+           android:id="@+id/icon7"
+           android:layout_width="320dp"
+           android:layout_height="310dp"
+           android:src="@drawable/defaultavator"
+
+           android:scaleType="fitXY"
+           />
+       <ImageView
+           android:id="@+id/icon8"
+           android:layout_width="320dp"
+           android:layout_height="310dp"
+           android:src="@drawable/defaultavator"
+           android:scaleType="fitXY"
+           />
+   </android.support.v7.widget.GridLayout>
+
+   <Button
+       android:layout_gravity="bottom"
+       android:id="@+id/cancle"
+       android:layout_width="match_parent"
+       android:layout_height="87dp"
+       android:textColor="@color/white"
+       android:text="退出"
+       android:textSize="30sp"
+       android:background="@color/red"/>
+</LinearLayout>

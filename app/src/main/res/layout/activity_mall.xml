@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_mall"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.punuo.sys.app.agedcare.ui.MallActivity">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/titleback">
+        <Button
+            android:background="#00000000"
+            android:id="@+id/web_mall_back"
+            android:text="返回"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="49px"
+            android:textColor="@color/white"
+            android:textSize="20sp"/>
+        <Button
+            android:layout_marginStart="20dp"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/web_back"
+            android:background="@drawable/left"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp" />
+        <Button
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/right"
+            android:id="@+id/web_forward"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp" />
+            />
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginLeft="640px"
+            android:gravity="center"
+            android:text="        "
+            android:textColor="@color/white"
+            android:textSize="30px"
+            />
+        <TextView
+            android:id="@+id/net"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+
+            android:textColor="@color/white"
+            android:textSize="30px"
+            android:layout_marginLeft="50px"
+            />
+    </LinearLayout>
+
+    <WebView
+        android:id="@+id/wv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </WebView>
+</LinearLayout>

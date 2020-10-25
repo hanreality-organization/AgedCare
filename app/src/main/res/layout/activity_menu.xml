@@ -1,0 +1,41 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dise"
+    tools:context="com.punuo.sys.app.agedcare.ui.MenuActivity" >
+    <!-- Viewpager:全类名导入 -->
+    <com.punuo.sys.app.agedcare.ui.TitleLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></com.punuo.sys.app.agedcare.ui.TitleLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp" >
+        <!-- 灰点所在的布局，假设所要显示的界面数量不确定，所以灰点需要在Java代码中绘制 -->
+        <LinearLayout
+            android:id="@+id/ll_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+        </LinearLayout>
+        <!-- 蓝点：由shape绘制的图片，将灰点的布局和蓝点放在同一个相对布局中，这样后面加入的蓝点就回覆盖灰点，达到想要的效果 -->
+        <ImageView
+            android:id="@+id/blue_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/blue_point" />
+    </RelativeLayout>
+    <!-- 开始体验按钮，首先它并不是在每个界面都显示的所以它的默认值应设为不可见 -->
+</RelativeLayout>
+

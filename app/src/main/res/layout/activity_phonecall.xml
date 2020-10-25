@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_phonecall"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/dise"
+    tools:context="com.punuo.sys.app.agedcare.ui.addressAddActivity">
+    <com.punuo.sys.app.agedcare.ui.TitleLayout2
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></com.punuo.sys.app.agedcare.ui.TitleLayout2>
+    <Button
+        android:layout_marginLeft="1115px"
+        android:id="@+id/addnumber"
+        android:text="添加"
+        android:textSize="30sp"
+        android:textColor="@color/titile"
+        android:background="@drawable/yuanjiaobai"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <android.support.v7.widget.CardView
+
+        android:layout_width="1200px"
+        android:layout_height="576px"
+        android:layout_gravity="center"
+        app:cardCornerRadius="20dp"
+        app:elevation="10dp">
+
+        <ImageView
+            android:src="@drawable/diseqian"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_marginTop="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

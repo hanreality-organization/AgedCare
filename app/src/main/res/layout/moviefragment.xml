@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+        <android.support.v7.widget.CardView
+            android:layout_width="1200px"
+            android:layout_height="638px"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            app:cardCornerRadius="20dp"
+            app:elevation="10dp">
+        <ImageView
+            android:src="@drawable/dise"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+                <android.support.v4.widget.SwipeRefreshLayout
+                    android:id="@+id/gank_swipe_refresh_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+
+                  >
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/rv_short_movie"
+            android:overScrollMode="never"
+            android:clipToPadding="false"
+            android:clipChildren="false">
+            </android.support.v7.widget.RecyclerView>
+                </android.support.v4.widget.SwipeRefreshLayout>
+</LinearLayout>
+        </android.support.v7.widget.CardView>
+</LinearLayout>

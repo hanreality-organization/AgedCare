@@ -1,0 +1,178 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="6dp" >
+
+    <LinearLayout
+        android:id="@+id/mainLi"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.punuo.sys.app.agedcare.view.CircleImageView
+                android:id="@+id/avator"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/empty_photo" />
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/avator"
+                android:textColor="#576B95"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/name"
+                android:layout_marginLeft="10dp"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:layout_toRightOf="@id/avator" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layout_nine_grid"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/avator"
+                android:textColor="@color/gary"
+                android:textSize="12sp" />
+
+            <com.punuo.sys.app.agedcare.friendCircleMain.adapter.NineGridTestLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/layout_nine_grid"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="30dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/content"
+
+                android:layout_toRightOf="@id/avator"
+                app:sapcing="4dp" />
+
+            <Button
+                android:id="@+id/btnIgnore"
+                android:layout_width="75dp"
+                android:layout_height="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@id/layout_nine_grid"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/micro_comment" />
+
+            <LinearLayout
+                android:id="@+id/liearLayoutIgnore"
+                android:layout_width="300dp"
+                android:layout_height="60dp"
+                android:layout_below="@id/layout_nine_grid"
+                android:layout_marginTop="15dp"
+                android:layout_toLeftOf="@id/btnIgnore"
+                android:background="@color/micro_list_ignore"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/btnPraise"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/l_xin"
+
+                     />
+                <Button
+                    android:id="@+id/express1"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/d_keai"
+                     />
+                <Button
+                    android:id="@+id/express2"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/d_xixi"
+                    />
+                <Button
+                    android:id="@+id/express3"
+                    android:layout_width="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/d_xiaoku"
+                    />
+                <Button
+                    android:id="@+id/btnComment"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/micro_list_ignore"
+                    android:drawableLeft="@drawable/micro_comment_comment"
+                    android:text="评论"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <LinearLayout
+             android:id="@+id/layout01" 
+             android:layout_width="fill_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginStart="110dp"
+             android:orientation="vertical"
+
+             android:background="@color/lightgary"
+             android:visibility="gone">
+        
+        <TextView 
+                android:id="@+id/text"
+                android:layout_width="fill_parent"
+                android:layout_height="3dp"/>
+            
+            <LinearLayout 
+                android:id="@+id/layoutParise"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:background="@color/lightgary">
+            </LinearLayout>
+        
+            <TextView
+                android:id="@+id/view"
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@color/background"
+                android:visibility="gone"/>
+            
+            <LinearLayout 
+                android:id="@+id/layout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:background="@color/lightgary">
+            </LinearLayout>
+         </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
