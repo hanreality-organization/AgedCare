@@ -58,8 +58,7 @@ public class CommunityActivity extends HindebarActivity {
         webView.getSettings().setUseWideViewPort(true);
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setDomStorageEnabled(true);
-        webView.loadUrl("http://pet.qinqingonline.com:9002?user_id="+userAccount);//此处填链接
-        Log.e("sheeeequuuuu","http://sip.qinqingonline.com:8888/qinqingcommunity?devid="+ SipInfo.devId+"&page=1");
+        webView.loadUrl("http://ln.game565.cn/dist/index.html");
         tv_time = (TextView) findViewById(R.id.time);
         net=(TextView)findViewById(R.id.net);
         gank_swipe_refresh_layout=(SwipeRefreshLayout)findViewById(R.id.gank_swipe_refresh_layout) ;

@@ -83,7 +83,7 @@ public class CodeActivity extends BaseActivity implements View.OnClickListener {
         String content = SipInfo.devId;
         String str=SipInfo.userId;
         String Port=SipInfo.port;
-        String downloadurl="http://sip.qinqingonline.com:8888/html/text.html";
+        String downloadurl="http://sip.qinqingonline.com:8000/static/apk/phone_ap/rlph_app.apk";
         Bitmap bitmap1 ;
         Bitmap bitmap2;
         Bitmap logo = BitmapFactory.decodeResource(getResources(), R.drawable.codeload);
