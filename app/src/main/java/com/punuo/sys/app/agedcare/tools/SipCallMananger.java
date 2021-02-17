@@ -15,6 +15,7 @@ import com.punuo.sys.app.agedcare.ui.VideoCallActivity;
 import com.punuo.sys.app.agedcare.video.RtpVideo;
 import com.punuo.sys.app.agedcare.video.SendActivePacket;
 import com.punuo.sys.app.agedcare.video.VideoInfo;
+import com.punuo.sys.app.agedcare.video.VideoInfoUser;
 import com.punuo.sys.app.agedcare.view.CustomProgressDialog;
 
 import org.zoolu.sip.address.NameAddress;
@@ -54,9 +55,9 @@ public class SipCallMananger {
         }
         
         
-        public void call(final Context mContext, final String userId, final boolean isIntiative){
+        public void call(final Context mContext, final String id, final boolean isIntiative){
   			Log.d("echo_tag", "2 - SipcallManager - 收到视频请求");
-            if(mContext == null || TextUtils.isEmpty(userId))return;
+            if(mContext == null || TextUtils.isEmpty(id))return;
             
             SipInfo.isWaitingFeedback = isIntiative;
             
@@ -71,10 +72,11 @@ public class SipCallMananger {
 						Log.d("echo_tag", "3 - SipcallManager - 收到视频请求 - 发起视频请求");
                         OkHttpClient client = new OkHttpClient();
                         Request request1 = new Request.Builder()
-                                .url("http://"+serverIp+":8000/xiaoyupeihu/public/index.php/devs/getUserDevId?id=" + userId +"&groupid="+groupid)
+                                    .url("http://"+serverIp+":8000/xiaoyupeihu/public/index.php/devs/getUserDevId?id=" + id +"&groupid="+groupid)
                                 .build();
-                        if (client.newCall(request1).execute().body().string().length()>=28) {
-                            devId = client.newCall(request1).execute().body().string().substring(10, 28);
+                        String response = client.newCall(request1).execute().body().string();
+                        if (response.length()>=28) {
+                            devId = response.substring(10, 28);
                         }
                         Log.d("1111", "run: "+devId);
                         devId = devId.substring(0, devId.length() - 4).concat("0160");//设备id后4位替换成0160
@@ -153,7 +155,7 @@ public class SipCallMananger {
                                         Log.i("echo_tag", "视频请求成功");
                                         SipInfo.decoding = true;
                                         try {
-                                            VideoInfo.rtpVideo = new RtpVideo(VideoInfo.rtpIp, VideoInfo.rtpPort);
+                                            VideoInfo.rtpVideo = new RtpVideo(VideoInfoUser.rtpIp, VideoInfoUser.rtpPort);
                                             VideoInfo.sendActivePacket = new SendActivePacket();
                                             VideoInfo.sendActivePacket.startThread();
                                             

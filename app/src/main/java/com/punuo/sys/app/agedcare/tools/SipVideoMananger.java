@@ -15,6 +15,7 @@ import com.punuo.sys.app.agedcare.ui.VideoCallActivity;
 import com.punuo.sys.app.agedcare.video.RtpVideo;
 import com.punuo.sys.app.agedcare.video.SendActivePacket;
 import com.punuo.sys.app.agedcare.video.VideoInfo;
+import com.punuo.sys.app.agedcare.video.VideoInfoUser;
 import com.punuo.sys.app.agedcare.view.CustomProgressDialog;
 
 import org.zoolu.sip.address.NameAddress;
@@ -150,7 +151,7 @@ public class SipVideoMananger {
                                     Log.i("echo_tag", "视频请求成功");
                                     SipInfo.decoding = true;
                                     try {
-                                        VideoInfo.rtpVideo = new RtpVideo(VideoInfo.rtpIp, VideoInfo.rtpPort);
+                                        VideoInfo.rtpVideo = new RtpVideo(VideoInfoUser.rtpIp, VideoInfoUser.rtpPort);
                                         VideoInfo.sendActivePacket = new SendActivePacket();
                                         VideoInfo.sendActivePacket.startThread();
                                         Intent intent = new Intent(mContext, VideoCallActivity.class);

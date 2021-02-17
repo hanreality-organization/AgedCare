@@ -125,7 +125,7 @@ dependencies {
     implementation files('libs/bdasr_V3_20191210_81acdf5.jar')
     implementation files('libs/com.baidu.tts_2.6.1.108.20200217_5adcfb6.jar')
     implementation 'com.hjq:xxpermissions:6.2'
-    implementation 'com.github.yhaolpz:FloatWindow:1.0.9'
+//    implementation 'com.github.yhaolpz:FloatWindow:1.0.9'
     //implementation 'cat.ereza:customactivityoncrash:2.3.0'
     //implementation 'com.blankj:utilcode:1.23.7'
     // 网络请求：https://github.com/square/okhttp && https://github.com/getActivity/EasyHttp

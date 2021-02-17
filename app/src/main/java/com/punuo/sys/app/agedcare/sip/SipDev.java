@@ -19,6 +19,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.zoolu.sip.address.NameAddress;
 import org.zoolu.sip.address.SipURL;
+import org.zoolu.sip.header.FromHeader;
 import org.zoolu.sip.message.Message;
 import org.zoolu.sip.provider.SipProvider;
 import org.zoolu.sip.provider.Transport;
@@ -228,23 +229,15 @@ public class SipDev extends SipProvider {
                                 BodyFactory.createOptionsBody("MOBILE_S6"));
                         SipInfo.sipDev.sendMessage(message);
 
-                        String userName = "";
-                        String userId="";
-                        final int startIndex = msg.toString().indexOf("From: \"");
-                        if(startIndex>=0){
-                            final int lenght = "From: \"".length();
-                            userName = msg.toString().substring(startIndex+lenght,startIndex+lenght+11);
 
-                            for (Device item : SipInfo.devList) {
-                                if(item.getName().equals(userName)){
-                                    userId = item.getId();
-                                    SipInfo.sipReqFromUser = userId;
-                                    break;
-                                }
+                        FromHeader fromHeader = msg.getFromHeader();
+                        String userName = fromHeader.getNameAddress().getAddress().getUserName();
+                        for (Device item : SipInfo.devList) {
+                            if (item.getUserid().equals(userName)) {
+                                SipInfo.sipReqFromUser = item.getId();
+                                break;
                             }
                         }
-
-//                        Log.e("echo_tag", "0 - sipDev - 收到视频请求 - from: " + userName);
                         return true;
                     case "is_monitor":
 
@@ -340,7 +333,7 @@ public class SipDev extends SipProvider {
 
                         Intent intent=new Intent("com.example.broadcast.CALL_REQUEST");
                         context.getApplicationContext().sendBroadcast(intent);
-                        EventBus.getDefault().post(new MessageEvent("视频来电"));
+//                        EventBus.getDefault().post(new MessageEvent("视频来电"));
                         isanswering=true;
                         }
                         else if (isanswering=true)
@@ -371,7 +364,7 @@ public class SipDev extends SipProvider {
 //                            Element userIdElement = (Element) root.getElementsByTagName("userId").item(0);
 //                            qinliaouserid=userIdElement.getFirstChild().getNodeValue();
 //                            Log.d("aaaaa",qinliaouserid);
-
+                        break;
                     case "service_call":
                         Element itemElement = (Element) root.getElementsByTagName("item").item(0);
                         Element telephoneElement = (Element) root.getElementsByTagName("telephone").item(0);

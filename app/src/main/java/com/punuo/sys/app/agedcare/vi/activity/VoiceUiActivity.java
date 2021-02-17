@@ -24,11 +24,6 @@ import com.punuo.sys.app.agedcare.vi.bean.VoiceEvent;
 import com.punuo.sys.app.agedcare.vi.http.ViAPI;
 import com.punuo.sys.app.agedcare.vi.http.ViRequestUtils;
 import com.punuo.sys.app.agedcare.vi.service.SpeechService;
-import com.punuo.sys.app.agedcare.vi.utils.ViCommonUtils;
-import com.yhao.floatwindow.FloatWindow;
-import com.yhao.floatwindow.MoveType;
-import com.yhao.floatwindow.PermissionListener;
-import com.yhao.floatwindow.ViewStateListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -219,69 +214,11 @@ public class VoiceUiActivity extends AppCompatActivity {
     public void showVoice() {
         View view = View.inflate(this, R.layout.activity_voice_ui, null);
         initBaseView(view);
-        FloatWindow
-                .with(getApplicationContext())
-                .setView(view)
-                .setWidth(ViCommonUtils.getScreenWidth(this))                               //设置控件宽高
-                .setHeight(RelativeLayout.LayoutParams.WRAP_CONTENT, 0.2f)
-                .setMoveType(MoveType.inactive)
-                .setDesktopShow(false)//桌面显示
-                .setViewStateListener(new ViewStateListener() {
-                    @Override
-                    public void onPositionUpdate(int i, int i1) {
-
-                    }
-
-                    @Override
-                    public void onShow() {
-
-                    }
-
-                    @Override
-                    public void onHide() {
-
-                    }
-
-                    @Override
-                    public void onDismiss() {
-
-                    }
-
-                    @Override
-                    public void onMoveAnimStart() {
-
-                    }
-
-                    @Override
-                    public void onMoveAnimEnd() {
-
-                    }
-
-                    @Override
-                    public void onBackToDesktop() {
-
-                    }
-                })    //监听悬浮控件状态改变
-                .setPermissionListener(new PermissionListener() {
-                    @Override
-                    public void onSuccess() {
-
-                    }
-
-                    @Override
-                    public void onFail() {
-
-                    }
-                })  //监听权限申请结果
-                .build();
-
-
         if (objectAnimator != null) {
             objectAnimator.start();
         }
         tvHint.setVisibility(View.VISIBLE);
         tvContent.setText("‘我想听菊花台’");
-        FloatWindow.get().show();
 
     }
 
@@ -297,7 +234,6 @@ public class VoiceUiActivity extends AppCompatActivity {
         if (tvContent != null) {
             tvContent.setText("‘我想听菊花台’");
         }
-        FloatWindow.destroy();
     }
 
 

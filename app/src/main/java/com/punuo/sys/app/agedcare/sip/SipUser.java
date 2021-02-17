@@ -6,6 +6,7 @@ import android.util.Log;
 import com.punuo.sys.app.agedcare.model.Cluster;
 import com.punuo.sys.app.agedcare.tools.SHA1;
 import com.punuo.sys.app.agedcare.video.VideoInfo;
+import com.punuo.sys.app.agedcare.video.VideoInfoUser;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -318,14 +319,14 @@ public class SipUser extends SipProvider {
                         Element peerElement = (Element) root.getElementsByTagName("peer").item(0);
                         Element magicElement = (Element) root.getElementsByTagName("magic").item(0);
                         String peer = peerElement.getFirstChild().getNodeValue();
-                        VideoInfo.rtpIp = peer.substring(0, peer.indexOf("UDP")).trim();
-                        VideoInfo.rtpPort = Integer.parseInt(peer.substring(peer.indexOf("UDP") + 3).trim());
-                        Log.e("VideoInfo.rtpPort",VideoInfo.rtpPort+"");
+                        VideoInfoUser.rtpIp = peer.substring(0, peer.indexOf("UDP")).trim();
+                        VideoInfoUser.rtpPort = Integer.parseInt(peer.substring(peer.indexOf("UDP") + 3).trim());
+                        Log.e("VideoInfoUser.rtpPort",VideoInfoUser.rtpPort+"");
                         String magic = magicElement.getFirstChild().getNodeValue();
-                        VideoInfo.magic = new byte[magic.length() / 2 + magic.length() % 2];
-                        for (int i = 0; i < VideoInfo.magic.length; i++) {
+                        VideoInfoUser.magic = new byte[magic.length() / 2 + magic.length() % 2];
+                        for (int i = 0; i < VideoInfoUser.magic.length; i++) {
                             try {
-                                VideoInfo.magic[i] = (byte) (0xff & Integer.parseInt(magic.substring(i * 2, i * 2 + 2), 16));
+                                VideoInfoUser.magic[i] = (byte) (0xff & Integer.parseInt(magic.substring(i * 2, i * 2 + 2), 16));
                             } catch (NumberFormatException e) {
                                 e.printStackTrace();
                             }

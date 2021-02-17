@@ -15,7 +15,7 @@ public class SendActivePacket extends Thread {
         msg[1] = 0x01;
         msg[2] = 0x00;
         msg[3] = 0x10;
-        System.arraycopy(VideoInfo.magic, 0, msg, 4, 16);
+        System.arraycopy(VideoInfoUser.magic, 0, msg, 4, 16);
     }
 
     @Override

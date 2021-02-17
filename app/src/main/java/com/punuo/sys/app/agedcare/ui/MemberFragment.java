@@ -22,7 +22,14 @@ import com.google.gson.reflect.TypeToken;
 
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.adapter.FarmilyRecyclerViewAdapter;
+import com.punuo.sys.app.agedcare.httplib.HttpManager;
+import com.punuo.sys.app.agedcare.httplib.RequestListener;
 import com.punuo.sys.app.agedcare.model.Device;
+import com.punuo.sys.app.agedcare.request.GetAllUserFromGroupRequest;
+import com.punuo.sys.app.agedcare.request.GetDevInfoRequest;
+import com.punuo.sys.app.agedcare.request.model.DevInfo;
+import com.punuo.sys.app.agedcare.request.model.DevModel;
+import com.punuo.sys.app.agedcare.request.model.DeviceModel;
 import com.punuo.sys.app.agedcare.sip.BodyFactory;
 import com.punuo.sys.app.agedcare.sip.SipDev;
 import com.punuo.sys.app.agedcare.sip.SipInfo;
@@ -164,65 +171,63 @@ public class MemberFragment extends Fragment implements SipDev.NumberUpdateListe
 
     }
     public void showPicture() {
-
-        sendRequestWithOkHttp();
+        getDevInfo();
     }
 
-    private void sendRequestWithOkHttp() {
-        new Thread( new Runnable() {
+    public void getDevInfo() {
+        GetDevInfoRequest request = new GetDevInfoRequest();
+        request.addUrlParam("devid", devId);
+        request.setRequestListener(new RequestListener<DevModel>() {
             @Override
-            public void run() {
-                try {
-//                    Log.d("1111", "run: ");
-                    OkHttpClient client = new OkHttpClient();
-                    Request request1 = new Request.Builder()
-                            .url("http://"+serverIp+":8000/xiaoyupeihu/public/index.php/devs/getDevInfo?devid=" + SipInfo.devId)
-                            .build();
-                    Log.d("1111", "run: "+client.newCall(request1).execute().body().string());
-                    if (client.newCall(request1).execute().body().string().split("\"groupid\":").length>=2) {
-                        groupid = client.newCall(request1).execute().body().string().split("\"groupid\":")[1].split(",\"password\"")[0];
-                        Log.d("1111", "run: "+groupid);
-                    }
-                    Request request2 = new Request.Builder()
-                            .url("http://"+serverIp+":8000/xiaoyupeihu/public/index.php/groups/getAllUserFromGroup?groupid=" + groupid)
-                            .build();
-                    Response response = client.newCall(request2).execute();
-                    String responseData = response.body().string();
-//                    Log.d("1111", "run:1 ");
-                    parseJSONWithGSON(responseData);
-//                    Log.d("1111", "run:2 "+responseData);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            public void onComplete() {
 
             }
-        }).start();
+
+            @Override
+            public void onSuccess(DevModel result) {
+                groupid = result.mDevInfo.groupId;
+                getAllUserFromGroup();
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+        HttpManager.addRequest(request);
     }
 
-    private void parseJSONWithGSON(String responseData) {
-//        Log.d("1111", "run:3 ");
-        String jsonData = "[" + responseData.split("\\[")[1].split("\\]")[0] + "]";
+    private void getAllUserFromGroup() {
+        GetAllUserFromGroupRequest request = new GetAllUserFromGroupRequest();
+        request.addUrlParam("groupid", groupid);
+        request.setRequestListener(new RequestListener<DeviceModel>() {
+            @Override
+            public void onComplete() {
 
-        Gson gson = new Gson();
-        try {
-            devices = gson.fromJson(jsonData, new TypeToken<List<Device>>(){}.getType());
-        } catch (JsonSyntaxException e) {
-            e.printStackTrace();
-        }
+            }
 
-        SipInfo.devList.addAll(devices);
-        url = new String[devices.size()];
-        Log.e("MemberFragment",!devices.isEmpty()+"" );
-        for ( Device device : devices) {
-            Log.e("MemberFragment", device.toString());
-        }
-        if (!devices.isEmpty()){
-            handler.sendEmptyMessage(0X111);
-        }else
-        {
-            handler.sendEmptyMessage(0X222);
+            @Override
+            public void onSuccess(DeviceModel result) {
+                devices = result.mDevices;
+                SipInfo.devList.addAll(devices);
+                url = new String[devices.size()];
+                Log.e("MemberFragment", !devices.isEmpty() + "");
+                for (Device device : devices) {
+                    Log.e("MemberFragment", device.toString());
+                }
+                if (!devices.isEmpty()) {
+                    handler.sendEmptyMessage(0X111);
+                } else {
+                    handler.sendEmptyMessage(0X222);
+                }
+            }
 
-        }
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+        HttpManager.addRequest(request);
     }
     @Override
     public void numberUpdate() {
