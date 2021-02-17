@@ -1,24 +1,5 @@
 <resources>
     <string name="app_name">AgedCare</string>
-    <string name="connect_failed">设置</string>
-    <string name="app_pic">AlbumImageSelect</string>
-    <string name="all_pic">全部图片</string>
-    <string name="preview_without_num">预览</string>
-    <string name="preview_with_num">预览(%1$d)</string>
-    <string name="choose_pic_finish">完成</string>
-    <string name="choose_pic_finish_with_num">完成(%1$d/%2$d)</string>
-    <string name="choose_pic_num_out_of_index">你最多只能选择%1$d张照片</string>
-    <string name="choose_pic">选择</string>
-    <string name="not_choose_any_pick">你还没有选择任何图片</string>
-    <string name="uploading_images">正在批量上传</string>
-    <string name="listview_header_hint_normal">pull to refresh</string>
-    <string name="listview_header_hint_release">release to start refresh</string>
-    <string name="listview_loading">loading...</string>
-    <string name="nomore_loading">no more to be loaded</string>
-    <string name="refreshing">refreshing...</string>
-    <string name="refresh_done">refresh done</string>
-    <string name="loading_done">loading done</string>
-    <string name="listview_header_last_time">last update：</string>
     <string name="zero_time">0:00</string>
     <string name="fourG">4G</string>
     <string name="wifi">WIFI</string>
@@ -43,7 +24,6 @@
     <string name="p2refresh_doing_head_refresh">正在刷新&#8230;</string>
     <string name="p2refresh_doing_end_refresh">加载中&#8230;</string>
     <string name="p2refresh_refresh_lasttime">最近更新&#160;&#058;&#160;</string>
-    <string name="image_desc">图片</string>
     <string name="Files">Files</string>
     <string name="viewpager_indicator">%1$d/%2$d</string>
 </resources>

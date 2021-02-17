@@ -17,10 +17,8 @@ android {
                 includeCompileClasspath = true
             }
         }
-        ndk {
-            moduleName "serial_port"
-            ldLibs "log"
-            abiFilters "armeabi"
+        ndk{
+            abiFilters 'armeabi-v7a'
         }
         multiDexEnabled true
         compileSdkVersion = rootProject.ext.compileSdkVersion

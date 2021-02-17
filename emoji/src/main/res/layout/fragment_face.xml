@@ -41,7 +41,6 @@
             android:textColor="#9E9E9E"
             android:background="@drawable/selector_face_text"/>
         <View
-            android:id="@+id/fill_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/selector_face_text"/>

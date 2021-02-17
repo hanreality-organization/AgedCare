@@ -9,8 +9,6 @@
     <dimen name="album_header_bar_height">50.0dip</dimen>
     <dimen name="title_view_left_back_padding_left">12.0dip</dimen>
     <dimen name="title_view_left_back_padding_right">12.0dip</dimen>
-    <dimen name="image_thumbnail_size">100dp</dimen>
-    <dimen name="image_thumbnail_spacing">1dp</dimen>
     <dimen name="thumbnail_imageview_size">41.0dip</dimen>
     <dimen name="shutter_bottom_size">62.0dip</dimen>
     <dimen name="bottom_bar_height">75.0dip</dimen>

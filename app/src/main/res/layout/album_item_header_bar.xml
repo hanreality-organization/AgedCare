@@ -5,7 +5,6 @@
     android:orientation="vertical" >
 
     <RelativeLayout
-        android:id="@+id/header_bar_photo_browse"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/album_header_bar_height"
         android:background="@color/common_title_bg" >

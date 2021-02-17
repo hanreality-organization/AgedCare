@@ -5,7 +5,6 @@
     <!-- 显示预览图形 -->
 
     <FrameLayout
-        android:id="@+id/pagerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 

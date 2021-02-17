@@ -10,15 +10,13 @@ android:layout_width="wrap_content"
 android:layout_height="wrap_content"
 android:layout_marginTop="10dp">
 <ProgressBar
-    android:id="@+id/pb_load"
     android:layout_width="200dp"
     android:layout_height="200dp"
     android:indeterminateDrawable="@drawable/shape_dialog_bg"
 android:layout_centerInParent="true"/>
 </RelativeLayout>
 <TextView
-android:id="@+id/tv_load_dialog"
-android:layout_width="wrap_content"
+    android:layout_width="wrap_content"
 android:layout_height="wrap_content"
 android:layout_gravity="center_horizontal"
 android:text="加载中..."
