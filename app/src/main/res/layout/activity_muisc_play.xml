@@ -10,7 +10,7 @@
     <!--<com.punuo.sys.app.agedcare.ui.TitleLayout2-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content"></com.punuo.sys.app.agedcare.ui.TitleLayout2>-->
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -96,9 +96,9 @@
             </LinearLayout>
         </LinearLayout>
 
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_marginTop="13px"
         android:layout_width="1200px"
         android:layout_height="313px"
@@ -116,14 +116,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="241px">
 
-            </android.support.v7.widget.RecyclerView>
+            </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 
 

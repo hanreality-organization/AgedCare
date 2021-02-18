@@ -43,9 +43,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.http.GetPostUtil;
-import com.punuo.sys.app.agedcare.http.ToastUtils;
 import com.punuo.sys.app.agedcare.model.Constant;
 import com.punuo.sys.app.agedcare.tools.ActivityCollector;
+import com.punuo.sys.sdk.util.ToastUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -161,7 +161,7 @@ private ProgressDialog dialog;
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 0x111) {
-                ToastUtils.showShort(PublishedActivity.this, "状态上传成功");
+                ToastUtils.showToast("状态上传成功");
                 Bimp.bmp.clear();
                 drr.clear();
                 Bimp.max = 0;
@@ -172,7 +172,7 @@ private ProgressDialog dialog;
 //                ActivityCollector.finishToMain();
 //                ActivityCollector.finishToFirstView();
             } else if (msg.what == 0x222) {
-                ToastUtils.showShort(PublishedActivity.this, "状态上传失败请重试");
+                ToastUtils.showToast("状态上传失败请重试");
                 dialog.dismiss();
                 return;
             }

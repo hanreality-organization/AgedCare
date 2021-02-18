@@ -6,7 +6,7 @@
     android:background="@drawable/background1"
     tools:context=".vi.activity.ChatActivity">
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/virv_chat"
         android:layout_width="match_parent"
         android:layout_height="280dp" />

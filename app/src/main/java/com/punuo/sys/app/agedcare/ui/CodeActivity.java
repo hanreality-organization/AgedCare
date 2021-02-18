@@ -1,23 +1,13 @@
 package com.punuo.sys.app.agedcare.ui;
 
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.Settings;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -27,35 +17,23 @@ import android.widget.Toast;
 
 import com.google.zxing.common.BitmapUtils;
 import com.punuo.sys.app.agedcare.R;
-import com.punuo.sys.app.agedcare.ftp.Ftp;
-import com.punuo.sys.app.agedcare.ftp.FtpListener;
 import com.punuo.sys.app.agedcare.sip.SipInfo;
-import com.punuo.sys.app.agedcare.tools.VersionXmlParse;
-import com.punuo.sys.app.agedcare.update.AutoUpdateService;
-import com.punuo.sys.app.agedcare.util.IntentUtil;
-import com.punuo.sys.app.agedcare.view.CustomProgressDialog;
+import com.punuo.sys.sdk.update.AutoUpdateService;
+import com.punuo.sys.sdk.util.IntentUtil;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.HashMap;
-
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.punuo.sys.app.agedcare.model.Constant.FTP_DOWN_LOADING;
-import static com.punuo.sys.app.agedcare.model.Constant.FTP_DOWN_SUCCESS;
-
 public class CodeActivity extends BaseActivity implements View.OnClickListener {
 
-    @Bind(R.id.code_image)
+    @BindView(R.id.code_image)
     ImageView codeImage;
-    @Bind(R.id.settingbutton)
+    @BindView(R.id.settingbutton)
     Button settingbutton;
-    @Bind(R.id.update)
+    @BindView(R.id.update)
     Button update;
-    @Bind(R.id.code_download)
+    @BindView(R.id.code_download)
     ImageView code_download;
     private final String TAG = getClass().getName();
     @Override

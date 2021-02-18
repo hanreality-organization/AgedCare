@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.punuo.sys.app.agedcare.ui.MenuFragment">
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="1200px"
         android:layout_height="626px"
         android:layout_marginTop="80dp"
@@ -20,7 +20,7 @@
             android:scaleType="centerCrop"/>
 
 
-        <android.support.v4.view.ViewPager
+        <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
             android:layout_marginLeft="49px"
             android:layout_marginRight="49px"
            />
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
     <!-- Viewpager:全类名导入 -->
 

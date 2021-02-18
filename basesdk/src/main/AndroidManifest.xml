@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.punuo.sys.sdk">
+    <application>
+        <service
+            android:name=".update.AutoUpdateService">
+        </service>
+
+        <activity android:name=".update.UpdateDialogActivity"
+            android:screenOrientation="behind"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="stateHidden"/>
+
+        <activity
+            android:name=".activity.BaseActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.WebViewActivity"
+            android:theme="@style/Theme.Pn.Translucent"
+            android:screenOrientation="portrait" />
+    </application>
+</manifest>

@@ -2,14 +2,13 @@ package com.punuo.sys.app.agedcare.ui;
 
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.adapter.FarmilyAdapter;
@@ -20,7 +19,8 @@ import com.punuo.sys.app.agedcare.tools.ActivityCollector;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import butterknife.Bind;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.punuo.sys.app.agedcare.sip.SipInfo.dbHelper;
@@ -30,9 +30,9 @@ import static com.punuo.sys.app.agedcare.sip.SipInfo.farmilymemberList;
 
 
 public class phonecallActivity extends HindebarActivity {
-    @Bind(R.id.addnumber)
+    @BindView(R.id.addnumber)
     Button addnumber;
-    @Bind(R.id.recyclerView)
+    @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
     public FarmilyAdapter farmilyAdapter;

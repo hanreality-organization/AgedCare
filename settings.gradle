@@ -1,1 +1,9 @@
-include ':app', ':ijkplayer-java', ':giraffeplayer', ':emoji'
+include ':basesdk'
+include ':app'
+include ':giraffeplayer'
+include ':emoji'
+
+apply from: './base.gradle'
+gradle.ext {
+    sdk = sdk
+}

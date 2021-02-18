@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
         android:orientation="vertical"
     tools:context="com.punuo.sys.app.agedcare.ui.MemberFragment">
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="1200px"
         android:layout_height="626px"
         android:layout_marginTop="80dp"
@@ -20,7 +20,7 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"/>
 
-        <android.support.v4.widget.SwipeRefreshLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:layout_marginTop="48dp"
             android:layout_marginLeft="49dp"
             android:layout_marginRight="49dp"
@@ -30,14 +30,14 @@
             android:layout_gravity="center_horizontal"
             >
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
 
             android:id="@+id/farmily_rv"
             />
-        </android.support.v4.widget.SwipeRefreshLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

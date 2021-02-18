@@ -3,14 +3,14 @@ package com.punuo.sys.app.agedcare.adapter;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.model.Device;
 import com.punuo.sys.app.agedcare.sip.SipInfo;
@@ -18,7 +18,7 @@ import com.punuo.sys.app.agedcare.view.CustomProgressDialog;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
@@ -42,7 +42,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
 
     public PictureAdapter(Context mContext) {
         this.mContext = mContext;
-        mDefaultBitmapDrawable = mContext.getResources().getDrawable(R.drawable.image_default);
+        mDefaultBitmapDrawable = mContext.getResources().getDrawable(R.drawable.sdk_image_placeholder);
     }
 
     public void appendData(List<Device> devices) {
@@ -79,7 +79,7 @@ public class PictureAdapter extends RecyclerView.Adapter<PictureAdapter.ViewHold
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.icon)
+        @BindView(R.id.icon)
         ImageView icon;
 
         public ViewHolder(View view) {

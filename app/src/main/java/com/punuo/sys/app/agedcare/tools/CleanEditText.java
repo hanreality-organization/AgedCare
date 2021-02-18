@@ -7,17 +7,17 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.CycleInterpolator;
 import android.view.animation.TranslateAnimation;
-import android.widget.EditText;
+
+import androidx.appcompat.widget.AppCompatEditText;
 
 /**
  * Created by 23578 on 2018/8/8.
  */
 
-public class CleanEditText extends EditText {
+public class CleanEditText extends AppCompatEditText {
 
     private final String TAG = "editText";
 

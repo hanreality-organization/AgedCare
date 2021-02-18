@@ -1,13 +1,6 @@
 package com.punuo.sys.app.agedcare.friendCircleMain.adapter;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -15,14 +8,13 @@ import android.widget.Button;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
 
 import com.punuo.sys.app.agedcare.R;
-import com.punuo.sys.app.agedcare.sip.BodyFactory;
-import com.punuo.sys.app.agedcare.sip.SipInfo;
-import com.punuo.sys.app.agedcare.sip.SipMessageFactory;
-
-import org.zoolu.sip.address.NameAddress;
-import org.zoolu.sip.address.SipURL;
 
 import java.util.ArrayList;
 
@@ -183,8 +175,10 @@ public class ImagePagerActivity extends FragmentActivity {
 		mPager.setCurrentItem(pagerPosition);
 	}
 
+
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
 		outState.putInt(STATE_POSITION, mPager.getCurrentItem());
 	}
 

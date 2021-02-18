@@ -6,13 +6,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.FragmentActivity;
 import android.telephony.TelephonyManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,7 +24,6 @@ import java.util.TimerTask;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.format;
-import static com.punuo.sys.app.agedcare.sip.SipInfo.nettype;
 
 /**
  * Created by 23578 on 2018/7/18.

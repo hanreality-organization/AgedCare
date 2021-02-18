@@ -2,7 +2,7 @@ package com.punuo.sys.app.agedcare.tools;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
-import android.support.v4.util.LruCache;
+import androidx.collection.LruCache;
 
 /**
  * Created by 林逸磊 on 2017/10/29.

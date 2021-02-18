@@ -10,7 +10,7 @@
         android:layout_height="wrap_content">
     </com.punuo.sys.app.agedcare.ui.TitleLayout2>
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="1200px"
         android:layout_height="626px"
         android:layout_marginTop="34dp"
@@ -71,6 +71,6 @@
                 />
             </LinearLayout>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>

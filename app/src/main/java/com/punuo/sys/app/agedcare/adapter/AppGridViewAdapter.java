@@ -6,8 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
-
 
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.model.MyApplicationInfo;
@@ -15,7 +13,7 @@ import com.punuo.sys.app.agedcare.model.MyApplicationInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -80,7 +78,7 @@ public class AppGridViewAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        @Bind(R.id.imageview)
+        @BindView(R.id.imageview)
         ImageView imageview;
 
 

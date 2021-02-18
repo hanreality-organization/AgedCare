@@ -9,13 +9,13 @@ import android.widget.Button;
 
 import com.punuo.sys.app.agedcare.R;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class PropertyActivity extends HindebarActivity {
-    @Bind(R.id.wuye_cancel)
+    @BindView(R.id.wuye_cancel)
     Button wuye_cancel;
-    @Bind(R.id.wuye_call)
+    @BindView(R.id.wuye_call)
     Button wuye_call;
     String item;
     @Override

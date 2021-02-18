@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.sip.BodyFactory;
 import com.punuo.sys.app.agedcare.sip.SipInfo;
@@ -15,15 +16,16 @@ import com.punuo.sys.app.agedcare.sip.SipMessageFactory;
 import com.punuo.sys.app.agedcare.view.CircleImageView;
 import com.punuo.sys.app.agedcare.view.CustomProgressDialog;
 
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.zoolu.sip.address.NameAddress;
 import org.zoolu.sip.address.SipURL;
-import butterknife.Bind;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 import static com.punuo.sys.app.agedcare.sip.SipInfo.devName;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.devices;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.isanswering;
@@ -31,13 +33,13 @@ import static com.punuo.sys.app.agedcare.sip.SipInfo.userdevid;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.videouserId;
 
 public class VideoReply extends HindebarActivity implements View.OnClickListener {
-    @Bind(R.id.bt_accept)
+    @BindView(R.id.bt_accept)
     Button bt_accept;
-    @Bind(R.id.bt_refuse)
+    @BindView(R.id.bt_refuse)
     Button bt_refuse;
-    @Bind(R.id.name)
+    @BindView(R.id.name)
     TextView name;
-    @Bind(R.id.CIV_avatar)
+    @BindView(R.id.CIV_avatar)
     CircleImageView CIV_avatar;
     private SoundPool soundPool;
     private int streamId;

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.punuo.sys.app.agedcare.model.Cluster;
-import com.punuo.sys.app.agedcare.tools.SHA1;
+import com.punuo.sys.sdk.sercet.SHA1;
 import com.punuo.sys.app.agedcare.video.VideoInfo;
 import com.punuo.sys.app.agedcare.video.VideoInfoUser;
 
@@ -20,7 +20,6 @@ import org.zoolu.sip.provider.Transport;
 import org.zoolu.sip.provider.TransportConnId;
 
 import java.io.StringReader;
-import java.util.Collections;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;

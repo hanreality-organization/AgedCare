@@ -11,7 +11,7 @@ import com.alibaba.fastjson.JSON;
 import com.punuo.sys.app.agedcare.groupvoice.GroupInfo;
 import com.punuo.sys.app.agedcare.groupvoice.GroupSignaling;
 import com.punuo.sys.app.agedcare.sip.SipInfo;
-import com.punuo.sys.app.agedcare.tools.MyToast;
+import com.punuo.sys.sdk.util.ToastUtils;
 
 
 public class MyReceiver extends BroadcastReceiver {
@@ -31,10 +31,10 @@ public class MyReceiver extends BroadcastReceiver {
 
             case 261:
                 Log.d("ssssssss","aaaa");
-                MyToast.show(context, "PTT键按下", Toast.LENGTH_SHORT);
+                ToastUtils.showToast("PTT键按下");
                 System.out.println("state = " + state);
                 if (state == 0) {
-                    MyToast.show(context, "正在说话...", Toast.LENGTH_LONG);
+                    ToastUtils.showToast("正在说话...");
                     if (GroupInfo.rtpAudio != null) {
                         System.out.println(111);
 //                       GroupInfo.rtpAudio.pttChanged(true);
@@ -46,7 +46,7 @@ public class MyReceiver extends BroadcastReceiver {
                         GroupInfo.groupUdpThread.sendMsg(start.getBytes());
                     }
                 } else {
-                    MyToast.show(context, "结束说话...", Toast.LENGTH_LONG);
+                    ToastUtils.showToast("结束说话...");
                     if (GroupInfo.rtpAudio != null) {
                         System.out.println(222);
 //                        GroupInfo.rtpAudio.pttChanged(false);

@@ -23,7 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.camera.FileOperateUtil;
 import com.punuo.sys.app.agedcare.camera.album.view.FilterImageView;
@@ -41,7 +40,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
@@ -51,45 +50,45 @@ import butterknife.ButterKnife;
 
 public class MyCamera extends Activity implements View.OnClickListener, CameraContainer.TakePictureListener
         , SensorEventListener {
-    @Bind(R.id.btn_thumbnail)
+    @BindView(R.id.btn_thumbnail)
     FilterImageView btnThumbnail;
-    @Bind(R.id.videoicon)
+    @BindView(R.id.videoicon)
     ImageView videoicon;
-    @Bind(R.id.btn_shutter_record)
+    @BindView(R.id.btn_shutter_record)
     ImageButton btnShutterRecord;
-    @Bind(R.id.btn_shutter_camera)
+    @BindView(R.id.btn_shutter_camera)
     ImageButton btnShutterCamera;
-    @Bind(R.id.btn_switch_mode)
+    @BindView(R.id.btn_switch_mode)
     ImageButton btnSwitchMode;
-    @Bind(R.id.btn_switch_camera)
+    @BindView(R.id.btn_switch_camera)
     ImageView btnSwitchCamera;
-    @Bind(R.id.btn_flash_mode)
+    @BindView(R.id.btn_flash_mode)
     ImageView btnFlashMode;
-    @Bind(R.id.btn_other_setting)
+    @BindView(R.id.btn_other_setting)
     ImageView btnOtherSetting;
-    @Bind(R.id.camera_header_bar)
+    @BindView(R.id.camera_header_bar)
     LinearLayout cameraHeaderBar;
-    @Bind(R.id.cameracontainer)
+    @BindView(R.id.cameracontainer)
     CameraContainer cameracontainer;
-    @Bind(R.id.camera_bottom_bar)
+    @BindView(R.id.camera_bottom_bar)
     LinearLayout cameraBottomBar;
-    @Bind(R.id.pic)
+    @BindView(R.id.pic)
     ImageView pic;
-    @Bind(R.id.cancel)
+    @BindView(R.id.cancel)
     Button cancel;
-    @Bind(R.id.upload)
+    @BindView(R.id.upload)
     Button upload;
-    @Bind(R.id.upload_layout)
+    @BindView(R.id.upload_layout)
     LinearLayout uploadLayout;
-    @Bind(R.id.icon_play)
+    @BindView(R.id.icon_play)
     ImageView iconPlay;
-    @Bind(R.id.videoviewlayout)
+    @BindView(R.id.videoviewlayout)
     RelativeLayout videoviewlayout;
-    @Bind(R.id.reset)
+    @BindView(R.id.reset)
     Button reset;
-    @Bind(R.id.use)
+    @BindView(R.id.use)
     Button use;
-    @Bind(R.id.chose_layout)
+    @BindView(R.id.chose_layout)
     LinearLayout choseLayout;
     private boolean mIsRecordMode = false;
     private SensorManager mSensorManager;

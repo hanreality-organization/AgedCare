@@ -14,7 +14,7 @@ import com.punuo.sys.app.agedcare.model.Cluster;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -69,9 +69,9 @@ public class ClusterAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        @Bind(R.id.devIcon)
+        @BindView(R.id.devIcon)
         ImageView devIcon;
-        @Bind(R.id.devName)
+        @BindView(R.id.devName)
         TextView devName;
 
         ViewHolder(View view) {

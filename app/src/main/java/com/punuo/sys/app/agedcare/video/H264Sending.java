@@ -1,10 +1,8 @@
 package com.punuo.sys.app.agedcare.video;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.ImageFormat;
@@ -18,13 +16,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Process;
 import android.os.StrictMode;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.groupvoice.G711;
@@ -35,26 +34,19 @@ import com.punuo.sys.app.agedcare.tools.ActivityCollector;
 import com.punuo.sys.app.agedcare.tools.AvcEncoder;
 import com.punuo.sys.app.agedcare.ui.HindebarActivity;
 import com.punuo.sys.app.agedcare.ui.MessageEvent;
-import com.punuo.sys.app.agedcare.ui.VideoCallActivity;
-import com.punuo.sys.app.agedcare.ui.VideoPlay;
 
 import org.greenrobot.eventbus.EventBus;
-import org.zoolu.sip.address.NameAddress;
-import org.zoolu.sip.address.SipURL;
 
 import java.io.IOException;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
-
-import static com.punuo.sys.app.agedcare.sip.SipInfo.devName;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.isanswering;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.ismoniter;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.userdevid;
 import static com.punuo.sys.app.agedcare.ui.VideoCallActivity.BROADCAST_ACTION;
-import static com.punuo.sys.app.agedcare.video.VideoInfo.isvideoplay;
 
 
 /**
@@ -62,9 +54,9 @@ import static com.punuo.sys.app.agedcare.video.VideoInfo.isvideoplay;
  * Date 2016/12/19.
  */
 public class H264Sending extends HindebarActivity implements SurfaceHolder.Callback, Camera.PreviewCallback {
-    @Bind(R.id.h264suf)
+    @BindView(R.id.h264suf)
     SurfaceView h264suf;
-    @Bind(R.id.video_back)
+    @BindView(R.id.video_back)
     Button video_back;
     SurfaceHolder m_surfaceHolder;
     public static RTPSending rtpsending = null;
@@ -264,7 +256,6 @@ public class H264Sending extends HindebarActivity implements SurfaceHolder.Callb
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
 
         VideoInfo.handler = null;
         if (mCamera != null)  //没有背面摄像头的情况
@@ -605,12 +596,12 @@ public class H264Sending extends HindebarActivity implements SurfaceHolder.Callb
     }
 }
 //public class H264Sending extends Activity implements SurfaceHolder.Callback, Camera.PreviewCallback {
-//    @Bind(R.id.h264suf)
+//    @BindView(R.id.h264suf)
 //    SurfaceView h264suf;
 //
 //    SurfaceHolder m_surfaceHolder;
 //    public static RTPSending rtpsending = null;
-//    @Bind(R.id.flashLight)
+//    @BindView(R.id.flashLight)
 //    Button flashLight;
 //    private String TAG = H264Sending.class.getSimpleName();    //取得类名
 //    public static boolean G711Running = true;

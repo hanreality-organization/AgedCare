@@ -9,10 +9,6 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,31 +18,39 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 import com.danikula.videocache.HttpProxyCacheServer;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.punuo.sys.app.agedcare.R;
-import com.punuo.sys.app.agedcare.application.AppContext;
 import com.punuo.sys.app.agedcare.model.Music;
 import com.punuo.sys.app.agedcare.model.Musicitem;
 import com.punuo.sys.app.agedcare.view.CircleImageView;
+import com.punuo.sys.sdk.PnApplication;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
-import butterknife.Bind;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+
 import static com.punuo.sys.app.agedcare.sip.SipInfo.lastmusictype;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.musicitems;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.musics;
@@ -54,23 +58,23 @@ import static com.punuo.sys.app.agedcare.sip.SipInfo.serverIp;
 
 public class MuiscPlay extends Fragment {
 
-    @Bind(R.id.CIV_avatar)
+    @BindView(R.id.CIV_avatar)
     CircleImageView CIVAvatar;
-    @Bind(R.id.songname)
+    @BindView(R.id.songname)
     TextView songname;
-    @Bind(R.id.kuaitui)
+    @BindView(R.id.kuaitui)
     ImageView kuaitui;
-    @Bind(R.id.stop)
+    @BindView(R.id.stop)
     ImageView stop;
-    @Bind(R.id.kuaijin)
+    @BindView(R.id.kuaijin)
     ImageView kuaijin;
-    @Bind(R.id.recycler_view)
+    @BindView(R.id.recycler_view)
     RecyclerView recycler_view;
-    @Bind(R.id.activity_muisc_play)
+    @BindView(R.id.activity_muisc_play)
     LinearLayout activityMuiscPlay;
-    @Bind(R.id.seekbar)
+    @BindView(R.id.seekbar)
    SeekBar  mSeekBar;
-    @Bind(R.id.text1)
+    @BindView(R.id.text1)
     TextView mTextView;
 //    private SeekBar mSeekBar;
 //    private TextView mTextView;
@@ -125,7 +129,7 @@ public class MuiscPlay extends Fragment {
         recycler_view.setLayoutManager(linearLayoutManager);
         recycler_view.addItemDecoration(new SpaceItemDecoration(32, 0));
 //        myApplication = (AppContext) getApplication();
-        proxy = AppContext.getProxy(getActivity());
+        proxy = PnApplication.getProxy(getActivity());
         Log.d(TAG, currentMusicIndex + "aa");
         return view;
     }
@@ -458,14 +462,16 @@ public class MuiscPlay extends Fragment {
         public MusicitemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(context).inflate(R.layout.musicitem, parent, false);
             final MusicitemAdapter.ViewHolder holder = new MusicitemAdapter.ViewHolder(view);
-            ImageLoader.getInstance().displayImage("http://" + serverIp + ":8000/static/musicListCover/" + musicitems.get(lastmusictype).getType() + ".png", imageView);
+            Glide.with(getActivity()).load("http://" + serverIp + ":8000/static/musicListCover/" + musicitems.get(lastmusictype).getType() + ".png")
+                    .into(imageView);
 
             holder.musicimage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                     int position = holder.getAdapterPosition();
-                    ImageLoader.getInstance().displayImage("http://" + serverIp + ":8000/static/musicListCover/" + musicitems.get(position).getType() + ".png", imageView);
+                    Glide.with(getActivity()).load("http://" + serverIp + ":8000/static/musicListCover/" + musicitems.get(position).getType() + ".png")
+                            .into(imageView);
                     sendMusicRequestWithOkHttp("http://" + serverIp + ":8000/xiaoyupeihu/public/index.php/music/getMusicList?type=" + musicitems.get(position).getType());
                     lastmusictype = position;
 
@@ -482,7 +488,8 @@ public class MuiscPlay extends Fragment {
 
             Log.d(TAG, "geturl");
             Log.d(TAG, musicitems.get(position).getType());
-            ImageLoader.getInstance().displayImage("http://" + serverIp + ":8000/static/musicListCover/" + musicitems.get(position).getType() + ".png", holder.musicimage);
+            Glide.with(getActivity()).load("http://" + serverIp + ":8000/static/musicListCover/" + musicitems.get(position).getType() + ".png")
+                    .into(holder.musicimage);
             sendMusicRequestWithOkHttp("http://" + serverIp + ":8000/xiaoyupeihu/public/index.php/music/getMusicList?type=" + musicitems.get(lastmusictype).getType());
 
         }

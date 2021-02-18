@@ -3,51 +3,43 @@ package com.punuo.sys.app.agedcare.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.app.Fragment;
-import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.adapter.FarmilyRecyclerViewAdapter;
-import com.punuo.sys.app.agedcare.httplib.HttpManager;
-import com.punuo.sys.app.agedcare.httplib.RequestListener;
 import com.punuo.sys.app.agedcare.model.Device;
 import com.punuo.sys.app.agedcare.request.GetAllUserFromGroupRequest;
 import com.punuo.sys.app.agedcare.request.GetDevInfoRequest;
-import com.punuo.sys.app.agedcare.request.model.DevInfo;
 import com.punuo.sys.app.agedcare.request.model.DevModel;
 import com.punuo.sys.app.agedcare.request.model.DeviceModel;
 import com.punuo.sys.app.agedcare.sip.BodyFactory;
 import com.punuo.sys.app.agedcare.sip.SipDev;
 import com.punuo.sys.app.agedcare.sip.SipInfo;
 import com.punuo.sys.app.agedcare.sip.SipMessageFactory;
+import com.punuo.sys.sdk.httplib.HttpManager;
+import com.punuo.sys.sdk.httplib.RequestListener;
 
 import org.zoolu.sip.address.NameAddress;
 import org.zoolu.sip.address.SipURL;
 
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
-
 
 import static com.punuo.sys.app.agedcare.sip.SipInfo.devId;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.devName;
@@ -62,9 +54,9 @@ import static com.punuo.sys.app.agedcare.sip.SipInfo.userId;
 public class MemberFragment extends Fragment implements SipDev.NumberUpdateListener{
     private Context mContext;
 
-    @Bind(R.id.farmily_rv)
+    @BindView(R.id.farmily_rv)
     RecyclerView farmily_rv;
-    @Bind(R.id.gank_swipe_refresh)
+    @BindView(R.id.gank_swipe_refresh)
     SwipeRefreshLayout gank_swipe_refresh_layout;
     private FarmilyRecyclerViewAdapter adapter;
     GridLayoutManager glm;

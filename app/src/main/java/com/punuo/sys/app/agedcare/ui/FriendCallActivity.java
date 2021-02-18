@@ -5,29 +5,32 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.FloatingActionButton;
-import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.alibaba.fastjson.JSON;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.punuo.sys.app.agedcare.R;
+import com.punuo.sys.app.agedcare.adapter.PhoneRecyclerViewAdapter;
 import com.punuo.sys.app.agedcare.db.MyDatabaseHelper;
 import com.punuo.sys.app.agedcare.http.GetPostUtil;
 import com.punuo.sys.app.agedcare.model.Constant;
 import com.punuo.sys.app.agedcare.model.Farmilymember;
-import com.punuo.sys.app.agedcare.adapter.PhoneRecyclerViewAdapter;
 import com.punuo.sys.app.agedcare.sip.SipInfo;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.HashMap;
+
 import static com.punuo.sys.app.agedcare.sip.SipInfo.dbHelper;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.farmilymemberList;
 

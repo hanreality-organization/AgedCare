@@ -1,7 +1,7 @@
 package com.punuo.sys.app.agedcare.model;
 
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Created by asus on 2017/9/12.

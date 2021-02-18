@@ -1,0 +1,24 @@
+package com.punuo.sys.sdk.recyclerview;
+
+import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
+
+/**
+ * Created by han.chen.
+ * Date on 2019-06-05.
+ **/
+public abstract class BaseViewHolder<T> extends RecyclerView.ViewHolder {
+    public BaseViewHolder(View itemView) {
+        super(itemView);
+    }
+
+    public void bind(T t, int position) {
+        if (t == null) {
+            return;
+        }
+        bindData(t, position);
+    }
+
+    protected abstract void bindData(T t, int position);
+}

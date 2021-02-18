@@ -1,9 +1,7 @@
 package com.punuo.sys.app.agedcare.ui;
 
 import android.graphics.Color;
-
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -11,8 +9,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.punuo.sys.app.agedcare.R;
-import com.punuo.sys.app.agedcare.receiver.NetworkConnectChangedReceiver;
 
 public class HindebarActivity extends AppCompatActivity implements ViewTreeObserver.OnGlobalLayoutListener {
     FrameLayout content;

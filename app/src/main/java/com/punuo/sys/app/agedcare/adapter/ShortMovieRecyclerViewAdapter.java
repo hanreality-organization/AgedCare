@@ -1,29 +1,20 @@
 package com.punuo.sys.app.agedcare.adapter;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.punuo.sys.app.agedcare.R;
-import com.punuo.sys.app.agedcare.application.AppContext;
-import com.punuo.sys.app.agedcare.ui.addressAddActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import static com.punuo.sys.app.agedcare.sip.SipInfo.dbHelper;
-import static com.punuo.sys.app.agedcare.sip.SipInfo.farmilymemberList;
+import com.bumptech.glide.Glide;
+import com.punuo.sys.app.agedcare.R;
+
 import static com.punuo.sys.app.agedcare.sip.SipInfo.movies;
-import static com.punuo.sys.app.agedcare.sip.SipInfo.musicitems;
-import static com.punuo.sys.app.agedcare.sip.SipInfo.musics;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.serverIp;
 
 /**
@@ -65,12 +56,10 @@ public class ShortMovieRecyclerViewAdapter extends RecyclerView.Adapter<ShortMov
         myViewHolder.textView.setText(movies.get(i).getTitle());
         myViewHolder.movie_info.setText(movies.get(i).getInfo());
         Log.e("movie",movies.get(i).getId());
-        if (movies.get(i).getId()==null)
-        {
+        if (movies.get(i).getId() == null) {
             myViewHolder.imageView.setImageResource(R.drawable.testcover);
-        }else {
-            AppContext.instance.displayImage("http://" + serverIp + ":8000/static/videoListCover/" + movies.get(i).getCover() + ".png", myViewHolder.imageView);
-            Log.e("movie","http://" + serverIp + ":8000/static/videoListCover/" + movies.get(i).getId() + ".png");
+        } else {
+            Glide.with(mContext).load("http://" + serverIp + ":8000/static/videoListCover/" + movies.get(i).getCover() + ".png").into(myViewHolder.imageView);
         }
 
         if(mOnItemClickListener!=null)//传递监听事件

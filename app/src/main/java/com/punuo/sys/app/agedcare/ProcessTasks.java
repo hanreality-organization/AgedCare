@@ -1,11 +1,14 @@
 package com.punuo.sys.app.agedcare;
 
-import android.accounts.AccountManager;
 import android.app.Application;
 
-import com.punuo.sys.app.agedcare.httplib.HttpConfig;
-import com.punuo.sys.app.agedcare.httplib.HttpManager;
-import com.punuo.sys.app.agedcare.httplib.IHttpConfig;
+import com.punuo.sys.sdk.activity.ActivityLifeCycle;
+import com.punuo.sys.sdk.httplib.HttpConfig;
+import com.punuo.sys.sdk.httplib.HttpManager;
+import com.punuo.sys.sdk.httplib.IHttpConfig;
+import com.punuo.sys.sdk.util.DebugCrashHandler;
+import com.punuo.sys.sdk.util.DeviceHelper;
+
 
 /**
  * Created by han.chen.
@@ -14,6 +17,10 @@ import com.punuo.sys.app.agedcare.httplib.IHttpConfig;
 public class ProcessTasks {
 
     public static void commonLaunchTasks(Application app) {
+        if (DeviceHelper.isApkInDebug()) {
+            DebugCrashHandler.getInstance().init(); //崩溃日志收集
+        }
+        app.registerActivityLifecycleCallbacks(ActivityLifeCycle.getInstance());
         HttpConfig.init(new IHttpConfig() {
             @Override
             public String getHost() {
@@ -40,7 +47,7 @@ public class ProcessTasks {
                 return "/xiaoyupeihu/public/index.php";
             }
         });
-        HttpManager.setContext(app);
+        HttpManager.setDebug(true);
         HttpManager.init();
 
     }

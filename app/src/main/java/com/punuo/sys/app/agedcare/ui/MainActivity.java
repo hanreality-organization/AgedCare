@@ -17,13 +17,10 @@ import android.widget.Button;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.punuo.sys.app.agedcare.ProcessTasks;
 import com.punuo.sys.app.agedcare.R;
-import com.punuo.sys.app.agedcare.application.AppContext;
 import com.punuo.sys.app.agedcare.groupvoice.GroupInfo;
 import com.punuo.sys.app.agedcare.http.GetPostUtil;
-import com.punuo.sys.app.agedcare.http.ToastUtils;
 import com.punuo.sys.app.agedcare.model.Constant;
 import com.punuo.sys.app.agedcare.sip.KeepAlive;
 import com.punuo.sys.app.agedcare.sip.SipDev;
@@ -31,6 +28,7 @@ import com.punuo.sys.app.agedcare.sip.SipInfo;
 import com.punuo.sys.app.agedcare.sip.SipMessageFactory;
 import com.punuo.sys.app.agedcare.sip.SipUser;
 import com.punuo.sys.app.agedcare.tools.ActivityCollector;
+import com.punuo.sys.sdk.util.ToastUtils;
 import com.punuo.sys.app.agedcare.view.LoginProgressDialog;
 
 import org.zoolu.sip.address.NameAddress;
@@ -42,16 +40,16 @@ import java.io.FileOutputStream;
 import java.util.Properties;
 import java.util.Random;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.punuo.sys.app.agedcare.model.Constant.id;
 import static java.lang.Thread.sleep;
 
 public class MainActivity extends HindebarActivity implements View.OnClickListener{
-    @Bind(R.id.setting)
+    @BindView(R.id.setting)
     Button setting;
-    @Bind(R.id.login)
+    @BindView(R.id.login)
     Button login;
     private String SdCard;
 //    Loading_view loading_view;
@@ -379,7 +377,7 @@ public class MainActivity extends HindebarActivity implements View.OnClickListen
 
                 } else {
                     Looper.prepare();
-                    ToastUtils.makeShortText("获取用户数据失败请重试", MainActivity.this);
+                    ToastUtils.showToast("获取用户数据失败请重试");
                     logining.dismiss();
                     handler.post(timeOut);
                     clicklogin.removeCallbacks(this);
@@ -389,7 +387,7 @@ public class MainActivity extends HindebarActivity implements View.OnClickListen
                 }
             } else {
                 Looper.prepare();
-                ToastUtils.makeShortText("获取用户数据失败请重试", MainActivity.this);
+                ToastUtils.showToast("获取用户数据失败请重试");
                 logining.dismiss();
                 handler.post(timeOut);
                 clicklogin.removeCallbacks(this);
@@ -492,9 +490,6 @@ public class MainActivity extends HindebarActivity implements View.OnClickListen
         }
         super.onDestroy();
         ActivityCollector.removeActivity(this);
-        ButterKnife.unbind(this);//空间解绑
-        ImageLoader.getInstance().clearMemoryCache();
-        ImageLoader.getInstance().clearDiskCache();
     }
 
     @Override

@@ -1,13 +1,8 @@
 package com.punuo.sys.app.agedcare.ui;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -18,16 +13,15 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.punuo.sys.app.agedcare.R;
-import com.punuo.sys.app.agedcare.sip.SipInfo;
 import com.punuo.sys.app.agedcare.tools.NetUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static com.punuo.sys.app.agedcare.sip.SipInfo.format;
-import static com.punuo.sys.app.agedcare.sip.SipInfo.userAccount;
 
 public class CommunityActivity extends HindebarActivity {
     public Button back;

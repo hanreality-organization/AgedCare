@@ -15,7 +15,7 @@ import com.punuo.sys.app.agedcare.R;
  * 根据宽高比例自动计算高度ImageView
  * Created by HMY on 2016/4/21.
  */
-public class RatioImageView extends android.support.v7.widget.AppCompatImageView {
+public class RatioImageView extends androidx.appcompat.widget.AppCompatImageView {
 
     /**
      * 宽高比例

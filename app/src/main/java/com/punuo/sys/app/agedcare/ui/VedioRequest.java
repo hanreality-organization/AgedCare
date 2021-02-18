@@ -9,19 +9,23 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.sip.BodyFactory;
 import com.punuo.sys.app.agedcare.sip.SipInfo;
 import com.punuo.sys.app.agedcare.sip.SipMessageFactory;
 import com.punuo.sys.app.agedcare.view.CircleImageView;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.zoolu.sip.address.NameAddress;
 import org.zoolu.sip.address.SipURL;
-import butterknife.Bind;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 import static android.R.attr.defaultValue;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.devName;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.devices;
@@ -31,12 +35,12 @@ import static com.punuo.sys.app.agedcare.sip.SipInfo.netuserdevid;
 
 public class VedioRequest extends HindebarActivity implements View.OnClickListener {
 
-    @Bind(R.id.bt_cancle)
+    @BindView(R.id.bt_cancle)
 
     Button bt_cancle;
-    @Bind(R.id.CI_avatar)
+    @BindView(R.id.CI_avatar)
     CircleImageView CI_avatar;
-    @Bind(R.id.name)
+    @BindView(R.id.name)
     TextView name;
     String TAG="VedioRequest";
     SipURL sipURL = new SipURL(netuserdevid, SipInfo.serverIp, SipInfo.SERVER_PORT_USER);

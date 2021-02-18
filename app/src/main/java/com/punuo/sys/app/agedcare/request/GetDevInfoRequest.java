@@ -1,8 +1,7 @@
 package com.punuo.sys.app.agedcare.request;
 
-import com.punuo.sys.app.agedcare.httplib.BaseRequest;
-import com.punuo.sys.app.agedcare.request.model.DevInfo;
 import com.punuo.sys.app.agedcare.request.model.DevModel;
+import com.punuo.sys.sdk.httplib.BaseRequest;
 
 /**
  * Created by han.chen.

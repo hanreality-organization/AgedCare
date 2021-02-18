@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></com.punuo.sys.app.agedcare.ui.TitleLayout>
 
-    <android.support.v7.widget.GridLayout
+    <androidx.gridlayout.widget.GridLayout
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
 
@@ -81,7 +81,7 @@
            android:src="@drawable/defaultavator"
            android:scaleType="fitXY"
            />
-   </android.support.v7.widget.GridLayout>
+   </androidx.gridlayout.widget.GridLayout>
 
    <Button
        android:layout_gravity="bottom"

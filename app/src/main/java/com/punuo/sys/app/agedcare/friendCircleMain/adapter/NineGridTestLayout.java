@@ -2,13 +2,18 @@ package com.punuo.sys.app.agedcare.friendCircleMain.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.MotionEvent;
+
+
+import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.punuo.sys.app.agedcare.R;
 
@@ -33,15 +38,16 @@ public class NineGridTestLayout extends NineGridLayout {
 
     @Override
     protected boolean displayOneImage(final RatioImageView imageView, String url, final int parentWidth) {
-        Glide.with(mContext).load(url).error(R.drawable.empty_photo).listener(new RequestListener<String, GlideDrawable>() {
+        Glide.with(mContext).load(url)
+                .apply(new RequestOptions()
+                        .error(R.drawable.sdk_image_error)).listener(new RequestListener<Drawable>() {
             @Override
-            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 return false;
             }
 
             @Override
-            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                 int w = resource.getIntrinsicWidth();
                 int h = resource.getIntrinsicHeight();
 
@@ -61,57 +67,19 @@ public class NineGridTestLayout extends NineGridLayout {
                 return false;
             }
         }).into(imageView);
-
-//        ImageLoaderUtil.displayImage(mContext, imageView, url, ImageLoaderUtil.getPhotoImageOption(), new ImageLoadingListener() {
-//            @Override
-//            public void onLoadingStarted(String imageUri, View view) {
-//
-//            }
-//
-//            @Override
-//            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-//
-//            }
-//
-//            @Override
-//            public void onLoadingComplete(String imageUri, View view, Bitmap bitmap) {
-//                int w = bitmap.getWidth();
-//                int h = bitmap.getHeight();
-//
-//                int newW;
-//                int newH;
-//                if (h > w * MAX_W_H_RATIO) {//h:w = 5:3
-//                    newW = parentWidth / 2;
-//                    newH = newW * 5 / 3;
-//                } else if (h < w) {//h:w = 2:3
-//                    newW = parentWidth * 2 / 3;
-//                    newH = newW * 2 / 3;
-//                } else {//newH:h = newW :w
-//                    newW = parentWidth / 2;
-//                    newH = h * newW / w;
-//                }
-//                setOneImageLayoutParams(imageView, newW, newH);
-//            }
-//
-//            @Override
-//            public void onLoadingCancelled(String imageUri, View view) {
-//
-//            }
-//        });
         return false;
     }
 
     @Override
     protected void displayImage(RatioImageView imageView, String url) {
-        //ImageLoaderUtil.getImageLoader(mContext).displayImage(url, imageView, ImageLoaderUtil.getPhotoImageOption());
-    Glide.with(mContext).load(url).error(R.drawable.empty_photo).into(imageView);
+        Glide.with(mContext).load(url).into(imageView);
     }
 
     @Override
     protected void onClickImage(int i, String url, ArrayList<String> urlList) {
-//        Toast.makeText(mContext, "点击了图片" +i   + url, Toast.LENGTH_SHORT).show();
-      imageBrower(i, urlList);
+        imageBrower(i, urlList);
     }
+
     /**
      * 打开图片查看器
      *

@@ -1,14 +1,10 @@
 package com.punuo.sys.app.agedcare.friendCircleMain.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Environment;
-import android.provider.Settings;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -19,11 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.punuo.sys.app.agedcare.R;
-import com.punuo.sys.app.agedcare.friendCircleMain.custonListView.CustomListView;
 import com.punuo.sys.app.agedcare.friendCircleMain.domain.FirendMicroListDatas;
 import com.punuo.sys.app.agedcare.friendCircleMain.domain.FirstMicroListDatasFirendcomment;
 import com.punuo.sys.app.agedcare.friendCircleMain.domain.FirstMicroListDatasFirendimage;
@@ -32,9 +26,7 @@ import com.punuo.sys.app.agedcare.friendCircleMain.domain.FirstMicroListDatasFir
 import com.punuo.sys.app.agedcare.friendCircleMain.util.MyCustomDialog;
 import com.punuo.sys.app.agedcare.http.GetPostUtil;
 import com.punuo.sys.app.agedcare.model.Constant;
-import com.punuo.sys.app.agedcare.sip.SipInfo;
 import com.punuo.sys.app.agedcare.tools.LoadPicture;
-import com.punuo.sys.app.agedcare.ui.MainActivity;
 import com.punuo.sys.app.agedcare.ui.MessageEvent;
 import com.punuo.sys.app.agedcare.view.CircleImageView;
 
@@ -173,10 +165,7 @@ public class MyListAdapter extends BaseAdapter {
          */
         avatar = bean.getAvatar();
         id = bean.getId();
-        Glide.with(mContext).
-                load(Constant.URL_Avatar + id + "/" + avatar).
-                error(R.drawable.empty_photo).
-                into(holder.avator);
+        Glide.with(mContext).load(Constant.URL_Avatar + id + "/" + avatar).into(holder.avator);
         /*
          * 显示姓名和内容
          */

@@ -6,9 +6,10 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.annotation.Nullable;
 import android.view.MotionEvent;
 import android.view.WindowManager;
+
+import androidx.annotation.Nullable;
 
 /**
  * Author:miner

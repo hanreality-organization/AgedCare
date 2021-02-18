@@ -13,7 +13,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.punuo.sys.app.agedcare.R;
@@ -25,22 +24,21 @@ import com.punuo.sys.app.agedcare.friendCircleMain.domain.FirendsMicro;
 import com.punuo.sys.app.agedcare.friendcircle.PublishedActivity;
 import com.punuo.sys.app.agedcare.http.GetPostUtil;
 import com.punuo.sys.app.agedcare.model.Constant;
-import com.punuo.sys.app.agedcare.tools.ActivityCollector;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class FamilyCircle extends HindebarActivity implements MyListAdapter.PositionListener{
-    @Bind(R.id.iv_back7)
+    @BindView(R.id.iv_back7)
     Button ivBack7;
-    @Bind(R.id.titleset)
+    @BindView(R.id.titleset)
     TextView titleset;
-    @Bind(R.id.iv_fatie)
+    @BindView(R.id.iv_fatie)
     ImageView ivFatie;
 
     TextView title;

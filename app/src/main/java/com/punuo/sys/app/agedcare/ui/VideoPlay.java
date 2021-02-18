@@ -1,6 +1,5 @@
 package com.punuo.sys.app.agedcare.ui;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -17,7 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.sip.SipInfo;
 import com.punuo.sys.app.agedcare.sip.SipMessageFactory;
@@ -33,13 +31,10 @@ import org.zoolu.sip.message.Message;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.punuo.sys.app.agedcare.sip.SipDev.isagree;
-
 import static com.punuo.sys.app.agedcare.sip.SipInfo.isanswering;
-import static com.punuo.sys.app.agedcare.video.VideoInfo.isvideoplay;
 
 /**
  * Author chzjy
@@ -66,9 +61,9 @@ public class VideoPlay extends HindebarActivity implements SurfaceHolder.Callbac
     Timer timer = new Timer();
     private H264decoder h264decoder;
     AlertDialog dialog;
-    @Bind(R.id.surfaceView)
+    @BindView(R.id.surfaceView)
     SurfaceView surfaceView;
-    @Bind(R.id.video_back)
+    @BindView(R.id.video_back)
     Button video_back;
     Surface surface;
     int time=0;
@@ -179,7 +174,6 @@ public void onMessageEvent(MessageEvent event) {
         VideoInfo.rtpVideo.endSession();
         VideoInfo.track.stop();
 //        buffer.clear();
-        ButterKnife.unbind(this);
         System.gc();
         EventBus.getDefault().unregister(this);
 
@@ -379,7 +373,7 @@ public void onMessageEvent(MessageEvent event) {
 //    private Bitmap videoBit = Bitmap.createBitmap(VideoInfo.width, VideoInfo.height, Bitmap.Config.RGB_565);
 //    private int getNum = 0;
 //    Timer timer = new Timer();
-//    @Bind(R.id.surfaceView)
+//    @BindView(R.id.surfaceView)
 //    SurfaceView surfaceView;
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {

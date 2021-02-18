@@ -1,7 +1,5 @@
 package com.punuo.sys.app.agedcare.vi.activity;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -17,9 +15,13 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.vi.bean.ViOnlineSongLrc;
@@ -205,29 +207,29 @@ public class PlayActivity extends VoiceUiActivity implements View.OnClickListene
     }
 
     private void setDiscViewPic(String url) {
+        RequestOptions requestOptions = new RequestOptions()
+                .placeholder(R.drawable.welcome)
+                .error(R.drawable.welcome);
 
         Glide.with(this)
                 .load(url)
-                .placeholder(R.drawable.welcome)
-                .error(R.drawable.welcome)
-                .listener(new RequestListener<String, GlideDrawable>() {
+                .apply(requestOptions)
+                .listener(new RequestListener<Drawable>() {
                     @Override
-                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         return false;
                     }
 
                     @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        mDiscImg.setImageDrawable(resource);
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         int marginTop = (int) (ViCommonUtils.SCALE_DISC_MARGIN_TOP * ViCommonUtils.getScreenHeight(PlayActivity.this));
                         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mDiscImg
                                 .getLayoutParams();
                         layoutParams.setMargins(0, marginTop, 0, 0);
-
                         mDiscImg.setLayoutParams(layoutParams);
                         return false;
                     }
-                });
+                }).into(mDiscImg);
     }
 
     private void playViSong(String musicUrl) {

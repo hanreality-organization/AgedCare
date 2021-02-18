@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,13 +14,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
 
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.camera.FileOperateUtil;
 import com.punuo.sys.app.agedcare.camera.album.view.AlbumViewPager;
 import com.punuo.sys.app.agedcare.camera.album.view.MatrixImageView;
 import com.punuo.sys.app.agedcare.camera.video.view.VideoPlayerContainer;
-
 import com.punuo.sys.app.agedcare.ftp.Ftp;
 import com.punuo.sys.app.agedcare.ftp.FtpListener;
 import com.punuo.sys.app.agedcare.model.Constant;

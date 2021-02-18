@@ -10,7 +10,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -18,6 +17,9 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.sip.SipInfo;
 import com.punuo.sys.app.agedcare.sip.SipMessageFactory;
@@ -25,6 +27,7 @@ import com.punuo.sys.app.agedcare.sip.SipUser;
 import com.punuo.sys.app.agedcare.tools.H264decoder;
 import com.punuo.sys.app.agedcare.video.H264SendingManager;
 import com.punuo.sys.app.agedcare.video.VideoInfo;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -34,12 +37,12 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.util.Timer;
 import java.util.TimerTask;
-import butterknife.Bind;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
+
 import static com.punuo.sys.app.agedcare.sip.SipInfo.isanswering;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.toDev;
 
@@ -55,11 +58,11 @@ public class VideoCallActivity extends HindebarActivity implements SipUser.StopM
     Timer timer = new Timer();
     private H264decoder h264decoder;
     AlertDialog dialog;
-    @Bind(R.id.sv_back)
+    @BindView(R.id.sv_back)
     SurfaceView svBack;
-    @Bind(R.id.sv_front)
+    @BindView(R.id.sv_front)
     SurfaceView svFront;
-    @Bind(R.id.video_back)
+    @BindView(R.id.video_back)
     Button video_back;
     int time = 0;
     H264SendingManager sendingManager;
@@ -176,7 +179,6 @@ public class VideoCallActivity extends HindebarActivity implements SipUser.StopM
 
         VideoInfo.rtpVideo.endSession();
         VideoInfo.track.stop();
-        ButterKnife.unbind(this);
         EventBus.getDefault().unregister(this);
         sendingManager.deInit();
         System.gc();//系统垃圾回收

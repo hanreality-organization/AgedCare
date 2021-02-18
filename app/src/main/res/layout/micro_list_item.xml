@@ -18,7 +18,7 @@
                 android:id="@+id/avator"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/empty_photo" />
+                android:src="@drawable/sdk_image_error" />
 
             <TextView
                 android:id="@+id/name"

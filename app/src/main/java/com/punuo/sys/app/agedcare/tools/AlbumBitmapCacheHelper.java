@@ -6,11 +6,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.util.LruCache;
 import android.util.Log;
 import android.view.WindowManager;
 
-import com.punuo.sys.app.agedcare.application.AppContext;
+import androidx.collection.LruCache;
+
+import com.punuo.sys.sdk.PnApplication;
+import com.punuo.sys.sdk.util.CommonUtil;
+import com.punuo.sys.sdk.util.MD5Util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -136,7 +139,8 @@ public class AlbumBitmapCacheHelper {
                     BitmapFactory.Options options = new BitmapFactory.Options();
                     options.inJustDecodeBounds = true;
                     BitmapFactory.decodeFile(path, options);
-                    options.inSampleSize = computeScale(options, ((WindowManager) (AppContext.getInstance().getSystemService(Context.WINDOW_SERVICE))).getDefaultDisplay().getWidth(), ((WindowManager) (AppContext.getInstance().getSystemService(Context.WINDOW_SERVICE))).getDefaultDisplay().getWidth());
+                    options.inSampleSize = computeScale(options, ((WindowManager) (PnApplication.getInstance().getSystemService(Context.WINDOW_SERVICE))).getDefaultDisplay().getWidth(),
+                            ((WindowManager) (PnApplication.getInstance().getSystemService(Context.WINDOW_SERVICE))).getDefaultDisplay().getWidth());
                     options.inJustDecodeBounds = false;
                     try {
                         bitmap = BitmapFactory.decodeFile(path, options);
@@ -148,7 +152,7 @@ public class AlbumBitmapCacheHelper {
                     //返回小图，第一步，从temp目录下取该图片指定大小的缓存，如果取不到，
                     // 第二步，计算samplesize,如果samplesize > 4,
                     // 第三步则将压缩后的图片存入temp目录下，以便下次快速取出
-                    String hash = CommonUtil.md5(path+"_"+width+"_"+height);
+                    String hash = MD5Util.getMD5String(path+"_"+width+"_"+height);
                     File file = new File(CommonUtil.getDataPath());
                     if (!file.exists())
                         file.mkdirs();

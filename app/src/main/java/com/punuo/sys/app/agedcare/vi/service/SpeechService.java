@@ -7,8 +7,9 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.speech.RecognitionListener;
 import android.speech.SpeechRecognizer;
-import android.support.annotation.Nullable;
 import android.util.Log;
+
+import androidx.annotation.Nullable;
 
 import com.baidu.speech.EventListener;
 import com.baidu.speech.EventManager;
@@ -19,7 +20,7 @@ import com.baidu.tts.client.SpeechSynthesizer;
 import com.baidu.tts.client.SpeechSynthesizerListener;
 import com.baidu.tts.client.TtsMode;
 import com.punuo.sys.app.agedcare.http.LogUtils;
-import com.punuo.sys.app.agedcare.http.ToastUtils;
+import com.punuo.sys.sdk.util.ToastUtils;
 import com.punuo.sys.app.agedcare.vi.activity.ChatActivity;
 import com.punuo.sys.app.agedcare.vi.bean.VoiceEvent;
 
@@ -300,47 +301,47 @@ public class SpeechService extends Service implements RecognitionListener {
         switch (error) {
             case SpeechRecognizer.ERROR_AUDIO:
                 sb.append("存在音频问题");
-                ToastUtils.showShort(this,"存在音频问题");
+                ToastUtils.showToast("存在音频问题");
                 speakTTS("存在音频问题");
                 break;
             case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
                 sb.append("没有语音输入");
-                ToastUtils.showShort(this,"没有语音输入");
+                ToastUtils.showToast("没有语音输入");
                 speakTTS("没有语音输入");
                 break;
             case SpeechRecognizer.ERROR_CLIENT:
                 sb.append("其它客户端错误");
-                ToastUtils.showShort(this,"其它客户端错误");
+                ToastUtils.showToast("其它客户端错误");
                 speakTTS("其它客户端错误");
                 break;
             case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
                 sb.append("权限不足");
-                ToastUtils.showShort(this,"权限不足");
+                ToastUtils.showToast("权限不足");
                 speakTTS("权限不足");
                 break;
             case SpeechRecognizer.ERROR_NETWORK:
                 sb.append("网络问题");
-                ToastUtils.showShort(this,"网络问题");
+                ToastUtils.showToast("网络问题");
                 speakTTS("网络问题");
                 break;
             case SpeechRecognizer.ERROR_NO_MATCH:
                 sb.append("没有匹配的识别结果");
-                ToastUtils.showShort(this,"没有匹配的识别结果");
+                ToastUtils.showToast("没有匹配的识别结果");
                 speakTTS("没有匹配的识别结果");
                 break;
             case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
                 sb.append("引擎忙");
-                ToastUtils.showShort(this,"引擎忙");
+                ToastUtils.showToast("引擎忙");
                 speakTTS("引擎忙");
                 break;
             case SpeechRecognizer.ERROR_SERVER:
                 sb.append("服务端错误");
-                ToastUtils.showShort(this,"服务端错误");
+                ToastUtils.showToast("服务端错误");
                 speakTTS("服务端错误");
                 break;
             case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
                 sb.append("连接超时");
-                ToastUtils.showShort(this,"连接超时");
+                ToastUtils.showToast("连接超时");
                 speakTTS("连接超时");
                 break;
         }

@@ -1,22 +1,13 @@
 package com.punuo.sys.app.agedcare.ui;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
-
-import android.graphics.Paint;
-
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-
 import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -25,44 +16,39 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.alibaba.fastjson.JSON;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageSize;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import androidx.annotation.Nullable;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.adapter.ClusterAdapter;
 import com.punuo.sys.app.agedcare.groupvoice.GroupInfo;
 import com.punuo.sys.app.agedcare.groupvoice.GroupKeepAlive;
-import com.punuo.sys.app.agedcare.groupvoice.GroupSignaling;
 import com.punuo.sys.app.agedcare.groupvoice.GroupUdpThread;
 import com.punuo.sys.app.agedcare.groupvoice.RtpAudio;
 import com.punuo.sys.app.agedcare.service.PTTService;
 import com.punuo.sys.app.agedcare.sip.BodyFactory;
-import com.punuo.sys.app.agedcare.sip.SipDev;
 import com.punuo.sys.app.agedcare.sip.SipInfo;
 import com.punuo.sys.app.agedcare.sip.SipMessageFactory;
 import com.punuo.sys.app.agedcare.sip.SipUser;
 import com.punuo.sys.app.agedcare.tools.ActivityCollector;
-import com.punuo.sys.app.agedcare.tools.MyToast;
-import com.punuo.sys.app.agedcare.video.H264Sending;
-import com.punuo.sys.app.agedcare.video.VideoInfo;
 
 import java.io.IOException;
 import java.net.SocketException;
-import butterknife.Bind;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 import static com.punuo.sys.app.agedcare.sip.SipInfo.devices;
-import static com.punuo.sys.app.agedcare.sip.SipInfo.isSpeak;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.qinliaouseridList;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.sipUser;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.url;
-import static com.punuo.sys.app.agedcare.sip.SipUser.LIVE;
-
-import static com.punuo.sys.app.agedcare.sip.SipUser.afterQIANLIAOUSERID;
-import static com.punuo.sys.app.agedcare.sip.SipUser.qinliaouserid;
 
 
 /**
@@ -72,23 +58,23 @@ import static com.punuo.sys.app.agedcare.sip.SipUser.qinliaouserid;
  */
 public class ChsChange extends HindebarActivity implements SipUser.QinliaoUpdateListener, ViewTreeObserver.OnGlobalLayoutListener {
 
-    @Bind(R.id.icon1)
+    @BindView(R.id.icon1)
     ImageView icon1;
-    @Bind(R.id.icon2)
+    @BindView(R.id.icon2)
     ImageView icon2;
-    @Bind(R.id.icon3)
+    @BindView(R.id.icon3)
     ImageView icon3;
-    @Bind(R.id.icon4)
+    @BindView(R.id.icon4)
     ImageView icon4;
-    @Bind(R.id.icon5)
+    @BindView(R.id.icon5)
     ImageView icon5;
-    @Bind(R.id.icon6)
+    @BindView(R.id.icon6)
     ImageView icon6;
-    @Bind(R.id.icon7)
+    @BindView(R.id.icon7)
     ImageView icon7;
-    @Bind(R.id.icon8)
+    @BindView(R.id.icon8)
     ImageView icon8;
-    @Bind(R.id.cancle)
+    @BindView(R.id.cancle)
     Button button;
     ImageView[] icons;
     int i = 0;
@@ -131,11 +117,10 @@ public class ChsChange extends HindebarActivity implements SipUser.QinliaoUpdate
             switch (msg.what) {
 
                 case 0X222:
-                    for (int i=0;i<icons.length;i++)
-                    {
-                        changeLight(icons[i],-80);
+                    for (int i = 0; i < icons.length; i++) {
+                        changeLight(icons[i], -80);
                     }
-                    if (devices!=null) {
+                    if (devices != null) {
                         for (i = 0; i < qinliaouseridList.size(); i++) {
 
                             String str = Integer.toString(i);
@@ -221,29 +206,34 @@ public class ChsChange extends HindebarActivity implements SipUser.QinliaoUpdate
         Intent intent = new Intent("android.intent.action.GLOBAL_BUTTON");
         KeyEvent keyEvent = new KeyEvent(KeyEvent.ACTION_DOWN, 261);
         intent.putExtra("android.intent.extra.KEY_EVENT", keyEvent);
-                   sendBroadcast(intent);
-       Log.d(TAG,"aaaa");
+        sendBroadcast(intent);
+        Log.d(TAG, "aaaa");
 
     }
 
     protected void showicon() {
-        if (devices!=null) {
+        if (devices != null) {
             for (i = 0; i < devices.size(); i++) {
                 final int a = i;
-                ImageSize targetSize = new ImageSize(150, 150); // result Bitmap will be fit to this size
+                Glide.with(this).load(url[a])
+                        .apply(new RequestOptions().override(150, 150))
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                return false;
+                            }
 
-                ImageLoader.getInstance().loadImage(url[a], targetSize, new SimpleImageLoadingListener() {
-                    @Override
-                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                        // Do whatever you want with Bitmap
-                        super.onLoadingComplete(imageUri, view, loadedImage);
-                        icons[a].setImageBitmap(loadedImage);
-                        changeLight(icons[a], -80);
-                    }
-                });
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                changeLight(icons[a], -80);
+                                return false;
+                            }
+                        })
+                        .into(icons[a]);
             }
         }
     }
+
     private void waitFor() {
         try {
             Thread.sleep(100);
@@ -255,7 +245,6 @@ public class ChsChange extends HindebarActivity implements SipUser.QinliaoUpdate
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
         ActivityCollector.removeActivity(this);
         if (!(GroupInfo.wakeLock == null)) {
             GroupInfo.wakeLock.release();
@@ -270,7 +259,7 @@ public class ChsChange extends HindebarActivity implements SipUser.QinliaoUpdate
         content.getViewTreeObserver().removeOnGlobalLayoutListener(this);
     }
 
-    @OnClick({ R.id.cancle,})
+    @OnClick({R.id.cancle,})
     public void onClick(View view) {
         switch (view.getId()) {
 //            case R.id.speak:
@@ -323,10 +312,11 @@ public class ChsChange extends HindebarActivity implements SipUser.QinliaoUpdate
             decorView.setSystemUiVisibility(uiOptions);
         }
     }
+
     @Override
     public void iconUpdate() {
 
-      handler.sendEmptyMessage(0X222);
+        handler.sendEmptyMessage(0X222);
 //        Log.d("TTTT",Thread.currentThread().toString());
 //        for (i = 0; i < devices.size(); i++) {
 //            final int a = i;
@@ -382,14 +372,14 @@ public class ChsChange extends HindebarActivity implements SipUser.QinliaoUpdate
 //            return bmp;
 //        }
 
-        /**
-         * 暖意特效
-         *
-         * @param bmp     原图片
-         * @param centerX 光源横坐标
-         * @param centerY 光源纵坐标
-         * @return 暖意特效图片
-         */
+/**
+ * 暖意特效
+ *
+ * @param bmp     原图片
+ * @param centerX 光源横坐标
+ * @param centerY 光源纵坐标
+ * @return 暖意特效图片
+ */
 //        public Bitmap warmthFilter(Bitmap bmp, int centerX, int centerY) {
 //            final int width = bmp.getWidth();
 //            final int height = bmp.getHeight();

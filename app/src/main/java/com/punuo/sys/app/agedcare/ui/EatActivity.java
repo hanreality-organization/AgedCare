@@ -8,14 +8,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
 import com.punuo.sys.app.agedcare.R;
-import butterknife.Bind;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class EatActivity extends HindebarActivity {
-    @Bind(R.id.eat_cancel)
+    @BindView(R.id.eat_cancel)
     Button eat_cancel;
-    @Bind(R.id.eat_call)
+    @BindView(R.id.eat_call)
     Button eat_call;
     String item;
     @Override

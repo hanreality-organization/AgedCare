@@ -10,21 +10,19 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.punuo.sys.app.agedcare.R;
-import com.punuo.sys.app.agedcare.tools.AlbumBitmapCacheHelper;
 import com.punuo.sys.app.agedcare.adapter.MyRecyclerViewAdapter;
+import com.punuo.sys.app.agedcare.tools.AlbumBitmapCacheHelper;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -40,7 +38,6 @@ public class AlbumActivity extends HindebarActivity {
     private List<String> images = new ArrayList<String>();//图片地址
     private List<String> imagespath = new ArrayList<String>();
     private Context mContext;
-    private DisplayImageOptions options;
     private MyRecyclerViewAdapter adapter;
     private HashMap<Integer, float[]> xyMap = new HashMap<Integer, float[]>();//所有子项的坐标
     private int screenWidth;//屏幕宽度
@@ -166,15 +163,7 @@ public class AlbumActivity extends HindebarActivity {
         GridLayoutManager glm = new GridLayoutManager(mContext, 3);//定义3列的网格布局
         rv.setLayoutManager(glm);
         rv.addItemDecoration(new RecyclerViewItemDecoration(5, 3));//初始化子项距离和列数
-        options = new DisplayImageOptions.Builder()
-                .showImageForEmptyUri(R.drawable.pictureloading)
-                .showImageOnLoading(R.drawable.pictureloading)
-                .showImageOnFail(R.drawable.pictureloading)
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .displayer(new FadeInBitmapDisplayer(1))
-                .build();
-        adapter = new MyRecyclerViewAdapter(images, mContext, options, glm);
+        adapter = new MyRecyclerViewAdapter(images, mContext, glm);
         rv.setAdapter(adapter);
     }
 

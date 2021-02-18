@@ -9,6 +9,8 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.punuo.sys.sdk.util.FileUtil;
+
 import java.io.InputStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

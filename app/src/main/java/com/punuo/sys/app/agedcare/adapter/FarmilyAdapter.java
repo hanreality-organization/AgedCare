@@ -1,12 +1,9 @@
 package com.punuo.sys.app.agedcare.adapter;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,13 +11,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.model.Farmilymember;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.punuo.sys.app.agedcare.sip.SipInfo.dbHelper;
@@ -117,13 +116,13 @@ public class FarmilyAdapter extends RecyclerView.Adapter<FarmilyAdapter.ViewHold
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.name)
+        @BindView(R.id.name)
         TextView name;
-        @Bind(R.id.phonenumber)
+        @BindView(R.id.phonenumber)
         TextView phonenumber;
-        @Bind(R.id.remove)
+        @BindView(R.id.remove)
         Button remove;
-        @Bind(R.id.add)
+        @BindView(R.id.add)
         Button add;
         public ViewHolder(View view) {
             super(view);

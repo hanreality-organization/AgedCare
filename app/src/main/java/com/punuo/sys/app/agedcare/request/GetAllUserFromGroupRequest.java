@@ -1,11 +1,7 @@
 package com.punuo.sys.app.agedcare.request;
 
-import com.punuo.sys.app.agedcare.httplib.BaseRequest;
-import com.punuo.sys.app.agedcare.model.Device;
-import com.punuo.sys.app.agedcare.request.model.DevInfo;
 import com.punuo.sys.app.agedcare.request.model.DeviceModel;
-
-import java.util.List;
+import com.punuo.sys.sdk.httplib.BaseRequest;
 
 /**
  * Created by han.chen.

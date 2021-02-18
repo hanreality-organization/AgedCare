@@ -3,12 +3,6 @@ package com.punuo.sys.app.agedcare.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewConfigurationCompat;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
@@ -20,16 +14,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
-import com.punuo.sys.app.agedcare.R;
+import androidx.core.view.ViewConfigurationCompat;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
+import com.bumptech.glide.Glide;
+import com.punuo.sys.app.agedcare.R;
+import com.punuo.sys.app.agedcare.camera.imageloader.DisplayImageOptions;
+import com.punuo.sys.app.agedcare.camera.imageloader.ImageLoader;
 import com.punuo.sys.app.agedcare.tools.ViewPagerFixed;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -37,32 +36,32 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 public class AlbumSecondActivity extends Activity {
     private ViewPagerFixed vp;
 
-    private List<ImageView> imageViews=new ArrayList<>();//显示图片的ImageView
+    private List<ImageView> imageViews = new ArrayList<>();//显示图片的ImageView
     private int position;//从上个页面获取的子项position
-    private List<String> urls=new ArrayList<>();//上个页面获取的URL列表
-    private DisplayImageOptions options;
-    private MyViewPagerAdapter adapter=new MyViewPagerAdapter();
+    private List<String> urls = new ArrayList<>();//上个页面获取的URL列表
+    private MyViewPagerAdapter adapter = new MyViewPagerAdapter();
     private LinearLayout vp_ll;
-    private Map<Integer,float[]> xyMap=new HashMap<>();//接收所有图片的坐标
-    private float pivotX,pivotY;//放大缩小的中心点
+    private Map<Integer, float[]> xyMap = new HashMap<>();//接收所有图片的坐标
+    private float pivotX, pivotY;//放大缩小的中心点
     private TextView vp_text;
     private Context mContext;
     private Button back;
     private int mTouchSlop;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_albumsecondactivity);
         hideNavigationBar();
-        mContext=this;
+        mContext = this;
         initView();
 
 
-        position=getIntent().getIntExtra("position", 0);
+        position = getIntent().getIntExtra("position", 0);
         //得到放缩中心点
-        pivotX=xyMap.get(position)[0];
-        pivotY=xyMap.get(position)[1];
+        pivotX = xyMap.get(position)[0];
+        pivotY = xyMap.get(position)[1];
         initData();
         //放大动画
 //        ScaleAnimation scaleAnimation=new ScaleAnimation(0, 1, 0, 1, pivotX,pivotY);//设置动画从0放大到正常大小
@@ -88,9 +87,9 @@ public class AlbumSecondActivity extends Activity {
 
             @Override
             public void onPageSelected(int position1) {//左右滑动时更新中心点和文字信息
-                pivotX=xyMap.get(position1)[0];
-                pivotY=xyMap.get(position1)[1];
-                vp_text.setText((position1+1)+"/"+xyMap.size());
+                pivotX = xyMap.get(position1)[0];
+                pivotY = xyMap.get(position1)[1];
+                vp_text.setText((position1 + 1) + "/" + xyMap.size());
             }
 
             @Override
@@ -104,31 +103,24 @@ public class AlbumSecondActivity extends Activity {
 
 
     }
+
     @SuppressWarnings("unchecked")
     private void initView() {
         ViewConfiguration configuration = ViewConfiguration.get(this);
         mTouchSlop = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
 
-        vp=(ViewPagerFixed) findViewById(R.id.vp);
-        vp_ll=(LinearLayout)findViewById(R.id.vp_ll);
-        vp_text=(TextView)findViewById(R.id.vp_text);
-        back=(Button) findViewById(R.id.album_back);
-        xyMap=(HashMap<Integer,float[]>)getIntent().getExtras().get("xyMap");
+        vp = (ViewPagerFixed) findViewById(R.id.vp);
+        vp_ll = (LinearLayout) findViewById(R.id.vp_ll);
+        vp_text = (TextView) findViewById(R.id.vp_text);
+        back = (Button) findViewById(R.id.album_back);
+        xyMap = (HashMap<Integer, float[]>) getIntent().getExtras().get("xyMap");
     }
-    private void initData() {
-        options=new DisplayImageOptions.Builder()
-                .showImageForEmptyUri(R.drawable.pictureloading)
-                .showImageOnLoading(R.drawable.pictureloading)
-                .showImageOnFail(R.drawable.pictureloading)
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .displayer(new FadeInBitmapDisplayer(5))
-                .build();
 
-        urls=getIntent().getStringArrayListExtra("urls");
-        for(int i=0;i<urls.size();i++)//获取图片，设置PhotoView，加到ViewPager当中
-        {
-            PhotoView photoView=new PhotoView(mContext);
+    private void initData() {
+
+        urls = getIntent().getStringArrayListExtra("urls");
+        for (int i = 0; i < urls.size(); i++) {//获取图片，设置PhotoView，加到ViewPager当中
+            PhotoView photoView = new PhotoView(mContext);
             photoView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             photoView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {//单击图片退出大图
                 @Override
@@ -136,14 +128,13 @@ public class AlbumSecondActivity extends Activity {
                     AlbumSecondActivity.this.finish();
                 }
             });
-
-            ImageLoader.getInstance().displayImage(urls.get(i), photoView, options);
+            Glide.with(mContext).load(urls.get(i)).into(photoView);
             imageViews.add(photoView);
 
         }
         vp.setAdapter(adapter);
         vp.setCurrentItem(position, true);
-        vp_text.setText((position+1)+"/"+xyMap.size());
+        vp_text.setText((position + 1) + "/" + xyMap.size());
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,8 +144,7 @@ public class AlbumSecondActivity extends Activity {
 
     }
 
-    private class MyViewPagerAdapter extends PagerAdapter
-    {
+    private class MyViewPagerAdapter extends PagerAdapter {
 
         @Override
         public int getCount() {
@@ -163,23 +153,22 @@ public class AlbumSecondActivity extends Activity {
 
         @Override
         public boolean isViewFromObject(View arg0, Object arg1) {
-            return arg0==arg1;
+            return arg0 == arg1;
         }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((View)object);
+            container.removeView((View) object);
         }
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            View view=imageViews.get(position);
+            View view = imageViews.get(position);
             container.addView(view);
             return view;
         }
 
     }
-
 
 
     /**
@@ -190,7 +179,7 @@ public class AlbumSecondActivity extends Activity {
         //大图页面是全屏，小图页面非全屏，从全屏退到非全屏页面会产生抖动现象，因此退出前设置成非全屏模式
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN, WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 
-        ScaleAnimation scaleAnimation=new ScaleAnimation(1, 0, 1, 0, pivotX,pivotY);//动画从正常大小缩小至0
+        ScaleAnimation scaleAnimation = new ScaleAnimation(1, 0, 1, 0, pivotX, pivotY);//动画从正常大小缩小至0
         scaleAnimation.setDuration(350);
         scaleAnimation.setFillAfter(true);
         vp_ll.startAnimation(scaleAnimation);
@@ -217,6 +206,7 @@ public class AlbumSecondActivity extends Activity {
         });
 
     }
+
     public void hideNavigationBar() {
         int uiFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION

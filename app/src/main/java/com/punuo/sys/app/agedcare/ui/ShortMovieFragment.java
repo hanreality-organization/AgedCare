@@ -5,31 +5,36 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.adapter.ShortMovieRecyclerViewAdapter;
 import com.punuo.sys.app.agedcare.model.ShortMovie;
+
 import org.greenrobot.eventbus.EventBus;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import butterknife.Bind;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import tcking.github.com.giraffeplayer.GiraffePlayerActivity;
+
 import static com.punuo.sys.app.agedcare.sip.SipInfo.movies;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.serverIp;
 
@@ -39,9 +44,9 @@ import static com.punuo.sys.app.agedcare.sip.SipInfo.serverIp;
 
 public class ShortMovieFragment extends Fragment {
 
-    @Bind(R.id.rv_short_movie)
+    @BindView(R.id.rv_short_movie)
     RecyclerView rv_short_movie;
-    @Bind(R.id.gank_swipe_refresh_layout)
+    @BindView(R.id.gank_swipe_refresh_layout)
     SwipeRefreshLayout gank_swipe_refresh_layout;
     private Context mContext;
     private ShortMovieRecyclerViewAdapter adapter;

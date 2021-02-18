@@ -2,23 +2,17 @@ package com.punuo.sys.app.agedcare.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.Settings;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.google.zxing.common.Runnable;
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.http.GetPostUtil;
 import com.punuo.sys.app.agedcare.model.Constant;
@@ -31,15 +25,15 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Method;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ServiceCallActivity extends HindebarActivity implements View.OnClickListener {
-   @Bind(R.id.jiazheng)
+   @BindView(R.id.jiazheng)
    CircleImageView jiazheng;
-    @Bind(R.id.wuye)
+    @BindView(R.id.wuye)
     CircleImageView wuye;
-    @Bind(R.id.dingcan)
+    @BindView(R.id.dingcan)
     CircleImageView dingcan;
     String item_jiazheng;
     String item_wuye;
@@ -48,10 +42,7 @@ public class ServiceCallActivity extends HindebarActivity implements View.OnClic
     String orderfood;
     String property;
     public static final int UPDATECALLNUMBER=1;
-    private Handler handler = new Handler()
-    {
-
-    };
+    private Handler handler = new Handler();
     java.lang.Runnable runnable =new java.lang.Runnable() {
         @Override
         public void run() {
@@ -161,7 +152,6 @@ public class ServiceCallActivity extends HindebarActivity implements View.OnClic
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ButterKnife.unbind(this);
         EventBus.getDefault().unregister(this);
         finish();
     }

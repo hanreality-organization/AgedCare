@@ -12,8 +12,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,21 +19,28 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.adapter.AppGridViewAdapter;
 import com.punuo.sys.app.agedcare.adapter.ApplicationAdapter;
 import com.punuo.sys.app.agedcare.model.MyApplicationInfo;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import butterknife.Bind;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
+
 import static android.app.Activity.DEFAULT_KEYS_SEARCH_LOCAL;
 
 
 public class MenuFragment extends Fragment {
     private static final String TAG = "MenuFragment";
-    @Bind(R.id.viewpager)
+    @BindView(R.id.viewpager)
     ViewPager viewpager;
 
     public final int CHAT = 0;
@@ -150,7 +155,7 @@ public class MenuFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+
         unregisterIntentReceivers();
     }
 

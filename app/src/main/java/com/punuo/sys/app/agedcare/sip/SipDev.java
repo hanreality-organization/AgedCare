@@ -8,7 +8,6 @@ import android.util.Log;
 
 import com.punuo.sys.app.agedcare.groupvoice.GroupInfo;
 import com.punuo.sys.app.agedcare.model.Device;
-import com.punuo.sys.app.agedcare.tools.SipVideoMananger;
 import com.punuo.sys.app.agedcare.ui.MessageEvent;
 import com.punuo.sys.app.agedcare.video.VideoInfo;
 
@@ -29,8 +28,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;

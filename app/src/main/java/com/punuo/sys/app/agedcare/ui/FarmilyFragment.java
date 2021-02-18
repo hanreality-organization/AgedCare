@@ -1,13 +1,11 @@
 package com.punuo.sys.app.agedcare.ui;
 
 
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,28 +13,36 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.nostra13.universalimageloader.core.assist.ImageSize;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.punuo.sys.app.agedcare.R;
-import com.punuo.sys.app.agedcare.application.AppContext;
 import com.punuo.sys.app.agedcare.model.Device;
 import com.punuo.sys.app.agedcare.sip.BodyFactory;
 import com.punuo.sys.app.agedcare.sip.SipDev;
 import com.punuo.sys.app.agedcare.sip.SipInfo;
 import com.punuo.sys.app.agedcare.sip.SipMessageFactory;
 import com.punuo.sys.app.agedcare.sip.SipUser;
+
 import org.zoolu.sip.address.NameAddress;
 import org.zoolu.sip.address.SipURL;
+
 import java.io.IOException;
 import java.util.List;
-import butterknife.Bind;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-
 
 import static com.punuo.sys.app.agedcare.sip.SipInfo.devId;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.devName;
@@ -44,7 +50,6 @@ import static com.punuo.sys.app.agedcare.sip.SipInfo.devices;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.groupid;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.isanswering;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.netuserdevid;
-
 import static com.punuo.sys.app.agedcare.sip.SipInfo.serverIp;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.url;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.userId;
@@ -54,37 +59,37 @@ import static com.punuo.sys.app.agedcare.ui.ChsChange.clusterAdapter;
 public class FarmilyFragment extends Fragment implements SipDev.NumberUpdateListener,SipUser.ClusterNotifyListener
 {
     private static final String TAG = "FarmilyFragment";
-    @Bind(R.id.icon1)
+    @BindView(R.id.icon1)
     ImageView icon1;
-    @Bind(R.id.nickName1)
+    @BindView(R.id.nickName1)
     TextView nickName1;
-    @Bind(R.id.icon2)
+    @BindView(R.id.icon2)
     ImageView icon2;
-    @Bind(R.id.nickName2)
+    @BindView(R.id.nickName2)
     TextView nickName2;
-    @Bind(R.id.icon3)
+    @BindView(R.id.icon3)
     ImageView icon3;
-    @Bind(R.id.nickName3)
+    @BindView(R.id.nickName3)
     TextView nickName3;
-    @Bind(R.id.icon4)
+    @BindView(R.id.icon4)
     ImageView icon4;
-    @Bind(R.id.nickName4)
+    @BindView(R.id.nickName4)
     TextView nickName4;
-    @Bind(R.id.icon5)
+    @BindView(R.id.icon5)
     ImageView icon5;
-    @Bind(R.id.nickName5)
+    @BindView(R.id.nickName5)
     TextView nickName5;
-    @Bind(R.id.icon6)
+    @BindView(R.id.icon6)
     ImageView icon6;
-    @Bind(R.id.nickName6)
+    @BindView(R.id.nickName6)
     TextView nickName6;
-    @Bind(R.id.icon7)
+    @BindView(R.id.icon7)
     ImageView icon7;
-    @Bind(R.id.nickName7)
+    @BindView(R.id.nickName7)
     TextView nickName7;
-    @Bind(R.id.icon8)
+    @BindView(R.id.icon8)
     ImageView icon8;
-    @Bind(R.id.nickName8)
+    @BindView(R.id.nickName8)
     TextView nickName8;
     int i;
     int a;
@@ -115,21 +120,21 @@ public class FarmilyFragment extends Fragment implements SipDev.NumberUpdateList
 
                         for (i = 0; i < devices.size(); i++) {
                             final int iconorder = i;
+                            Glide.with(getActivity()).asBitmap().load(url[iconorder])
+                                    .apply(new RequestOptions()
+                                    .override(150, 150))
+                                    .listener(new RequestListener<Bitmap>() {
+                                        @Override
+                                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                            return false;
+                                        }
 
-                            ImageSize targetSize = new ImageSize(150, 150); // result Bitmap will be fit to this size
-//                            Log.d(TAG, url[iconorder]);
-                            AppContext.instance.loadImage(url[iconorder], targetSize, new SimpleImageLoadingListener() {
-                                @Override
-                                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                                    // Do whatever you want with Bitmap
-                                    super.onLoadingComplete(imageUri, view, loadedImage);
-                                    icons[iconorder].setImageBitmap(loadedImage);
-                                    devices.get(iconorder).setBitmap(loadedImage);
-
-
-                                }
-                            });
-
+                                        @Override
+                                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                            devices.get(iconorder).setBitmap(resource);
+                                            return false;
+                                        }
+                                    }).into(icons[iconorder]);
 
                             icons[iconorder].setOnClickListener(new View.OnClickListener() {
                                 @Override
