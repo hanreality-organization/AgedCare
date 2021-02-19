@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">AgedCare</string>
+    <string name="zero_time">0:00</string>
+    <string name="fourG">4G</string>
+    <string name="wifi">WIFI</string>
+    <string name="Image">Image</string>
+    <!-- 缩略图文件夹 -->
+    <string name="Thumbnail">Thumbnail</string>
+    <!-- 视频文件夹 -->
+    <string name="Video">Video</string>
+    <string name="album_phoot_select_all">全选</string>
+    <string name="album_phoot_unselect_all">取消全选</string>
+    <string name="common_delete">删除</string>
+    <string name="common_upload">上传</string>
+    <string name="album_title">我的相册</string>
+    <string name="album_enter_select">选择</string>
+    <string name="api_cancel">取消</string>
+    <string name="album_photo_select_tip">项</string>
+    <string name="p2refresh_head_load_more">加载更多</string>
+    <string name="p2refresh_end_load_more">更    多</string>
+    <string name="p2refresh_end_click_load_more">没有更多</string>
+    <string name="p2refresh_release_refresh">松开刷新</string>
+    <string name="p2refresh_pull_to_refresh">下拉刷新</string>
+    <string name="p2refresh_doing_head_refresh">正在刷新&#8230;</string>
+    <string name="p2refresh_doing_end_refresh">加载中&#8230;</string>
+    <string name="p2refresh_refresh_lasttime">最近更新&#160;&#058;&#160;</string>
+    <string name="Files">Files</string>
+    <string name="viewpager_indicator">%1$d/%2$d</string>
+</resources>

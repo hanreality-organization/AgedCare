@@ -1,7 +1,10 @@
-include ':basesdk'
+include ':module_router'
 include ':app'
+include ':module_sip'
+include ':module_compat'
+include ':basesdk'
+include ':module_home'
 include ':giraffeplayer'
-include ':emoji'
 
 apply from: './base.gradle'
 gradle.ext {

@@ -101,7 +101,7 @@ public class Download implements Runnable {
                     context.startActivity(installIntent);
                     mBuilder.setAutoCancel(true).setOngoing(false).setProgress(0, 0, false).setDefaults(Notification.DEFAULT_SOUND).
                             setContentIntent(updatePendingIntent).setContentTitle(context.getString(R.string.app_name)).
-                            setContentText("下载完成").setSmallIcon(R.drawable.logo);
+                            setContentText("下载完成").setSmallIcon(R.mipmap.ic_launcher);
                     updateNotificationManager.notify(id, mBuilder.build());
                     break;
                 case DOWNLOAD_FAILED:
@@ -176,7 +176,7 @@ public class Download implements Runnable {
         mBuilder = new NotificationCompat.Builder(context);
 
                 mBuilder.setAutoCancel(false).setOngoing(true).setContentTitle(context.getString(R.string.app_name))
-                        .setContentText("下载中").setSmallIcon(R.drawable.logo).setContentIntent(updatePendingIntent).setProgress(0, 0, true);
+                        .setContentText("下载中").setSmallIcon(R.mipmap.ic_launcher).setContentIntent(updatePendingIntent).setProgress(0, 0, true);
 
             updateNotificationManager.notify(id, mBuilder.build());
 

@@ -3,7 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.jakewharton.butterknife'
 android {
-    useLibrary 'org.apache.http.legacy'
     signingConfigs {
         punuo {
             keyAlias 'hangzhoupunuokeystore'
@@ -17,6 +16,7 @@ android {
         javaCompileOptions {
             annotationProcessorOptions {
                 includeCompileClasspath = true
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
             }
         }
         ndk{
@@ -72,6 +72,10 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':basesdk')
-    implementation project(':giraffeplayer')
+    implementation project(':module_compat')
+    implementation project(':module_sip')
+    implementation project(':module_home')
+    kapt 'com.alibaba:arouter-compiler:1.2.2'
     kapt 'com.jakewharton:butterknife-compiler:10.0.0'
+    kapt 'org.permissionsdispatcher:permissionsdispatcher-processor:4.6.0'
 }

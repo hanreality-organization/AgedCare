@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:background="@drawable/titleback"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:layout_width="370dp"
+        android:layout_height="82dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dp"
+        android:src="@drawable/logo" />
+
+    <TextClock
+        android:id="@+id/text_clock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:layout_toLeftOf="@+id/net"
+        android:format12Hour="yyyy年MM月dd日HH:mm:ss EEEE" />
+
+    <TextView
+        android:id="@+id/net"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingRight="30dp"
+        android:paddingLeft="30dp"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:text="网络"
+        android:textColor="@color/white"
+        android:textSize="30sp" />
+</RelativeLayout>

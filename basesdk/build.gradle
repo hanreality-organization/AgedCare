@@ -69,12 +69,17 @@ dependencies {
     api 'com.jakewharton:butterknife:10.0.0'
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$gradle.sdk.kotlin_version"
     api 'com.github.hanreality:SipLib:1.1.0'
-    api project(':emoji')
     api ('com.alibaba:arouter-api:1.5.0') {
         exclude module: 'support-v4'
     }
     kapt 'com.alibaba:arouter-compiler:1.2.2'
     api 'com.makeramen:roundedimageview:2.3.0'
+    api ('org.permissionsdispatcher:permissionsdispatcher:4.6.0') {
+        exclude module: 'support-v4'
+    }
+    api 'com.github.smart-fun:XmlToJson:1.4.5'
+
+    api project(':module_router')
     /////////////
     api 'com.github.open-android:Zxing:v1.0.3'
     api 'com.hjq:xxpermissions:6.2'

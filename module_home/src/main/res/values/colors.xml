@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="titile">#FF9900</color>
+    <color name="white">#FFFFFF</color>
+    <color name="red">#FF0033</color>
+    <color name="senlinlv">#228B22</color>
+    <color name="transparent">#00000000</color>
+    <color name="light_blue">#ADD8E6</color>
+    <color name="common_title_text">#ff565555</color>
+    <color name="common_text_yellow">#ffffe049</color>
+    <color name="common_title_bg">#aa111213</color>
+    <color name="main_menu_bg">#aa111213</color>
+    <color name="newbackground">#ffd340</color>
+    <color name="black">#000000</color>
+    <color name="lightgary">#EEEEEE</color>
+    <color name="gary">#3D3D3F</color>
+    <color name="touming">#00000000</color>
+    <color name="gold">#b89766</color>
+    <color name="micro_list_ignore">#8593B0</color>
+    <color name="background">#DEDEDE</color>
+    <color name="primary_title_text_color">#ff888888</color>
+    <color name="album_item_bg">#fffcfcfd</color>
+    <color name="video_playter_bg">#333333</color>
+</resources>
