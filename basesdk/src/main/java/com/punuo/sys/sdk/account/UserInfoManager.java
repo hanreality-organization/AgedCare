@@ -52,6 +52,14 @@ public class UserInfoManager {
         return sUserInfo;
     }
 
+    /**
+     * 退出登录时清空用户信息
+     */
+    public static void clearUserData() {
+        sUserInfo = null;
+        MMKVUtil.removeData(PREF_KEY_USER);
+    }
+
     public GetUserInfoRequest mGetUserInfoRequest;
     public void refreshUserInfo(RequestListener listener) {
         if (mGetUserInfoRequest != null && !mGetUserInfoRequest.isFinish()) {

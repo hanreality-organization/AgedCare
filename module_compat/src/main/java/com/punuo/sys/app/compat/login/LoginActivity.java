@@ -9,9 +9,13 @@ import android.widget.Button;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.punuo.sip.dev.SipDevManager;
+import com.punuo.sip.dev.event.DevLoginFailEvent;
+import com.punuo.sip.dev.event.ReRegisterDevEvent;
 import com.punuo.sip.dev.model.LoginResponseDev;
 import com.punuo.sip.dev.request.SipDevRegisterRequest;
 import com.punuo.sip.user.SipUserManager;
+import com.punuo.sip.user.event.ReRegisterUserEvent;
+import com.punuo.sip.user.event.UnauthorizedEvent;
 import com.punuo.sip.user.model.LoginResponseUser;
 import com.punuo.sip.user.request.SipGetUserIdRequest;
 import com.punuo.sys.app.compat.R;
@@ -37,6 +41,9 @@ public class LoginActivity extends BaseActivity {
     @BindView(R2.id.login)
     Button login;
 
+    private boolean userLoginFailed = false;
+    private boolean devLoginFailed = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +56,7 @@ public class LoginActivity extends BaseActivity {
             startActivity(mIntent);
         });
         login.setOnClickListener(v -> {
+            showLoadingDialog("正在登陆...");
             registerUser();
         });
         EventBus.getDefault().register(this);
@@ -72,7 +80,61 @@ public class LoginActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(LoginResponseDev event) {
         dismissLoadingDialog();
+        if (AccountManager.isLogin()) {
+            return;
+        }
+        AccountManager.setLogin(true);
         ARouter.getInstance().build(HomeRouter.ROUTER_HOME_ACTIVITY).navigation();
+        finish();
+    }
+
+    /**
+     * 设备Sip服务重新注册事件
+     *
+     * @param event event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(ReRegisterDevEvent event) {
+        if (devLoginFailed) {
+            devLoginFailed = false;
+            return;
+        }
+        registerDev();
+    }
+
+    /**
+     * 设备Sip服务注册失败事件
+     *
+     * @param event event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(DevLoginFailEvent event) {
+        devLoginFailed = true;
+    }
+
+    /**
+     * 用户Sip服务重新注册事件
+     *
+     * @param event event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(ReRegisterUserEvent event) {
+        if (userLoginFailed) {
+            userLoginFailed = false;
+            return;
+        }
+        registerUser();
+    }
+
+    /**
+     * 用户Sip服务注册失败事件
+     *
+     * @param event event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(UnauthorizedEvent event) {
+        userLoginFailed = true;
+        dismissLoadingDialog();
     }
 
     @Override

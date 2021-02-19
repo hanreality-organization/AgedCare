@@ -6,12 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -31,6 +33,19 @@ import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.punuo.sip.dev.DevHeartBeatHelper;
+import com.punuo.sip.dev.SipDevManager;
+import com.punuo.sip.dev.event.DevLoginFailEvent;
+import com.punuo.sip.dev.event.ReRegisterDevEvent;
+import com.punuo.sip.dev.model.LoginResponseDev;
+import com.punuo.sip.dev.request.SipDevRegisterRequest;
+import com.punuo.sip.user.SipUserManager;
+import com.punuo.sip.user.UserHeartBeatHelper;
+import com.punuo.sip.user.event.ReRegisterUserEvent;
+import com.punuo.sip.user.event.UnauthorizedEvent;
+import com.punuo.sip.user.event.UserReplaceEvent;
+import com.punuo.sip.user.model.LoginResponseUser;
+import com.punuo.sip.user.request.SipGetUserIdRequest;
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.service.NewsService;
 import com.punuo.sys.app.agedcare.service.PTTService;
@@ -42,6 +57,10 @@ import com.punuo.sys.app.router.HomeRouter;
 import com.punuo.sys.sdk.account.UserInfoManager;
 import com.punuo.sys.sdk.activity.BaseActivity;
 import com.punuo.sys.sdk.task.ImageTask;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -58,6 +77,10 @@ import static com.punuo.sys.app.agedcare.sip.SipInfo.sipUser;
 
 @Route(path = HomeRouter.ROUTER_HOME_ACTIVITY)
 public class HomeActivity extends BaseActivity implements ViewTreeObserver.OnGlobalLayoutListener {
+
+    private boolean userLoginFailed = false;
+    private boolean devLoginFailed = false;
+
     public CountDownTimer countDownTimer;
     private LinearLayout ll_item;//灰点所在的线性布局
     private ImageView blue_iv;//小蓝点
@@ -72,6 +95,8 @@ public class HomeActivity extends BaseActivity implements ViewTreeObserver.OnGlo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        //心跳包
+        initHeartBeat();
         apkPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures/";
 
         UserInfoManager.getInstance().refreshUserInfo();
@@ -130,6 +155,16 @@ public class HomeActivity extends BaseActivity implements ViewTreeObserver.OnGlo
             }
         });
         init();
+        EventBus.getDefault().register(this);
+    }
+
+    private void initHeartBeat() {
+        if (!mBaseHandler.hasMessages(UserHeartBeatHelper.MSG_HEART_BEAR_VALUE)) {
+            mBaseHandler.sendEmptyMessageDelayed(UserHeartBeatHelper.MSG_HEART_BEAR_VALUE, UserHeartBeatHelper.DELAY);
+        }
+        if (!mBaseHandler.hasMessages(DevHeartBeatHelper.MSG_HEART_BEAR_VALUE)) {
+            mBaseHandler.sendEmptyMessageDelayed(DevHeartBeatHelper.MSG_HEART_BEAR_VALUE, DevHeartBeatHelper.DELAY);
+        }
     }
 
     public void screenUpdate() {
@@ -333,6 +368,10 @@ public class HomeActivity extends BaseActivity implements ViewTreeObserver.OnGlo
         if (countDownTimer != null) {
             countDownTimer.cancel();
         }
+
+        mBaseHandler.removeMessages(UserHeartBeatHelper.MSG_HEART_BEAR_VALUE);
+        mBaseHandler.removeMessages(DevHeartBeatHelper.MSG_HEART_BEAR_VALUE);
+        EventBus.getDefault().unregister(this);
     }
 
     protected void onNavigationBarStatusChanged() {
@@ -363,6 +402,125 @@ public class HomeActivity extends BaseActivity implements ViewTreeObserver.OnGlo
                     | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY /*| View.SYSTEM_UI_FLAG_FULLSCREEN*/;
             decorView.setSystemUiVisibility(uiOptions);
         }
+    }
+
+    private void registerUser() {
+        SipGetUserIdRequest registerRequest = new SipGetUserIdRequest();
+        SipUserManager.getInstance().addRequest(registerRequest);
+    }
+
+    private void registerDev() {
+        SipDevRegisterRequest registerRequest = new SipDevRegisterRequest();
+        SipDevManager.getInstance().addRequest(registerRequest);
+    }
+
+
+    /**
+     * 设备Sip服务重新注册事件
+     * @param event event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(ReRegisterDevEvent event) {
+        if (devLoginFailed) {
+            devLoginFailed = false;
+            return;
+        }
+        mBaseHandler.removeMessages(DevHeartBeatHelper.MSG_HEART_BEAR_VALUE);
+        registerDev();
+    }
+
+    /**
+     * 设备Sip服务注册失败事件
+     * @param event event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(DevLoginFailEvent event) {
+        mBaseHandler.removeMessages(DevHeartBeatHelper.MSG_HEART_BEAR_VALUE);
+        devLoginFailed = true;
+    }
+
+    /**
+     * 用户Sip服务重新注册事件
+     * @param event event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(ReRegisterUserEvent event) {
+        if (userLoginFailed) {
+            userLoginFailed = false;
+            return;
+        }
+        mBaseHandler.removeMessages(UserHeartBeatHelper.MSG_HEART_BEAR_VALUE);
+        registerUser();
+    }
+
+    /**
+     * 用户Sip服务注册失败事件
+     * @param event event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(UnauthorizedEvent event) {
+        mBaseHandler.removeMessages(UserHeartBeatHelper.MSG_HEART_BEAR_VALUE);
+        userLoginFailed = true;
+    }
+
+    /**
+     * 用户Sip服务注册成功事件
+     * @param event event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(LoginResponseUser event) {
+        //sip登陆注册成功 开启心跳保活
+        if (!mBaseHandler.hasMessages(UserHeartBeatHelper.MSG_HEART_BEAR_VALUE)) {
+            mBaseHandler.sendEmptyMessageDelayed(UserHeartBeatHelper.MSG_HEART_BEAR_VALUE, UserHeartBeatHelper.DELAY);
+        }
+    }
+
+    /**
+     * 设备Sip服务注册成功事件
+     * @param event event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(LoginResponseDev event) {
+        //sip登陆注册成功 开启心跳保活
+        if (!mBaseHandler.hasMessages(DevHeartBeatHelper.MSG_HEART_BEAR_VALUE)) {
+            mBaseHandler.sendEmptyMessageDelayed(DevHeartBeatHelper.MSG_HEART_BEAR_VALUE, DevHeartBeatHelper.DELAY);
+        }
+    }
+
+    @Override
+    public void handleMessage(Message msg) {
+        super.handleMessage(msg);
+        switch (msg.what) {
+            case UserHeartBeatHelper.MSG_HEART_BEAR_VALUE:
+                UserHeartBeatHelper.heartBeat();
+                break;
+            case DevHeartBeatHelper.MSG_HEART_BEAR_VALUE:
+                DevHeartBeatHelper.heartBeat();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(UserReplaceEvent event) {
+        AlertDialog loginReplace = new AlertDialog.Builder(getApplicationContext())
+                .setTitle("账号异地登录")
+                .setMessage("请重新登录")
+                .setPositiveButton("确定", null)
+                .create();
+        loginReplace.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        loginReplace.setCancelable(false);
+        loginReplace.setCanceledOnTouchOutside(false);
+        loginReplace.show();
+        UserInfoManager.clearUserData();
+        ARouter.getInstance().build(CompatRouter.ROUTER_LOGIN_ACTIVITY).navigation();
+        finish();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(NetworkInfo info) {
+        registerUser();
     }
 
 
