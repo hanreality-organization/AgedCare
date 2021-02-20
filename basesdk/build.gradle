@@ -80,6 +80,7 @@ dependencies {
     api 'com.github.smart-fun:XmlToJson:1.4.5'
 
     api project(':module_router')
+    api 'com.google.android:flexbox:2.0.1'
     /////////////
     api 'com.github.open-android:Zxing:v1.0.3'
     api 'com.hjq:xxpermissions:6.2'

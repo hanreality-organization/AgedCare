@@ -1,78 +1,35 @@
 package com.punuo.sys.app.agedcare.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.ImageView;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.R2;
-import com.punuo.sys.app.agedcare.http.GetPostUtil;
-import com.punuo.sys.app.agedcare.model.Constant;
-import com.punuo.sys.app.agedcare.sip.SipInfo;
-import com.punuo.sys.app.agedcare.view.CircleImageView;
-import com.punuo.sys.sdk.event.MessageEvent;
+import com.punuo.sys.app.agedcare.request.GetServiceNumberRequest;
+import com.punuo.sys.app.agedcare.request.model.ServiceNumberModel;
+import com.punuo.sys.app.router.HomeRouter;
+import com.punuo.sys.sdk.account.AccountManager;
+import com.punuo.sys.sdk.activity.BaseActivity;
+import com.punuo.sys.sdk.httplib.HttpManager;
+import com.punuo.sys.sdk.httplib.RequestListener;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.lang.reflect.Method;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-public class ServiceCallActivity extends HindebarActivity implements View.OnClickListener {
-   @BindView(R2.id.jiazheng)
-   CircleImageView jiazheng;
+@Route(path = HomeRouter.ROUTER_SERVICE_CALL_ACTIVITY)
+public class ServiceCallActivity extends BaseActivity implements View.OnClickListener {
+    @BindView(R2.id.jiazheng)
+    ImageView jiazheng;
     @BindView(R2.id.wuye)
-    CircleImageView wuye;
+    ImageView wuye;
     @BindView(R2.id.dingcan)
-    CircleImageView dingcan;
-    String item_jiazheng;
-    String item_wuye;
-    String item_dingcan;
-    String housekeep;
-    String orderfood;
-    String property;
-    public static final int UPDATECALLNUMBER=1;
-    private Handler handler = new Handler();
-    java.lang.Runnable runnable =new java.lang.Runnable() {
-        @Override
-        public void run() {
-            try {
-                // 延迟5秒后自动挂断电话
-                // 首先拿到TelephonyManager
-                TelephonyManager telMag = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-                Class<TelephonyManager> c = TelephonyManager.class;
-
-                // 再去反射TelephonyManager里面的私有方法 getITelephony 得到 ITelephony对象
-                Method mthEndCall = c.getDeclaredMethod("getITelephony", (Class[]) null);
-                //允许访问私有方法
-                mthEndCall.setAccessible(true);
-                final Object obj = mthEndCall.invoke(telMag, (Object[]) null);
-
-                // 再通过ITelephony对象去反射里面的endCall方法，挂断电话
-                Method mt = obj.getClass().getMethod("endCall");
-                //允许访问私有方法
-                mt.setAccessible(true);
-                mt.invoke(obj);
-                Toast.makeText(ServiceCallActivity.this, "挂断电话！", Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    };
-
-
+    ImageView dingcan;
+    private ServiceNumberModel mServiceNumberModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,75 +39,56 @@ public class ServiceCallActivity extends HindebarActivity implements View.OnClic
         jiazheng.setOnClickListener(this);
         wuye.setOnClickListener(this);
         dingcan.setOnClickListener(this);
-        EventBus.getDefault().register(this);
-//        SharedPreferences preferences1 = getSharedPreferences("data", MODE_PRIVATE);
-//        item_jiazheng = preferences1.getString("家政电话", "");
-//        SharedPreferences preferences2 = getSharedPreferences("data", MODE_PRIVATE);
-//        item_wuye = preferences2.getString("物业电话", "");
-//        SharedPreferences preferences3 = getSharedPreferences("data", MODE_PRIVATE);
-//        item_dingcan = preferences3.getString("订餐电话", "");
-        new  Thread(getservicenumber).start();
+        getServiceNumber();
     }
+
+    private void getServiceNumber() {
+        GetServiceNumberRequest request = new GetServiceNumberRequest();
+        request.addUrlParam("devid", AccountManager.getDevId());
+        request.setRequestListener(new RequestListener<List<ServiceNumberModel>>() {
+            @Override
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onSuccess(List<ServiceNumberModel> result) {
+                if (result != null && !result.isEmpty()) {
+                    mServiceNumberModel = result.get(0);
+                }
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        });
+        HttpManager.addRequest(request);
+    }
+
     @Override
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.jiazheng) {
-            call(housekeep);
+            if (mServiceNumberModel != null) {
+                call(mServiceNumberModel.houseKeepNumber);
+            }
         } else if (id == R.id.wuye) {
-            call(property);
+            if (mServiceNumberModel != null) {
+                call(mServiceNumberModel.propertyNumber);
+            }
         } else if (id == R.id.dingcan) {
-            call(orderfood);
+            if (mServiceNumberModel != null) {
+                call(mServiceNumberModel.orderFoodNumber);
+            }
         }
     }
-    private void call( String item) {
 
+    private void call(String item) {
         Intent intent = new Intent(Intent.ACTION_CALL);
         Uri data = Uri.parse("tel:" + item);
         intent.setData(data);
         startActivity(intent);
-//        handler.postDelayed(runnable,10*1000);
-    }
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(MessageEvent event) {
-        switch (event.getMessage())
-        {
-
-            case "callend":
-                Log.e("calling","..");
-                handler.removeCallbacks(runnable);
-
-                break;
-            default:
-                break;
-        }
-
-    }
-
-    String response = "";
-    private java.lang.Runnable getservicenumber = new java.lang.Runnable() {
-        @Override
-        public void run() {
-            response = GetPostUtil.sendGet1111(Constant.URL_getservicenumber, "devid=" + SipInfo.devId);
-            Log.e("getservicenumber ;",response);
-            JSONArray jsonArray = JSONObject.parseArray(response);
-            for (int i = 0; i < jsonArray.size(); i++) {
-                JSONObject jsonObject2 = jsonArray.getJSONObject(i);
-                housekeep = jsonObject2.getString("housekeep");
-                orderfood = jsonObject2.getString("orderfood");
-                property = jsonObject2.getString("property");
-            }
-            Message message = new Message();
-            message.what = UPDATECALLNUMBER;
-            handler.sendMessage(message);
-
-
-        }
-    };
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-        finish();
     }
 }

@@ -1,12 +1,13 @@
 package com.punuo.sys.app.agedcare.model;
 
-import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Created by asus on 2018/1/15.
  */
 
-public class Device {
+public class Device implements Parcelable {
     private String id;
     private String userid;
     private String nickname;
@@ -16,19 +17,28 @@ public class Device {
     private String devId;
     private String devType;
 
-    public Bitmap getBitmap() {
-        return bitmap;
+    protected Device(Parcel in) {
+        id = in.readString();
+        userid = in.readString();
+        nickname = in.readString();
+        name = in.readString();
+        avatar = in.readString();
+        auth = in.readString();
+        devId = in.readString();
+        devType = in.readString();
     }
 
-    public void setBitmap(Bitmap bitmap) {
-        if(bitmap==null){
-            this.bitmap=null;
-        }else {
-            this.bitmap = bitmap;
+    public static final Creator<Device> CREATOR = new Creator<Device>() {
+        @Override
+        public Device createFromParcel(Parcel in) {
+            return new Device(in);
         }
-    }
 
-    private Bitmap bitmap;
+        @Override
+        public Device[] newArray(int size) {
+            return new Device[size];
+        }
+    };
 
     public String getDevType() {
         return devType;
@@ -121,5 +131,22 @@ public class Device {
     @Override
     public String toString() {
         return "id:"+id+" userid:"+userid +" nickname:"+nickname+" name:"+name+" avatar:"+avatar+" auth:"+auth;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(userid);
+        dest.writeString(nickname);
+        dest.writeString(name);
+        dest.writeString(avatar);
+        dest.writeString(auth);
+        dest.writeString(devId);
+        dest.writeString(devType);
     }
 }

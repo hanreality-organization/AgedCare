@@ -33,6 +33,7 @@
             android:screenOrientation="landscape" />
         <activity
             android:name=".ui.CodeActivity"
+            android:theme="@style/Theme.Pn.Translucent"
             android:screenOrientation="landscape" />
         <activity
             android:name=".ui.ChsChange"
@@ -90,7 +91,9 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ui.VedioRequest" />
+        <activity android:name=".ui.VideoRequestActivity"
+            android:theme="@style/Theme.Pn.Translucent"
+            android:screenOrientation="landscape"/>
 
         <receiver
             android:name=".receiver.MyBroadCastReceiver1"
@@ -144,7 +147,8 @@
         <activity android:name=".friendcircle.TestPicActivity" />
         <activity android:name=".friendcircle.ImageGridActivity" />
         <activity android:name=".friendcircle.PhotoActivity" />
-        <activity android:name=".ui.ServiceCallActivity" />
+        <activity android:name=".ui.ServiceCallActivity"
+            android:theme="@style/Theme.Pn.Translucent"/>
         <activity android:name=".ui.JiazhengActivity" />
     </application>
 

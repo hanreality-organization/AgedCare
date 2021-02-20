@@ -6,7 +6,7 @@
     android:orientation="vertical">
     <com.punuo.sys.app.agedcare.ui.TitleLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></com.punuo.sys.app.agedcare.ui.TitleLayout>
+        android:layout_height="wrap_content"/>
 
     <androidx.gridlayout.widget.GridLayout
        android:layout_width="match_parent"

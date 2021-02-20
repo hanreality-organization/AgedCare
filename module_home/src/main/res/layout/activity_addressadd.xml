@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/dise"
-    tools:context="com.punuo.sys.app.agedcare.ui.addressAddActivity">
-    <com.punuo.sys.app.agedcare.ui.TitleLayout2
+    android:background="@drawable/dise">
+    <com.punuo.sys.app.agedcare.ui.TitleLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></com.punuo.sys.app.agedcare.ui.TitleLayout2>
+        android:layout_height="wrap_content"
+        app:view_type="special"/>
     <androidx.cardview.widget.CardView
         android:layout_width="1200px"
         android:layout_height="626px"

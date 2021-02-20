@@ -6,4 +6,6 @@
     <color name="bg_base">#f2f4f6</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="main_color">#F9B14B</color>
+    <color name="light_main_color">#F3BF7D</color>
 </resources>

@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/main_color"
+    android:fitsSystemWindows="true">
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/loginbackground" />
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/logo" />
 
     <Button
         android:id="@+id/login"
         android:layout_width="200dp"
         android:layout_height="100dp"
-        android:layout_above="@+id/setting"
-        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/icon"
+        android:layout_alignParentRight="true"
         android:layout_marginEnd="265dp"
-        android:layout_marginBottom="63dp"
         android:background="@color/transparent"
         android:text="登 录"
         android:textColor="@color/white"

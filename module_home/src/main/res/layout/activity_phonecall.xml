@@ -7,9 +7,10 @@
     android:orientation="vertical"
     android:background="@drawable/dise"
     tools:context="com.punuo.sys.app.agedcare.ui.addressAddActivity">
-    <com.punuo.sys.app.agedcare.ui.TitleLayout2
+    <com.punuo.sys.app.agedcare.ui.TitleLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></com.punuo.sys.app.agedcare.ui.TitleLayout2>
+        android:layout_height="wrap_content"
+        app:view_type="special"/>
     <Button
         android:layout_marginLeft="1115px"
         android:id="@+id/addnumber"

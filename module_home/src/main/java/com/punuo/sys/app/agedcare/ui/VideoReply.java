@@ -30,10 +30,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.punuo.sys.app.agedcare.sip.SipInfo.devName;
-import static com.punuo.sys.app.agedcare.sip.SipInfo.devices;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.isanswering;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.userdevid;
-import static com.punuo.sys.app.agedcare.sip.SipInfo.videouserId;
 
 public class VideoReply extends HindebarActivity implements View.OnClickListener {
     @BindView(R2.id.bt_accept)
@@ -57,15 +55,15 @@ public class VideoReply extends HindebarActivity implements View.OnClickListener
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         EventBus.getDefault().register(this);  //注册
         EventBus.getDefault().post(new MessageEvent("等待通话"));
-        for (int i=0;i<devices.size();i++)
-        {
-            if(videouserId.equals(devices.get(i).getUserid())) {
-                CIV_avatar.setImageBitmap(devices.get(i).getBitmap());
-                name.setText(devices.get(i).getNickname());
-            }
-            Log.d(TAG,videouserId);
-            Log.d(TAG,devices.get(i).getUserid());
-        }
+//        for (int i=0;i<devices.size();i++)
+//        {
+//            if(videouserId.equals(devices.get(i).getUserid())) {
+//                CIV_avatar.setImageBitmap(devices.get(i).getBitmap());
+//                name.setText(devices.get(i).getNickname());
+//            }
+//            Log.d(TAG,videouserId);
+//            Log.d(TAG,devices.get(i).getUserid());
+//        }
         soundPool=new SoundPool(10, android.media.AudioManager.STREAM_MUSIC,5);
         final int sourceid=soundPool.load(this,R.raw.videowait,1);
         soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {

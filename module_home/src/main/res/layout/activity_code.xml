@@ -1,75 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/dise"
+    android:background="@drawable/default_background_color"
     android:orientation="vertical">
-    <com.punuo.sys.app.agedcare.ui.TitleLayout2
+
+    <com.punuo.sys.app.agedcare.ui.TitleLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </com.punuo.sys.app.agedcare.ui.TitleLayout2>
+        android:layout_height="wrap_content"
+        app:view_type="special" />
 
     <androidx.cardview.widget.CardView
-        android:layout_width="1200px"
-        android:layout_height="626px"
-        android:layout_marginTop="34dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
+        android:layout_margin="30dp"
         app:cardCornerRadius="20dp"
         app:elevation="10dp">
 
-    <ImageView
-        android:src="@drawable/diseqian"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/diseqian" />
 
         <LinearLayout
-            android:layout_gravity="center_vertical"
-           android:layout_marginLeft="16.8dp"
-
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-    <ImageView
-        android:background="@drawable/codebackground"
-        android:id="@+id/code_image"
-        android:layout_width="279px"
-        android:layout_height="279px"
-        android:scaleType="fitXY"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:orientation="horizontal">
 
-        />
-
-    <Button
-        android:layout_marginLeft="16.8dp"
-        android:background="@drawable/yuanjiaobai"
-        android:text="设置"
-        android:textColor="@color/titile"
-        android:textSize="50dp"
-        android:layout_width="279px"
-        android:layout_height="279px"
-
-        android:id="@+id/settingbutton" />
-
-        <Button
-            android:layout_marginLeft="16.8dp"
-            android:background="@drawable/yuanjiaobai"
-            android:text="检查更新"
-            android:id="@+id/update"
-            android:textColor="@color/titile"
-            android:layout_width="279px"
-            android:layout_height="279px"
-            android:textSize="50dp"/>
             <ImageView
-                android:layout_marginLeft="16.8dp"
+                android:id="@+id/code_image"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="15dp"
+                android:adjustViewBounds="true"
+                android:layout_weight="1"
                 android:background="@drawable/codebackground"
-                android:id="@+id/code_download"
-                android:layout_width="279px"
-                android:layout_height="279px"
-                android:scaleType="fitXY"
+                android:scaleType="fitXY" />
 
-                />
-            </LinearLayout>
+            <Button
+                android:id="@+id/settingbutton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/yuanjiaobai"
+                android:text="设置"
+                android:layout_weight="1"
+                android:textColor="@color/titile"
+                android:layout_margin="15dp"
+                android:textSize="50dp" />
+
+            <Button
+                android:id="@+id/update"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/yuanjiaobai"
+                android:text="检查更新"
+                android:layout_weight="1"
+                android:layout_margin="15dp"
+                android:textColor="@color/titile"
+                android:textSize="50dp" />
+
+            <ImageView
+                android:id="@+id/code_download"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_margin="15dp"
+                android:adjustViewBounds="true"
+                android:layout_weight="1"
+                android:background="@drawable/codebackground"
+                android:scaleType="fitXY" />
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 

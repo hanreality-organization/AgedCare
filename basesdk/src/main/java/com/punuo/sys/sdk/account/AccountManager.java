@@ -13,6 +13,7 @@ import java.util.Properties;
 public class AccountManager {
     private static String userId; //用户id
     private static String devId; //用户设备id
+    private static String groupPort; //集群端口
     private static String groupId;
     private static boolean login = false;
     private static String userIpPhoneNum; //网络IP电话
@@ -66,6 +67,14 @@ public class AccountManager {
         AccountManager.targetDevId = targetDevId;
     }
 
+    public static String getGroupPort() {
+        return groupPort;
+    }
+
+    public static void setGroupPort(String groupPort) {
+        AccountManager.groupPort = groupPort;
+    }
+
     /**
      * 读取配置文件
      */
@@ -92,7 +101,7 @@ public class AccountManager {
             if (properties != null) {
                 AccountManager.setUserId(properties.getProperty("userAccount"));
                 AccountManager.setDevId(properties.getProperty("devId"));
-//                properties.getProperty("port");
+                AccountManager.setGroupPort(properties.getProperty("port"));
             }
         }
     }

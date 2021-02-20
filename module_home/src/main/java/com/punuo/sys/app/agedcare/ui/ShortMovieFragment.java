@@ -1,7 +1,6 @@
 package com.punuo.sys.app.agedcare.ui;
 
 import android.content.Context;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,7 +26,6 @@ import com.punuo.sys.sdk.event.MessageEvent;
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -53,7 +51,6 @@ public class ShortMovieFragment extends Fragment {
     private Context mContext;
     private ShortMovieRecyclerViewAdapter adapter;
     GridLayoutManager glm;
-    HashMap<String, Integer> stringIntegerHashMap = new HashMap<>();
     private static final int REFRESH_COMPLETE = 0x01;
     private final String typepath = "http://" + serverIp + ":8000/xiaoyupeihu/public/index.php/video/getVideoList";
     private Handler setAdapterHandler = new Handler(new Handler.Callback() {
@@ -83,11 +80,6 @@ public class ShortMovieFragment extends Fragment {
         putdata();
         glm=new GridLayoutManager(mContext,2);
         rv_short_movie.setLayoutManager(glm);
-        stringIntegerHashMap.put(MemberFragment.RecyclerViewSpacesItemDecoration.TOP_DECORATION,15);//top间距
-        stringIntegerHashMap.put(MemberFragment.RecyclerViewSpacesItemDecoration.BOTTOM_DECORATION,10);//底部间距
-        stringIntegerHashMap.put(MemberFragment.RecyclerViewSpacesItemDecoration.LEFT_DECORATION,15);//左间距
-        stringIntegerHashMap.put(MemberFragment.RecyclerViewSpacesItemDecoration.RIGHT_DECORATION,15);//右间距
-        rv_short_movie.addItemDecoration(new ShortMovieFragment.RecyclerViewSpacesItemDecoration(stringIntegerHashMap));
         gank_swipe_refresh_layout.setSize(SwipeRefreshLayout.LARGE);
         gank_swipe_refresh_layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -181,34 +173,5 @@ public class ShortMovieFragment extends Fragment {
 
             movies.clear();
         }
-    }
-
-    public class RecyclerViewSpacesItemDecoration extends RecyclerView.ItemDecoration {
-
-        private HashMap<String, Integer> mSpaceValueMap;
-
-        static final String TOP_DECORATION = "top_decoration";
-        static final String BOTTOM_DECORATION = "bottom_decoration";
-        static final String LEFT_DECORATION = "left_decoration";
-        static final String RIGHT_DECORATION = "right_decoration";
-        RecyclerViewSpacesItemDecoration(HashMap<String, Integer> mSpaceValueMap) {
-            this.mSpaceValueMap = mSpaceValueMap;
-        }
-        @Override
-        public void getItemOffsets(Rect outRect, View view,
-                                   RecyclerView parent, RecyclerView.State state) {
-            if (mSpaceValueMap.get(TOP_DECORATION) != null)
-            {
-                outRect.top = mSpaceValueMap.get(TOP_DECORATION);}
-            if (mSpaceValueMap.get(LEFT_DECORATION) != null)
-            {
-                outRect.left = mSpaceValueMap.get(LEFT_DECORATION);}
-            if (mSpaceValueMap.get(RIGHT_DECORATION) != null)
-            { outRect.right = mSpaceValueMap.get(RIGHT_DECORATION);}
-            if (mSpaceValueMap.get(BOTTOM_DECORATION) != null)
-            {
-                outRect.bottom = mSpaceValueMap.get(BOTTOM_DECORATION);}
-        }
-
     }
 }

@@ -20,12 +20,13 @@
             android:scaleType="centerCrop"
             android:src="@drawable/diseqian" />
 
-        <com.handmark.pulltorefresh.library.PullToRefreshRecyclerView
-            android:id="@+id/farmily_rv"
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/menu_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:flexWrap="wrap"
             android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp" />
+            android:layout_marginRight="30dp"/>
 
     </androidx.cardview.widget.CardView>
 

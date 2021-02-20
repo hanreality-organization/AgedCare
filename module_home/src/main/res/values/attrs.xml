@@ -23,4 +23,11 @@
     <declare-styleable name="NineGridLayout">
         <attr name="sapcing" format="dimension"/>
     </declare-styleable>
+
+    <declare-styleable name="TitleLayout">
+        <attr name="view_type">
+            <enum name="normal" value="0" />
+            <enum name="special" value="1" />
+        </attr>
+    </declare-styleable>
 </resources>

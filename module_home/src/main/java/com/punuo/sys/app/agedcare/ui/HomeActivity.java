@@ -10,15 +10,12 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -56,7 +53,6 @@ import com.punuo.sys.app.router.CompatRouter;
 import com.punuo.sys.app.router.HomeRouter;
 import com.punuo.sys.sdk.account.UserInfoManager;
 import com.punuo.sys.sdk.activity.BaseActivity;
-import com.punuo.sys.sdk.task.ImageTask;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -76,12 +72,12 @@ import static com.punuo.sys.app.agedcare.sip.SipInfo.shareurl;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.sipUser;
 
 @Route(path = HomeRouter.ROUTER_HOME_ACTIVITY)
-public class HomeActivity extends BaseActivity implements ViewTreeObserver.OnGlobalLayoutListener {
+public class HomeActivity extends BaseActivity {
 
     private boolean userLoginFailed = false;
     private boolean devLoginFailed = false;
 
-    public CountDownTimer countDownTimer;
+
     private LinearLayout ll_item;//灰点所在的线性布局
     private ImageView blue_iv;//小蓝点
     int position;//当前界面数（从0开始）
@@ -89,12 +85,10 @@ public class HomeActivity extends BaseActivity implements ViewTreeObserver.OnGlo
     private Bitmap bitmap;
     public static String apkPath;
 
-    private boolean mLayoutComplete = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
+        setContentView(R.layout.activity_home);
         //心跳包
         initHeartBeat();
         apkPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures/";
@@ -287,68 +281,6 @@ public class HomeActivity extends BaseActivity implements ViewTreeObserver.OnGlo
     }
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        switch (ev.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                //有按下动作时取消定时
-                if (countDownTimer != null) {
-                    countDownTimer.cancel();
-                }
-                break;
-            case MotionEvent.ACTION_UP:
-                //抬起时启动定时
-                startAD();
-                break;
-        }
-        return super.dispatchTouchEvent(ev);
-    }
-
-
-    /**
-     * 跳轉廣告
-     */
-    public void startAD() {
-        long advertisingTime = 40 * 1000;//定时跳转广告时间
-        if (countDownTimer == null) {
-            countDownTimer = new CountDownTimer(advertisingTime, 10000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-
-                }
-
-                @Override
-                public void onFinish() {
-                    new ImageTask(imageList -> {
-                        if (!imageList.isEmpty()) {
-                            ARouter.getInstance().build(CompatRouter.ROUTER_SCREEN_SAVER_ACTIVITY).navigation();
-                        }
-                    }).execute();
-                }
-            };
-            countDownTimer.start();
-        } else {
-            countDownTimer.start();
-        }
-    }
-
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-//        当activity不在前台是停止定时
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
-        }
-    }
-
-    public void onGlobalLayout() {
-
-        if (!mLayoutComplete)
-            return;
-        onNavigationBarStatusChanged();
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         SipInfo.loginReplace = null;
@@ -365,10 +297,6 @@ public class HomeActivity extends BaseActivity implements ViewTreeObserver.OnGlo
 //        stopService(new Intent(this, PTTService.class));
         //关闭监听服务
         stopService(new Intent(HomeActivity.this, NewsService.class));
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
-        }
-
         mBaseHandler.removeMessages(UserHeartBeatHelper.MSG_HEART_BEAR_VALUE);
         mBaseHandler.removeMessages(DevHeartBeatHelper.MSG_HEART_BEAR_VALUE);
         EventBus.getDefault().unregister(this);
@@ -382,7 +310,7 @@ public class HomeActivity extends BaseActivity implements ViewTreeObserver.OnGlo
     @Override
     protected void onResume() {
         super.onResume();
-        startAD();
+        startScreenSaver();
     }
 
 

@@ -4,50 +4,51 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.zxing.common.BitmapUtils;
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.R2;
 import com.punuo.sys.app.agedcare.sip.SipInfo;
+import com.punuo.sys.app.router.HomeRouter;
+import com.punuo.sys.sdk.account.AccountManager;
 import com.punuo.sys.sdk.activity.BaseActivity;
 import com.punuo.sys.sdk.update.AutoUpdateService;
+import com.punuo.sys.sdk.util.CommonUtil;
 import com.punuo.sys.sdk.util.IntentUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
+@Route(path = HomeRouter.ROUTER_CODE_ACTIVITY)
 public class CodeActivity extends BaseActivity implements View.OnClickListener {
-
+    private final String TAG = getClass().getName();
     @BindView(R2.id.code_image)
     ImageView codeImage;
     @BindView(R2.id.settingbutton)
-    Button settingbutton;
+    Button settingButton;
     @BindView(R2.id.update)
     Button update;
     @BindView(R2.id.code_download)
-    ImageView code_download;
-    private final String TAG = getClass().getName();
+    ImageView codeDownload;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_code);
         ButterKnife.bind(this);
-        settingbutton.setOnClickListener(this);
+        settingButton.setOnClickListener(this);
 
-        hideStatusBarNavigationBar();
         initView();
     }
+
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.settingbutton) {
@@ -55,33 +56,43 @@ public class CodeActivity extends BaseActivity implements View.OnClickListener {
             startActivity(intent);
         }
     }
+
     private void initView() {
-        String content = SipInfo.devId;
-        String str=SipInfo.userId;
-        String Port=SipInfo.port;
-        String downloadurl="http://sip.qinqingonline.com:8000/static/apk/phone_ap/rlph_app.apk";
-        Bitmap bitmap1 ;
+        int size = (CommonUtil.getWidth() - CommonUtil.dip2px(30f) * 4 - CommonUtil.dip2px(60f) - CommonUtil.dip2px(60f)) / 4;
+        codeImage.getLayoutParams().width = size;
+        codeImage.getLayoutParams().height = size;
+        settingButton.getLayoutParams().width = size;
+        settingButton.getLayoutParams().height = size;
+        update.getLayoutParams().width = size;
+        update.getLayoutParams().height = size;
+        codeDownload.getLayoutParams().width = size;
+        codeDownload.getLayoutParams().height = size;
+        String content = AccountManager.getDevId();
+        String str = AccountManager.getUserId();
+        String Port = AccountManager.getGroupPort();
+        String downloadUrl = "http://sip.qinqingonline.com:8000/static/apk/phone_ap/rlph_app.apk";
+        Bitmap bitmap1;
         Bitmap bitmap2;
         Bitmap logo = BitmapFactory.decodeResource(getResources(), R.drawable.codeload);
-
         try {
-            bitmap1 = BitmapUtils.create2DCode(content+" "+Port+" "+str);
+            bitmap1 = BitmapUtils.create2DCode(content + " " + Port + " " + str);
             codeImage.setImageBitmap(bitmap1);
-            bitmap2=BitmapUtils.create2DCode(downloadurl);
-            code_download.setImageBitmap(addLogo(bitmap2,logo));
-        }catch (Exception e) {
+            bitmap2 = BitmapUtils.create2DCode(downloadUrl);
+            codeDownload.setImageBitmap(addLogo(bitmap2, logo));
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     //给二维码添加图片
     //第一个参数为原二维码，第二个参数为添加的logo
     private static Bitmap addLogo(Bitmap src, Bitmap logo) {
         //如果原二维码为空，返回空
-        if (src ==null ) {
+        if (src == null) {
             return null;
         }
         //如果logo为空，返回原二维码
-        if (logo ==null) {
+        if (logo == null) {
             return src;
         }
 
@@ -109,7 +120,7 @@ public class CodeActivity extends BaseActivity implements View.OnClickListener {
             Canvas canvas = new Canvas(bitmap);
             canvas.drawBitmap(src, 0, 0, null);
             canvas.scale(scaleFactor, scaleFactor, srcWidth / 2, srcHeight / 2);
-            canvas.drawBitmap(logo, (srcWidth - logoWidth) / 2, (srcHeight - logoHeight) / 2,null );
+            canvas.drawBitmap(logo, (srcWidth - logoWidth) / 2, (srcHeight - logoHeight) / 2, null);
 
             canvas.save();
             canvas.restore();
@@ -121,22 +132,6 @@ public class CodeActivity extends BaseActivity implements View.OnClickListener {
         return bitmap;
     }
 
-    public void hideStatusBarNavigationBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
-            window.setNavigationBarColor(Color.TRANSPARENT);
-            return;
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            getWindow().addFlags( WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            getWindow().addFlags( WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-
-        }
-    }
     @OnClick(R2.id.update)
     public void onClick() {
         if (SipInfo.isNetworkConnected) {
