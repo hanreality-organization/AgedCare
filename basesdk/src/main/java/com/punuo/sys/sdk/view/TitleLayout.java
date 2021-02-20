@@ -1,4 +1,4 @@
-package com.punuo.sys.app.agedcare.ui;
+package com.punuo.sys.sdk.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -11,8 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.punuo.sys.app.agedcare.R;
-import com.punuo.sys.app.agedcare.tools.NetUtils;
+import com.punuo.sys.sdk.R;
+import com.punuo.sys.sdk.util.NetUtils;
 
 /**
  * Created by Administrator on 2018/7/2.
@@ -42,9 +42,9 @@ public class TitleLayout extends LinearLayout {
         back.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-               if (getContext() instanceof AppCompatActivity) {
-                   ((AppCompatActivity) getContext()).finish();
-               }
+                if (getContext() instanceof AppCompatActivity) {
+                    ((AppCompatActivity) getContext()).finish();
+                }
             }
         });
         View Icon = findViewById(R.id.logo);

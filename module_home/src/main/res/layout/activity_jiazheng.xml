@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.punuo.sys.app.agedcare.ui.JiazhengActivity">
-    <com.punuo.sys.app.agedcare.ui.TitleLayout
+    <com.punuo.sys.sdk.view.TitleLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <androidx.cardview.widget.CardView

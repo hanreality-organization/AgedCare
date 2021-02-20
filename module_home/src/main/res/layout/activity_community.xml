@@ -5,36 +5,40 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.punuo.sys.app.agedcare.ui.CommunityActivity">
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@drawable/titleback">
+        android:background="@drawable/titleback"
+        android:orientation="horizontal">
+
         <Button
-            android:background="#00000000"
             android:id="@+id/web_view_back"
-            android:text="返回"
-            android:gravity="center"
-            android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
             android:layout_marginLeft="49px"
+            android:background="#00000000"
+            android:gravity="center"
+            android:text="返回"
             android:textColor="@color/white"
-            android:textSize="20sp"
-            />
+            android:textSize="20sp" />
+
         <Button
-            android:layout_marginStart="20dp"
-            android:layout_gravity="center_vertical"
             android:id="@+id/web_back"
-            android:background="@drawable/left"
             android:layout_width="wrap_content"
-            android:layout_height="45dp" />
-        <Button
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:background="@drawable/right"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/left" />
+
+        <Button
             android:id="@+id/web_forward"
             android:layout_width="wrap_content"
-            android:layout_height="45dp" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/right" />
+
         <TextView
             android:id="@+id/time"
             android:layout_width="wrap_content"
@@ -44,20 +48,20 @@
             android:gravity="center"
             android:text="        "
             android:textColor="@color/white"
-            android:textSize="30px"
-            />
+            android:textSize="30px" />
+
         <TextView
             android:id="@+id/net"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:gravity="center"
-
-            android:textColor="@color/white"
-            android:textSize="30px"
             android:layout_marginLeft="50px"
-            />
+
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="30px" />
     </LinearLayout>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/gank_swipe_refresh_layout"
         android:layout_width="match_parent"
@@ -65,10 +69,10 @@
         android:layout_gravity="center_horizontal"
 
         >
-    <WebView
-        android:id="@+id/web_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </WebView>
+
+        <WebView
+            android:id="@+id/web_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></WebView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/disetupian1"
     android:orientation="vertical">
-    <com.punuo.sys.app.agedcare.ui.TitleLayout
+    <com.punuo.sys.sdk.view.TitleLayout
         android:id="@+id/title_layout"
         android:layout_width="match_parent"
         android:layout_height="100dp" />

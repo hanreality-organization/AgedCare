@@ -1,57 +1,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.punuo.sys.app.agedcare.ui.EntertainmentActivity" >
-    <!-- Viewpager:全类名导入 -->
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="horizontal"
+    android:orientation="vertical">
+
+    <com.punuo.sys.sdk.view.TitleLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@drawable/titleback">
-    <Button
-        android:background="#00000000"
-        android:id="@+id/back"
-        android:text="返回"
-        android:gravity="center"
-        android:layout_gravity="center_vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="49px"
-        android:textColor="@color/white"
-        android:textSize="20sp"
+        android:layout_height="wrap_content"
+        app:view_type="special" />
 
-        />
-    <TextView
-        android:id="@+id/time"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_marginLeft="840px"
-        android:gravity="center"
-        android:text="        "
-        android:textColor="@color/white"
-        android:textSize="30px"
-        />
-    <TextView
-        android:id="@+id/net"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-
-        android:textColor="@color/white"
-        android:textSize="30px"
-        android:layout_marginLeft="50px"
-        />
-        </LinearLayout>
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewpager"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="match_parent">
 
-        />
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
+        <com.punuo.sys.sdk.view.LoopIndicator
+            android:id="@+id/indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="20dp" />
+    </FrameLayout>
 </LinearLayout>

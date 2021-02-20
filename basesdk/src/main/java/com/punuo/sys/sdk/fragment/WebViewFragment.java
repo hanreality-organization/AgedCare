@@ -1,7 +1,6 @@
 package com.punuo.sys.sdk.fragment;
 
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.view.LayoutInflater;
@@ -19,7 +18,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshWebView;
 import com.punuo.sys.sdk.R;
 import com.punuo.sys.sdk.activity.BaseActivity;
 import com.punuo.sys.sdk.util.BaseHandler;
-import com.punuo.sys.sdk.util.StatusBarUtil;
 
 /**
  * Created by han.chen.
@@ -29,7 +27,6 @@ public class WebViewFragment extends BaseFragment {
     private BaseActivity mActivity;
     private PullToRefreshWebView mPullToRefreshWebView;
     private WebView mWebView;
-    private View mStatusBar;
     private boolean isRefreshing;
     private BaseHandler mBaseHandler;
     private String mUrl = "";
@@ -47,21 +44,18 @@ public class WebViewFragment extends BaseFragment {
         TextView title = mFragmentView.findViewById(R.id.title);
         mPullToRefreshWebView = mFragmentView.findViewById(R.id.pull_to_refresh);
         mPullToRefreshWebView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
-        mStatusBar = mFragmentView.findViewById(R.id.status_bar);
         mWebView = mPullToRefreshWebView.getRefreshableView();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mStatusBar.setVisibility(View.VISIBLE);
-            mStatusBar.getLayoutParams().height = StatusBarUtil.getStatusBarHeight(mActivity);
-            mStatusBar.requestLayout();
-        }
         mUrl = getArguments().getString("url", "");
         mTitle = getArguments().getString("title", "");
         showTopBar = getArguments().getBoolean("showTopBar", true);
         View topBarContainer = mFragmentView.findViewById(R.id.top_bar_container);
+        View normalTitleLayout = mFragmentView.findViewById(R.id.normal_title_layout);
         if (showTopBar) {
             topBarContainer.setVisibility(View.VISIBLE);
+            normalTitleLayout.setVisibility(View.GONE);
         } else {
             topBarContainer.setVisibility(View.GONE);
+            normalTitleLayout.setVisibility(View.VISIBLE);
         }
         title.setText(mTitle);
         mWebView.setOverScrollMode(View.OVER_SCROLL_NEVER);

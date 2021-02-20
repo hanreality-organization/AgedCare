@@ -137,7 +137,9 @@
         <activity android:name=".ui.MallActivity" />
         <activity android:name=".ui.CommunityActivity" />
         <activity android:name=".ui.FriendCallActivity" />
-        <activity android:name=".ui.EntertainmentActivity" />
+        <activity android:name=".ui.EntertainmentActivity"
+            android:theme="@style/Theme.Pn.Translucent"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".ui.ShortMovieActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -148,6 +150,7 @@
         <activity android:name=".friendcircle.ImageGridActivity" />
         <activity android:name=".friendcircle.PhotoActivity" />
         <activity android:name=".ui.ServiceCallActivity"
+            android:screenOrientation="landscape"
             android:theme="@style/Theme.Pn.Translucent"/>
         <activity android:name=".ui.JiazhengActivity" />
     </application>

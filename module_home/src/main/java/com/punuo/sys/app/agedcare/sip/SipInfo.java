@@ -9,7 +9,7 @@ import com.punuo.sys.app.agedcare.model.Cluster;
 import com.punuo.sys.app.agedcare.model.Device;
 import com.punuo.sys.app.agedcare.model.Farmilymember;
 import com.punuo.sys.app.agedcare.model.Music;
-import com.punuo.sys.app.agedcare.model.Musicitem;
+import com.punuo.sys.app.agedcare.request.model.MusicItem;
 import com.punuo.sys.app.agedcare.model.ShortMovie;
 
 import org.zoolu.sip.address.NameAddress;
@@ -123,7 +123,7 @@ public class SipInfo {
     public static ArrayList<Device> devList=new ArrayList<>();
     public static ArrayList<String> qinliaouseridList=new ArrayList<>();
     public static ArrayList<String> pictureList=new ArrayList<>();
- public static ArrayList<Musicitem> musicitems=new ArrayList<>();
+ public static ArrayList<MusicItem> musicItems =new ArrayList<>();
     public static List<Farmilymember> farmilymemberList = new ArrayList<>();
     public static ArrayList<Music> musics=new ArrayList<>();
     public static ArrayList<ShortMovie> movies=new ArrayList<>();

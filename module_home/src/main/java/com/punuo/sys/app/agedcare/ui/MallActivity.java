@@ -15,7 +15,7 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.TextView;
 import com.punuo.sys.app.agedcare.R;
-import com.punuo.sys.app.agedcare.tools.NetUtils;
+import com.punuo.sys.sdk.util.NetUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

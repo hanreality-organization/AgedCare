@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.punuo.sys.sdk">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application>
         <service
             android:name=".update.AutoUpdateService">
@@ -13,10 +15,10 @@
 
         <activity
             android:name=".activity.BaseActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="landscape" />
         <activity
             android:name=".activity.WebViewActivity"
             android:theme="@style/Theme.Pn.Translucent"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="landscape" />
     </application>
 </manifest>

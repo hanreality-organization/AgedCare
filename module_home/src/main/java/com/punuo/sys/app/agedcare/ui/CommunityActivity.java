@@ -16,7 +16,7 @@ import android.widget.TextView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.punuo.sys.app.agedcare.R;
-import com.punuo.sys.app.agedcare.tools.NetUtils;
+import com.punuo.sys.sdk.util.NetUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

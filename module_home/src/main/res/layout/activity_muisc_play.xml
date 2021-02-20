@@ -1,127 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_muisc_play"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_music_play"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.punuo.sys.app.agedcare.ui.MuiscPlay">
+    android:orientation="vertical">
+
     <androidx.cardview.widget.CardView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:layout_marginLeft="30dp"
         android:layout_marginTop="30dp"
-    app:cardCornerRadius="20dp"
-    app:elevation="10dp">
-    <ImageView
-        android:src="@drawable/dise"
-        android:layout_width="1200px"
-        android:layout_height="313px"
-        android:scaleType="centerCrop"/>
+        android:layout_marginRight="30dp"
+        app:cardCornerRadius="20dp"
+        app:elevation="10dp">
+
         <LinearLayout
-            android:layout_width="992px"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="104px"
-            android:layout_marginRight="104px"
-            android:layout_marginTop="29px">
-            <com.punuo.sys.app.agedcare.view.CircleImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/default_background_color"
+            android:orientation="horizontal"
+            android:padding="20dp">
+
+            <com.makeramen.roundedimageview.RoundedImageView
                 android:id="@+id/CIV_avatar"
-                android:layout_width="251px"
-                android:layout_height="251px"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                app:riv_corner_radius="1000dp"
+                tools:src="@tools:sample/avatars" />
 
-                />
             <LinearLayout
-
-                android:layout_gravity="center_vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
                 android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/songname"
-                    android:layout_gravity="center_horizontal"
-                    android:textSize="35sp"
-                    android:textColor="@color/white"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <LinearLayout
-                    android:layout_marginTop="10dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:textColor="@color/white"
+                    android:textSize="35sp" />
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_horizontal"
                     android:orientation="horizontal">
+
                     <ImageView
                         android:id="@+id/kuaitui"
+                        android:layout_width="85dp"
+                        android:layout_height="70dp"
                         android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                        android:src="@drawable/kuaitui1"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp" />
+                        android:layout_marginRight="80dp"
+                        android:src="@drawable/kuaitui1" />
+
                     <ImageView
                         android:id="@+id/stop"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/play1"
-                        android:layout_weight="1"
-                        android:layout_width="90dp"
-                        android:layout_height="90dp" />
+                        android:src="@drawable/play1" />
+
                     <ImageView
                         android:id="@+id/kuaijin"
+                        android:layout_width="85dp"
+                        android:layout_height="70dp"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/kuaijin1"
-                        android:layout_weight="1"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp" />
+                        android:layout_marginLeft="80dp"
+                        android:src="@drawable/kuaijin1" />
 
                 </LinearLayout>
+
                 <SeekBar
-                    android:layout_marginTop="20dp"
                     android:id="@+id/seekbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:maxHeight="4dp"
-                    android:minHeight="4dp"/>
+                    android:minHeight="4dp" />
+
                 <TextView
-                    android:visibility="gone"
-                    android:text="当前进度："
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:text="当前进度："
+                    android:visibility="gone" />
+
                 <TextView
-                    android:text="0:00"
                     android:id="@+id/text1"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:textSize="24dp"
+                    android:text="0:00" />
             </LinearLayout>
         </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:layout_marginTop="13px"
-        android:layout_width="1200px"
-        android:layout_height="313px"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:layout_gravity="center"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="30dp"
         app:cardCornerRadius="20dp"
         app:elevation="10dp">
-        <ImageView
-            android:src="@drawable/dise"
+
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"/>
-        <LinearLayout
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="36px"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:background="@drawable/default_background_color">
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="241px">
+                android:layout_height="match_parent"
+                android:layout_margin="20dp">
 
             </androidx.recyclerview.widget.RecyclerView>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+        </FrameLayout>
 
+
+    </androidx.cardview.widget.CardView>
 
 
 </LinearLayout>

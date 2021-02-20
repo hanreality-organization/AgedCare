@@ -77,4 +77,11 @@
         <attr name="ptrDrawableBottom" format="reference" />
     </declare-styleable>
 
+    <declare-styleable name="TitleLayout">
+        <attr name="view_type">
+            <enum name="normal" value="0" />
+            <enum name="special" value="1" />
+        </attr>
+    </declare-styleable>
+
 </resources>

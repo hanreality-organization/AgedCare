@@ -1,4 +1,4 @@
-package com.punuo.sys.app.agedcare.tools;
+package com.punuo.sys.sdk.util;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:scaleType="fitXY">
 
-    <com.punuo.sys.app.agedcare.ui.TitleLayout
+    <com.punuo.sys.sdk.view.TitleLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

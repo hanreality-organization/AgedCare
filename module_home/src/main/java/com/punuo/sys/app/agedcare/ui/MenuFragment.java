@@ -15,6 +15,8 @@ import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.R2;
 import com.punuo.sys.app.agedcare.model.MenuItem;
 import com.punuo.sys.app.router.HomeRouter;
+import com.punuo.sys.sdk.SDKRouter;
+import com.punuo.sys.sdk.account.AccountManager;
 import com.punuo.sys.sdk.util.CommonUtil;
 
 import java.util.ArrayList;
@@ -75,7 +77,10 @@ public class MenuFragment extends Fragment {
                         startActivity(new Intent(getActivity(), FamilyCircle.class));
                         break;
                     case COMMUNITY:
-                        startActivity(new Intent(getActivity(), CommunityActivity.class));
+                        ARouter.getInstance().build(SDKRouter.ROUTER_WEB_VIEW_ACTIVITY)
+                                .withString("url", "http://pet.qinqingonline.com:8889?user_id="+ AccountManager.getUserId())
+                                .withBoolean("showTopBar", false)
+                                .navigation();
                         break;
                     case HOUSEKEEPING:
                         startActivity(new Intent(getActivity(), AlbumActivity.class));
