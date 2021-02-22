@@ -28,6 +28,7 @@ import com.punuo.sip.dev.SipDevManager;
 import com.punuo.sip.dev.event.DevLoginFailEvent;
 import com.punuo.sip.dev.event.ReRegisterDevEvent;
 import com.punuo.sip.dev.model.LoginResponseDev;
+import com.punuo.sip.dev.model.OperationData;
 import com.punuo.sip.dev.request.SipDevRegisterRequest;
 import com.punuo.sip.user.SipUserManager;
 import com.punuo.sip.user.UserHeartBeatHelper;
@@ -82,7 +83,7 @@ public class HomeActivity extends BaseActivity {
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(new MemberFragment());
         fragments.add(new MenuFragment());
-        mLoopIndicator.select(fragments.size());
+        mLoopIndicator.setData(fragments.size());
         mLoopIndicator.select(0);
         FragAdapter adapter = new FragAdapter(getSupportFragmentManager(), fragments);
         ViewPager vp = findViewById(R.id.viewpager);
@@ -384,5 +385,9 @@ public class HomeActivity extends BaseActivity {
         registerUser();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(OperationData operationData) {
+
+    }
 
 }

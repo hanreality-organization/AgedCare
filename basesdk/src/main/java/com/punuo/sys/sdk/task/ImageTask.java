@@ -34,7 +34,7 @@ public class ImageTask extends AsyncTask<Object, Void, List<String>> {
         ContentResolver contentResolver = PnApplication.getInstance().getContentResolver();
         //获取jpeg和png格式的文件，并且按照时间进行倒序
         Cursor cursor = contentResolver.query(uri, null, MediaStore.Images.Media.MIME_TYPE + "=\"image/jpeg\" or " +
-                MediaStore.Images.Media.MIME_TYPE + "=\"image/png\"", null, MediaStore.Images.Media.DATE_MODIFIED + " desc");
+                MediaStore.Images.Media.MIME_TYPE + "=\"image/png\"", null, null);
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 String realPath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));

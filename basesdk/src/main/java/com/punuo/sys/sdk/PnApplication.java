@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.punuo.sys.sdk.util.DeviceHelper;
+import com.raizlabs.android.dbflow.config.FlowManager;
 import com.tencent.mmkv.MMKV;
 
 
@@ -31,6 +32,7 @@ public class PnApplication extends Application {
             ARouter.openDebug();
         }
         ARouter.init(this);
+        FlowManager.init(this);
     }
 
     @Override

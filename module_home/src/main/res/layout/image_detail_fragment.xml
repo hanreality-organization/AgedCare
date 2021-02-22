@@ -4,19 +4,9 @@
     android:layout_height="match_parent"
     android:background="@android:color/black" >
 
-    <ImageView
+    <com.punuo.sys.sdk.view.PinchImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/app_name"
-        android:scaleType="centerCrop" />
-
-    <ProgressBar
-        android:id="@+id/loading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone" />
+        android:layout_height="match_parent" />
 
 </FrameLayout>

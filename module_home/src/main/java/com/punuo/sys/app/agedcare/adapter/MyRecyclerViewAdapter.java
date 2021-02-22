@@ -77,7 +77,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         return images.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         private ImageView imageView;
 
         public MyViewHolder(View itemView) {

@@ -29,12 +29,12 @@
     <application>
         <activity
             android:name=".ui.HomeActivity"
-            android:theme="@style/Theme.Pn.Translucent"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Pn.Translucent" />
         <activity
             android:name=".ui.CodeActivity"
-            android:theme="@style/Theme.Pn.Translucent"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Pn.Translucent" />
         <activity
             android:name=".ui.ChsChange"
             android:screenOrientation="landscape" />
@@ -42,7 +42,8 @@
         <activity android:name=".ui.VideoPlay" />
         <activity
             android:name=".ui.AlbumActivity"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Pn.Translucent" />
         <activity
             android:name=".ui.VideoCallActivity"
             android:launchMode="singleTask" />
@@ -50,8 +51,8 @@
             android:name=".ui.VideoStart"
             android:theme="@android:style/Theme.Translucent" />
         <activity
-            android:name=".ui.AlbumSecondActivity"
-            android:theme="@style/SecondActivityTheme" />
+            android:name=".ui.ImagePagerActivity"
+            android:theme="@style/Theme.Pn.Translucent" />
 
         <service android:name=".service.PTTService" />
         <service android:name=".service.NewsService" />
@@ -91,9 +92,10 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ui.VideoRequestActivity"
-            android:theme="@style/Theme.Pn.Translucent"
-            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".ui.VideoRequestActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Pn.Translucent" />
 
         <receiver
             android:name=".receiver.MyBroadCastReceiver1"
@@ -130,28 +132,36 @@
         <activity android:name=".ui.VideoReply" />
         <activity android:name=".ui.EatActivity" />
         <activity android:name=".ui.PropertyActivity" /> <!-- android:launchMode="singleInstance"/> -->
-        <activity android:name=".ui.FamilyCircle" />
-        <activity android:name=".ui.phonecallActivity" />
-        <activity android:name=".ui.addressAddActivity" />
+        <activity android:name=".ui.FamilyCircleActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Pn.Translucent"/>
+        <activity
+            android:name=".ui.FamilyMemberManagerActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Pn.Translucent" />
         <activity android:name=".ui.HindebarActivity" />
         <activity android:name=".ui.MallActivity" />
         <activity android:name=".ui.CommunityActivity" />
-        <activity android:name=".ui.FriendCallActivity" />
-        <activity android:name=".ui.EntertainmentActivity"
-            android:theme="@style/Theme.Pn.Translucent"
-            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".ui.FriendCallActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Pn.Translucent" />
+        <activity
+            android:name=".ui.EntertainmentActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Pn.Translucent" />
         <activity
             android:name=".ui.ShortMovieActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensor" />
-        <activity android:name=".friendCircleMain.adapter.ImagePagerActivity" />
         <activity android:name=".friendcircle.PublishedActivity" />
-        <activity android:name=".friendcircle.TestPicActivity" />
         <activity android:name=".friendcircle.ImageGridActivity" />
         <activity android:name=".friendcircle.PhotoActivity" />
-        <activity android:name=".ui.ServiceCallActivity"
+        <activity
+            android:name=".ui.ServiceCallActivity"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.Pn.Translucent"/>
+            android:theme="@style/Theme.Pn.Translucent" />
         <activity android:name=".ui.JiazhengActivity" />
     </application>
 

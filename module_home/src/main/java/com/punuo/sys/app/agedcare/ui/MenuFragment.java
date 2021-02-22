@@ -74,7 +74,7 @@ public class MenuFragment extends Fragment {
                         ARouter.getInstance().build(HomeRouter.ROUTER_SERVICE_CALL_ACTIVITY).navigation();
                         break;
                     case CHAT:
-                        startActivity(new Intent(getActivity(), FamilyCircle.class));
+                        startActivity(new Intent(getActivity(), FamilyCircleActivity.class));
                         break;
                     case COMMUNITY:
                         ARouter.getInstance().build(SDKRouter.ROUTER_WEB_VIEW_ACTIVITY)
@@ -83,13 +83,13 @@ public class MenuFragment extends Fragment {
                                 .navigation();
                         break;
                     case HOUSEKEEPING:
-                        startActivity(new Intent(getActivity(), AlbumActivity.class));
+                        ARouter.getInstance().build(HomeRouter.ROUTER_ALBUM_ACTIVITY).navigation();
                         break;
                     case PHONECALL:
                         startActivity(new Intent(getActivity(), FriendCallActivity.class));
                         break;
                     case MUSIC:
-                        startActivity(new Intent(getActivity(), EntertainmentActivity.class));
+                        ARouter.getInstance().build(HomeRouter.ROUTER_ENTERTAINMENT_ACTIVITY).navigation();
                         break;
                     case OTHER:
                         ARouter.getInstance().build(HomeRouter.ROUTER_CODE_ACTIVITY).navigation();

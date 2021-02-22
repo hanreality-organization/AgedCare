@@ -1,115 +1,98 @@
 package com.punuo.sys.app.agedcare.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.punuo.sys.app.agedcare.R;
+import com.punuo.sys.app.agedcare.model.ShortMovie;
+import com.punuo.sys.sdk.activity.BaseActivity;
+import com.punuo.sys.sdk.httplib.HttpConfig;
 
-import static com.punuo.sys.app.agedcare.sip.SipInfo.movies;
-import static com.punuo.sys.app.agedcare.sip.SipInfo.serverIp;
+import java.util.ArrayList;
+import java.util.List;
+
+import tcking.github.com.giraffeplayer.GiraffePlayerActivity;
 
 /**
  * Created by 23578 on 2018/11/25.
  */
 
-public class ShortMovieRecyclerViewAdapter extends RecyclerView.Adapter<ShortMovieRecyclerViewAdapter.MyViewHolder>{
+public class ShortMovieRecyclerViewAdapter extends RecyclerView.Adapter<ShortMovieRecyclerViewAdapter.MyViewHolder> {
 
     private Context mContext;
+    private List<ShortMovie> mShortMovies = new ArrayList<>();
 
-    private GridLayoutManager glm;
-    private OnItemClickListener mOnItemClickListener;
-    private OnLongItemClickListener mOnLongItemClickListener;
-
-
-
-    public ShortMovieRecyclerViewAdapter( Context mContext, GridLayoutManager glm) {
-
+    public ShortMovieRecyclerViewAdapter(Context mContext) {
         this.mContext = mContext;
+    }
 
-        this.glm=glm;
+    public void appendData(List<ShortMovie> movies) {
+        mShortMovies.clear();
+        mShortMovies.addAll(movies);
+        notifyDataSetChanged();
     }
 
     @Override
-    public ShortMovieRecyclerViewAdapter.MyViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view= LayoutInflater.from(mContext).inflate(R.layout.rv_item_shortmovie,viewGroup,false);//加载item布局
-        ShortMovieRecyclerViewAdapter.MyViewHolder myViewHolder=new ShortMovieRecyclerViewAdapter.MyViewHolder(view);
-        return myViewHolder;
+    @NonNull
+    public ShortMovieRecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.rv_item_shortmovie, viewGroup, false);
+        return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ShortMovieRecyclerViewAdapter.MyViewHolder myViewHolder, final int i) {
-        myViewHolder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);//设置图片充满ImageView并自动裁剪居中显示
-        ViewGroup.LayoutParams parm = myViewHolder.imageView.getLayoutParams();
-        parm.height = glm.getWidth()/glm.getSpanCount()
-                - 2*myViewHolder.imageView.getPaddingLeft() - 2*((ViewGroup.MarginLayoutParams)parm).leftMargin;//设置imageView宽高相同
-//        ImageLoader.getInstance().displayImage(images.get(i),myViewHolder.imageView,options);//网络加载原图
-
-        myViewHolder.textView.setText(movies.get(i).getTitle());
-        myViewHolder.movie_info.setText(movies.get(i).getInfo());
-        Log.e("movie",movies.get(i).getId());
-        if (movies.get(i).getId() == null) {
-            myViewHolder.imageView.setImageResource(R.drawable.testcover);
-        } else {
-            Glide.with(mContext).load("http://" + serverIp + ":8000/static/videoListCover/" + movies.get(i).getCover() + ".png").into(myViewHolder.imageView);
-        }
-
-        if(mOnItemClickListener!=null)//传递监听事件
-        {
-            myViewHolder.imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mOnItemClickListener.onClick(myViewHolder.imageView,i);
-                }
-            });
-
-        }
-
+        myViewHolder.bind(mShortMovies.get(i));
     }
 
     @Override
     public int getItemCount() {
-        return movies.size();
+        return mShortMovies.size();
     }
-    class MyViewHolder extends RecyclerView.ViewHolder
-    {
-        private ImageView imageView;
-        private TextView textView;
-        private TextView movie_info;
+
+    static class MyViewHolder extends RecyclerView.ViewHolder {
+        private final ImageView imageView;
+        private final TextView textView;
+        private final TextView movieInfo;
+
         public MyViewHolder(View itemView) {
             super(itemView);
-            imageView=(ImageView)itemView.findViewById(R.id.movie_item);
-            textView=(TextView)itemView.findViewById(R.id.movie_name);
-            movie_info=(TextView)itemView.findViewById(R.id.info);
+            imageView = (ImageView) itemView.findViewById(R.id.movie_item);
+            textView = (TextView) itemView.findViewById(R.id.movie_name);
+            movieInfo = (TextView) itemView.findViewById(R.id.info);
+        }
+
+        public void bind(ShortMovie item) {
+            textView.setText(item.title);
+            movieInfo.setText(item.info);
+            Glide.with(itemView.getContext())
+                    .load("http://" + HttpConfig.getHost() + ":8000/static/videoListCover/" + item.cover + ".png")
+                    .apply(new RequestOptions().error(R.drawable.testcover)).into(imageView);
+            imageView.setOnClickListener(v -> {
+                GiraffePlayerActivity.configPlayer((BaseActivity) itemView.getContext()).
+                        setTitle(item.title)
+                        .play("http://" + HttpConfig.getHost() + ":8000/static/video/" + item.id + ".mp4");
+            });
         }
     }
 
-    public void setmOnItemClickListener(ShortMovieRecyclerViewAdapter.OnItemClickListener mOnItemClickListener)
-    {
-        this.mOnItemClickListener=mOnItemClickListener;
-    }
-    public void setmOnLongItemClickListener(ShortMovieRecyclerViewAdapter.OnLongItemClickListener mOnLongItemClickListener)
-    {
-        this.mOnLongItemClickListener=mOnLongItemClickListener;
-    }
     /**
      * 子项点击接口
      */
-    public interface OnItemClickListener
-    {
+    public interface OnItemClickListener {
         void onClick(View view, int position);
 
     }
-    public interface OnLongItemClickListener
-    {
-        void onLongClick(View view,int position);
+
+    public interface OnLongItemClickListener {
+        void onLongClick(View view, int position);
     }
 }

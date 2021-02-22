@@ -1,33 +1,24 @@
 package com.punuo.sys.app.agedcare.adapter;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.punuo.sys.app.agedcare.R;
-import com.punuo.sys.app.agedcare.http.GetPostUtil;
-import com.punuo.sys.app.agedcare.model.Constant;
-import com.punuo.sys.sdk.event.MessageEvent;
-import com.punuo.sys.app.agedcare.ui.addressAddActivity;
+import com.punuo.sys.app.agedcare.db.FamilyMember;
+import com.punuo.sys.app.router.HomeRouter;
 
-import org.greenrobot.eventbus.EventBus;
-
-import static com.punuo.sys.app.agedcare.sip.SipInfo.farmilymemberList;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -36,166 +27,60 @@ import static com.punuo.sys.app.agedcare.sip.SipInfo.farmilymemberList;
 
 public class PhoneRecyclerViewAdapter extends RecyclerView.Adapter<PhoneRecyclerViewAdapter.MyViewHolder> {
 
-    private Context mContext;
-
-    private GridLayoutManager glm;
-    private PhoneRecyclerViewAdapter.OnItemClickListener mOnItemClickListener;
-    private PhoneRecyclerViewAdapter.OnLongItemClickListener mOnLongItemClickListener;
-    Button cancle;
-    Button delete;
-    Button edit;
-    Dialog mCameraDialog;
-
-    public PhoneRecyclerViewAdapter(Context mContext, GridLayoutManager glm) {
-
+    private final Context mContext;
+    private final List<FamilyMember> mFamilyMemberList = new ArrayList<>();
+    public PhoneRecyclerViewAdapter(Context mContext) {
         this.mContext = mContext;
+    }
 
-        this.glm = glm;
+    public void clear() {
+        mFamilyMemberList.clear();
+    }
+
+    public void addAllData(List<FamilyMember> list) {
+        clear();
+        if (list != null) {
+            mFamilyMemberList.addAll(list);
+        }
+        notifyDataSetChanged();
     }
 
     @Override
-    public PhoneRecyclerViewAdapter.MyViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.rv_item_layout, null);//加载item布局
-        PhoneRecyclerViewAdapter.MyViewHolder myViewHolder = new PhoneRecyclerViewAdapter.MyViewHolder(view);
-        return myViewHolder;
+    @NonNull
+    public PhoneRecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.rv_item_layout, viewGroup, false);
+        return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final PhoneRecyclerViewAdapter.MyViewHolder myViewHolder, final int i) {
-        myViewHolder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);//设置图片充满ImageView并自动裁剪居中显示
-        ViewGroup.LayoutParams parm = myViewHolder.imageView.getLayoutParams();
-        parm.height = glm.getWidth() / glm.getSpanCount()
-                - 2 * myViewHolder.imageView.getPaddingLeft() - 2 * ((ViewGroup.MarginLayoutParams) parm).leftMargin;//设置imageView宽高相同
-//        ImageLoader.getInstance().displayImage(images.get(i),myViewHolder.imageView,options);//网络加载原图
-
-        myViewHolder.textView.setText(farmilymemberList.get(i).getLinkman());
-        if (farmilymemberList.get(i).getPic().equals("nopic")) {
-            myViewHolder.imageView.setImageResource(R.drawable.defaultavator);
-        } else {
-            Glide.with(mContext).load(farmilymemberList.get(i).getPic()).into(myViewHolder.imageView);
-        }
-        myViewHolder.delete.setOnClickListener(new View.OnClickListener() {
+        FamilyMember familyMember = mFamilyMemberList.get(i);
+        myViewHolder.textView.setText(familyMember.name);
+        RequestOptions requestOptions = new RequestOptions().placeholder(R.drawable.defaultavator);
+        Glide.with(mContext).load(familyMember.avatarUrl).apply(requestOptions).into(myViewHolder.imageView);
+        myViewHolder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(final View v) {
-                Log.d("onlongclick", "success");
-                setDialog();
-                cancle.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mCameraDialog.dismiss();
-                    }
-                });
-                edit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String avatorurl = farmilymemberList.get(i).getPic();
-                        String name = farmilymemberList.get(i).getLinkman();
-                        String phonenumber = farmilymemberList.get(i).getTelnum();
-                        Intent intent = new Intent(mContext, addressAddActivity.class);
-                        intent.putExtra("extra_avatorurl", avatorurl);
-                        intent.putExtra("extra_name", name);
-                        intent.putExtra("extra_phonenumber", phonenumber);
-                        intent.putExtra("extra_id", farmilymemberList.get(i).getId());
-                        intent.putExtra("extra_position", i);
-                        mContext.startActivity(intent);
-                        mCameraDialog.dismiss();
-                    }
-                });
-                delete.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                GetPostUtil.sendGet1111(Constant.URL_deleteAddressbook, "id=" + farmilymemberList.get(i).getId());
-                                EventBus.getDefault().post(new MessageEvent("addcompelete"));
-                                farmilymemberList.remove(i);
-                            }
-                        }).start();
-
-                        mCameraDialog.dismiss();
-                    }
-                });
-
+            public void onClick(View v) {
+                ARouter.getInstance().build(HomeRouter.ROUTER_FAMILY_MEMBER_MANAGER_ACTIVITY)
+                        .withParcelable("family_member", familyMember)
+                        .navigation();
             }
         });
-        if (mOnItemClickListener != null)//传递监听事件
-        {
-            myViewHolder.imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mOnItemClickListener.onClick(myViewHolder.imageView, i);
-                }
-
-            });
-
-
-        }
-
     }
 
     @Override
     public int getItemCount() {
-        return farmilymemberList.size();
+        return mFamilyMemberList.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
-        private ImageView imageView;
-        private TextView textView;
-        private ImageView delete;
+    static class MyViewHolder extends RecyclerView.ViewHolder {
+        private final ImageView imageView;
+        private final TextView textView;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.iv_item);
             textView = (TextView) itemView.findViewById(R.id.iv_name);
-            delete = (ImageView) itemView.findViewById(R.id.delete);
         }
     }
-
-    public void setmOnItemClickListener(PhoneRecyclerViewAdapter.OnItemClickListener mOnItemClickListener) {
-        this.mOnItemClickListener = mOnItemClickListener;
-    }
-
-    public void setmOnLongItemClickListener(PhoneRecyclerViewAdapter.OnLongItemClickListener mOnLongItemClickListener) {
-        this.mOnLongItemClickListener = mOnLongItemClickListener;
-    }
-
-    /**
-     * 子项点击接口
-     */
-    public interface OnItemClickListener {
-        void onClick(View view, int position);
-
-    }
-
-    public interface OnLongItemClickListener {
-        void onLongClick(View view, int position);
-    }
-
-    private void setDialog() {
-        mCameraDialog = new Dialog(mContext, R.style.BottomDialog);
-        LinearLayout root = (LinearLayout) LayoutInflater.from(mContext).inflate(
-                R.layout.editpop, null);
-        //初始化视图
-        cancle = (Button) root.findViewById(R.id.pop_cancle);
-        edit = (Button) root.findViewById(R.id.pop_edit);
-        delete = (Button) root.findViewById(R.id.pop_delete);
-        root.findViewById(R.id.pop_delete);
-        root.findViewById(R.id.pop_edit);
-        mCameraDialog.setContentView(root);
-        Window dialogWindow = mCameraDialog.getWindow();
-        dialogWindow.setGravity(Gravity.BOTTOM);
-//        dialogWindow.setWindowAnimations(R.style.dialogstyle); // 添加动画
-        WindowManager.LayoutParams lp = dialogWindow.getAttributes(); // 获取对话框当前的参数值
-        lp.x = 0; // 新位置X坐标
-        lp.y = 0; // 新位置Y坐标
-        lp.width = mContext.getResources().getDisplayMetrics().widthPixels; // 宽度
-        root.measure(0, 0);
-        lp.height = root.getMeasuredHeight();
-
-        lp.alpha = 9f; // 透明度
-        dialogWindow.setAttributes(lp);
-        mCameraDialog.show();
-    }
-
 }

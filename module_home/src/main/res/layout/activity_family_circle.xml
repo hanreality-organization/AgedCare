@@ -4,54 +4,38 @@
     android:layout_height="match_parent"
     android:background="@drawable/diseqian"
     android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:orientation="horizontal"
-        android:background="@drawable/dise">
+        android:orientation="horizontal">
+
         <Button
-            android:background="#00000000"
             android:id="@+id/iv_back7"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="49px"
+            android:layout_marginLeft="30dp"
+            android:background="#00000000"
             android:text="返回"
-            android:textSize="20sp"
             android:textColor="@color/white"
-            />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/titleset"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:layout_centerHorizontal="true"
+            android:gravity="center"
             android:text="家人动态"
             android:textColor="@color/white"
             android:textSize="25sp" />
-        <ImageView
-            android:visibility="gone"
-            android:id="@+id/iv_fatie"
-            android:layout_width="25dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="15dp"
-            android:src="@drawable/ic_fabu"/>
 
     </RelativeLayout>
-    <com.punuo.sys.app.agedcare.friendCircleMain.custonListView.CustomListView
-        android:background="@color/white"
-        android:id="@+id/list"
+
+    <com.handmark.pulltorefresh.library.PullToRefreshRecyclerView
+        android:id="@+id/pull_to_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:cacheColorHint="#00000000"
-        android:fadingEdge="none"
-        android:listSelector="#00000000"
-        android:scrollingCache="false"
-        android:animationCache="false"
-        android:smoothScrollbar="true"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="3dp" />
 </LinearLayout>

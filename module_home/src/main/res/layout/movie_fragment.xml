@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="30dp"
+        app:cardCornerRadius="20dp"
+        android:padding="10dp"
+        app:elevation="10dp">
+
+        <com.handmark.pulltorefresh.library.PullToRefreshRecyclerView
+            android:id="@+id/pull_to_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/default_background_color"
+            android:overScrollMode="never" />
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

@@ -7,6 +7,7 @@ import android.util.Log;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.punuo.sip.SipConfig;
 import com.punuo.sip.dev.request.BaseDevSipRequest;
 import com.punuo.sip.dev.service.SipDevServiceManager;
 import com.punuo.sip.user.service.SipUserServiceManager;
@@ -84,7 +85,7 @@ public class SipDevManager extends SipProvider {
 
     @Override
     public TransportConnId sendMessage(Message msg) {
-        return sendMessage(msg, com.punuo.sip.SipConfig.getServerIp(), com.punuo.sip.SipConfig.getDevPort());
+        return sendMessage(msg, SipConfig.getServerIp(), SipConfig.getDevPort());
     }
 
     public TransportConnId sendMessage(final Message msg, final String destAddr, final int destPort) {

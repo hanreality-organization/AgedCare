@@ -1,5 +1,6 @@
 package com.punuo.sip.user.request;
 
+import com.punuo.sip.SipConfig;
 import com.punuo.sip.user.H264ConfigUser;
 
 import org.json.JSONException;
@@ -25,7 +26,7 @@ public class SipMediaRequest extends BaseUserSipRequest {
     @Override
     public NameAddress getDestNameAddress() {
         String devId = targetDevId.substring(0, targetDevId.length() - 4).concat("0160"); //设备id后4位替换成0160
-        SipURL sipURL = new SipURL(devId, com.punuo.sip.SipConfig.getServerIp(), com.punuo.sip.SipConfig.getUserPort());
+        SipURL sipURL = new SipURL(devId, SipConfig.getServerIp(), SipConfig.getUserPort());
         return new NameAddress(devId, sipURL);
     }
 

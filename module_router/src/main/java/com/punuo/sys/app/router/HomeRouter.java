@@ -10,4 +10,9 @@ public class HomeRouter {
     public static final String ROUTER_VIDEO_REQUEST_ACTIVITY = PREFIX + "VideoRequestActivity";
     public static final String ROUTER_CODE_ACTIVITY = PREFIX + "CodeActivity";
     public static final String ROUTER_SERVICE_CALL_ACTIVITY = PREFIX + "ServiceCallActivity";
+    public static final String ROUTER_ENTERTAINMENT_ACTIVITY = PREFIX + "EntertainmentActivity";
+    public static final String ROUTER_IMAGE_PAGER_ACTIVITY = PREFIX + "ImagePagerActivity";
+    public static final String ROUTER_ALBUM_ACTIVITY = PREFIX + "AlbumActivity";
+    public static final String ROUTER_FAMILY_MEMBER_MANAGER_ACTIVITY = PREFIX + "FamilyMemberManagerActivity";
+    public static final String ROUTER_FRIEND_CALL_ACTIVITY = PREFIX + "FriendCallActivity";
 }

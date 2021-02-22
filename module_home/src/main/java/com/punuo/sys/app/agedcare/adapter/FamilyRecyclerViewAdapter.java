@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.punuo.sip.H264Config;
 import com.punuo.sip.user.SipUserManager;
 import com.punuo.sip.user.request.SipOperationRequest;
 import com.punuo.sys.app.agedcare.R;
@@ -108,6 +109,7 @@ public class FamilyRecyclerViewAdapter extends RecyclerView.Adapter<FamilyRecycl
                     public void onSuccess(UserDevModel result) {
                         if (!TextUtils.isEmpty(result.devId)) {
                             AccountManager.setTargetDevId(result.devId);
+                            H264Config.monitorType = H264Config.DOUBLE_MONITOR_POSITIVE;
                             SipOperationRequest operationRequest = new SipOperationRequest();
                             SipUserManager.getInstance().addRequest(operationRequest);
 

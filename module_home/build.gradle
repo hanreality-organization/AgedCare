@@ -45,4 +45,5 @@ dependencies {
     kapt 'com.alibaba:arouter-compiler:1.2.2'
     kapt 'com.jakewharton:butterknife-compiler:10.0.0'
     kapt 'org.permissionsdispatcher:permissionsdispatcher-processor:4.6.0'
+    kapt "com.github.Raizlabs.DBFlow:dbflow-processor:$gradle.sdk.dbflow_version"
 }

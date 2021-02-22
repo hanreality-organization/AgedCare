@@ -1,162 +1,96 @@
 package com.punuo.sys.app.agedcare.ui;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.database.Cursor;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
+import android.widget.ImageView;
 
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.adapter.MyRecyclerViewAdapter;
 import com.punuo.sys.app.agedcare.tools.AlbumBitmapCacheHelper;
+import com.punuo.sys.app.router.HomeRouter;
+import com.punuo.sys.sdk.activity.BaseActivity;
+import com.punuo.sys.sdk.task.ImageTask;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import static com.punuo.sys.app.agedcare.video.VideoInfo.mCamera;
-
-
-public class AlbumActivity extends HindebarActivity {
+@Route(path = HomeRouter.ROUTER_ALBUM_ACTIVITY)
+public class AlbumActivity extends BaseActivity {
 
     private RecyclerView rv;
-    private List<String> images = new ArrayList<String>();//图片地址
-    private List<String> imagespath = new ArrayList<String>();
+    private final List<String> images = new ArrayList<String>();//图片地址
     private Context mContext;
     private MyRecyclerViewAdapter adapter;
-    private HashMap<Integer, float[]> xyMap = new HashMap<Integer, float[]>();//所有子项的坐标
-    private int screenWidth;//屏幕宽度
-    private int screenHeight;//屏幕高度
-    PopupMenu popup;
+    private PopupMenu popup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_albumactivity);
+        setContentView(R.layout.activity_album_layout);
         mContext = this;
         initView();
         startGetImageThread();
         setEvent();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    private void setEvent() {
+        adapter.setmOnLongItemClickListener((view, position) -> {
+            popup = new PopupMenu(AlbumActivity.this, view);
+            popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+            popup.setOnMenuItemClickListener(
+                    item -> {
+                        if (item.getItemId() == R.id.deletepicture) {
+                            AlbumBitmapCacheHelper.getInstance().clearCache();
+                            File file = new File(images.get(position).substring(7));
+                            if (file.exists()) {
+                                getContentResolver().delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                                        MediaStore.Images.Media.DATA + "=?", new String[]{images.get(position).substring(7)});
+                                file.delete();
+                            }
+                            images.remove(position);
+                            adapter.notifyDataSetChanged();
+                        }
+                        return true;
+                    });
+            popup.show();
+        });
+        adapter.setmOnItemClickListener((view, position) -> ARouter.getInstance().build(HomeRouter.ROUTER_IMAGE_PAGER_ACTIVITY)
+                .withStringArrayList(ImagePagerActivity.EXTRA_IMAGE_URLS, (ArrayList<String>) images)
+                .withInt(ImagePagerActivity.EXTRA_IMAGE_INDEX, position)
+                .navigation());
+        ImageView fab = (ImageView) findViewById(R.id.takePhoto);
+        fab.setOnClickListener(v -> {
+            Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            cameraPhotoPath = getCameraPhotoPath();
+            Uri imageUri = Uri.fromFile(new File(cameraPhotoPath));
+            captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+            startActivityForResult(captureIntent, 1);
 
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        screenWidth = dm.widthPixels;
-        screenHeight = dm.heightPixels;
+        });
     }
 
-    /**
-     * recyclerView item点击事件
-     */
-    private void setEvent() {
-        adapter.setmOnLongItemClickListener(new MyRecyclerViewAdapter.OnLongItemClickListener() {
-            @Override
-            public void onLongClick(View view, final int position) {
-                Log.d("onlongclick", "success");
+    private String cameraPhotoPath;
 
-                popup = new PopupMenu(AlbumActivity.this, view);
-                // 将R.menu.popup_menu菜单资源加载到popup菜单中
-                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
-                // 为popup菜单的菜单项单击事件绑定事件监听器
-                popup.setOnMenuItemClickListener(
-                        new PopupMenu.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem item) {
-                                if (item.getItemId() == R.id.deletepicture) {
-                                    AlbumBitmapCacheHelper.getInstance().clearCache();
-                                    File file = new File(images.get(position).substring(7));
-                                    Log.d("ssssb", position + "");
-                                    Log.d("ssssb", images.get(position).substring(7));
-                                    if (file.exists()) {
-                                        getContentResolver().delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, MediaStore.Images.Media.DATA + "=?", new String[]{images.get(position).substring(7)});//删除系统缩略图
-                                        file.delete();
-                                        images.remove(position);
-                                        adapter.notifyDataSetChanged();
-                                    } else {
-                                        Log.d("ssssb", "文件不存在");
-                                    }
-                                }
-                                return true;
-                            }
-                        });
-                popup.show();
-
-
-            }
-        });
-        adapter.setmOnItemClickListener(new MyRecyclerViewAdapter.OnItemClickListener() {
-
-            @Override
-            public void onClick(View view, int position) {
-                Intent intent = new Intent(mContext, AlbumSecondActivity.class);
-                intent.putStringArrayListExtra("urls", (ArrayList<String>) images);
-                intent.putExtra("position", position);
-                xyMap.clear();//每一次点击前子项坐标都不一样，所以清空子项坐标
-
-                //子项前置判断，是否在屏幕内，不在的话获取屏幕边缘坐标
-                View view0 = rv.getChildAt(0);
-                int position0 = rv.getChildAdapterPosition(view0);
-                if (position0 > 0) {
-                    for (int j = 0; j < position0; j++) {
-                        float[] xyf = new float[]{(1 / 6.0f + (j % 3) * (1 / 3.0f)) * screenWidth, 0};//每行3张图，每张图的中心点横坐标自然是屏幕宽度的1/6,3/6,5/6
-                        xyMap.put(j, xyf);
-                    }
-                }
-
-                //其余子项判断
-                for (int i = position0; i < rv.getAdapter().getItemCount(); i++) {
-                    View view1 = rv.getChildAt(i - position0);
-                    if (rv.getChildAdapterPosition(view1) == -1)//子项末尾不在屏幕部分同样赋值屏幕底部边缘
-                    {
-                        float[] xyf = new float[]{(1 / 6.0f + (i % 3) * (1 / 3.0f)) * screenWidth, screenHeight};
-                        xyMap.put(i, xyf);
-                    } else {
-                        int[] xy = new int[2];
-                        view1.getLocationOnScreen(xy);
-                        float[] xyf = new float[]{xy[0] * 1.0f + view1.getWidth() / 2, xy[1] * 1.0f + view1.getHeight() / 2};
-                        xyMap.put(i, xyf);
-                    }
-                }
-                intent.putExtra("xyMap", xyMap);
-                startActivity(intent);
-            }
-
-
-        });
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.takePhoto);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE), 1);
-
-            }
-        });
+    private String getCameraPhotoPath() {
+        return Environment.getExternalStorageDirectory() + "/DCIM/Camera/" + System.currentTimeMillis() + ".png";
     }
 
     private void initView() {
         rv = (RecyclerView) findViewById(R.id.rv);
         GridLayoutManager glm = new GridLayoutManager(mContext, 3);//定义3列的网格布局
         rv.setLayoutManager(glm);
-        rv.addItemDecoration(new RecyclerViewItemDecoration(5, 3));//初始化子项距离和列数
         adapter = new MyRecyclerViewAdapter(images, mContext, glm);
         rv.setAdapter(adapter);
     }
@@ -165,12 +99,12 @@ public class AlbumActivity extends HindebarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // 如果返回值是正常的话
         if (resultCode == Activity.RESULT_OK) {
-            // 验证请求码是否一至，也就是startActivityForResult的第二个参数
             switch (requestCode) {
                 case 1:
-                    startGetImageThread();
+                    Uri imageUri = Uri.fromFile(new File(cameraPhotoPath));
+                    sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, imageUri));
+                    rv.postDelayed(this::startGetImageThread, 500);
                     break;
 
                 default:
@@ -180,95 +114,10 @@ public class AlbumActivity extends HindebarActivity {
     }
 
     public void startGetImageThread() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                ContentResolver contentResolver = getContentResolver();
-                //获取jpeg和png格式的文件，并且按照时间进行倒序
-                Cursor cursor = contentResolver.query(uri, null, MediaStore.Images.Media.MIME_TYPE + "=\"image/jpeg\" or " +
-                        MediaStore.Images.Media.MIME_TYPE + "=\"image/png\"", null, MediaStore.Images.Media.DATE_MODIFIED + " desc");
-                if (cursor != null) {
-                    images.clear();
-                    while (cursor.moveToNext()) {
-                        String realPath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-                        String path = "file://" + cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-                        Log.d("1111", path);
-                        images.add(path);
-                        imagespath.add(realPath);
-                        adapter.notifyDataSetChanged();
-                    }
-
-                    cursor.close();
-                }
-
-            }
-
-        }).start();
-
-    }
-
-    public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
-        private int itemSpace;//定义子项间距
-        private int itemColumnNum;//定义子项的列数
-
-        RecyclerViewItemDecoration(int itemSpace, int itemColumnNum) {
-            this.itemSpace = itemSpace;
-            this.itemColumnNum = itemColumnNum;
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            super.getItemOffsets(outRect, view, parent, state);
-            outRect.bottom = itemSpace;//底部留出间距
-            if (parent.getChildAdapterPosition(view) % itemColumnNum == 0)//每行第一项左边不留间距，其他留出间距
-            {
-                outRect.left = 0;
-            } else {
-                outRect.left = itemSpace;
-            }
-
-        }
-    }
-
-    /**
-     * 重写startActivity方法，禁用activity默认动画
-     */
-    @Override
-    public void startActivity(Intent intent) {
-        super.startActivity(intent);
-        overridePendingTransition(0, 0);
-    }
-
-    @Override
-
-    public void
-
-    onConfigurationChanged(Configuration newConfig) {
-
-// TODO Auto-generated method stub
-
-        super
-                .onConfigurationChanged(newConfig);
-
-        if
-                (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-
-//横屏
-
-            mCamera.setDisplayOrientation(
-                    0
-            );
-
-        } else {
-
-//竖屏
-
-            mCamera.setDisplayOrientation(
-                    90
-            );
-
-        }
-
+        new ImageTask(imageList -> {
+            images.clear();
+            images.addAll(imageList);
+            adapter.notifyDataSetChanged();
+        }).execute();
     }
 }

@@ -29,7 +29,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.punuo.sys.app.agedcare.sip.SipInfo.devices;
-import static com.punuo.sys.app.agedcare.sip.SipInfo.serverIp;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.url;
 
 public class MemberFragment extends BaseFragment {
@@ -40,7 +39,6 @@ public class MemberFragment extends BaseFragment {
     private RecyclerView mRecyclerView;
     private FamilyRecyclerViewAdapter adapter;
     private GridLayoutManager mLayoutManager;
-    public String ip = "http://" + serverIp + ":8000/static/xiaoyupeihu/";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

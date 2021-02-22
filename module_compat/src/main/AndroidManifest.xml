@@ -11,12 +11,13 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <!--<category android:name="android.intent.category.HOME" />-->
+                <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </activity>
         <activity
             android:name=".screensaver.ScreenSaverActivity"
             android:screenOrientation="landscape"
+            android:launchMode="singleTop"
             android:theme="@style/Theme.Pn.Translucent" />
     </application>
 

@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fab="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
+
     <com.punuo.sys.sdk.view.TitleLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:view_type="special"/>
+        app:view_type="special" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/diseqian"
-        android:id="@+id/rv"
-        />
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_margin="60dp"
-        android:layout_gravity="bottom|end"
-        android:src="@drawable/ic_plus"
-        app:backgroundTint="@color/titile"
-       />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp" />
+
+        <ImageView
+            android:id="@+id/add"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="60dp"
+            android:src="@drawable/ic_plus" />
 
     </FrameLayout>
 </LinearLayout>

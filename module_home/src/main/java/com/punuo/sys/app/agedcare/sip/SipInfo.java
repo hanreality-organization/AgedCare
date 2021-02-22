@@ -4,13 +4,8 @@ package com.punuo.sys.app.agedcare.sip;
 
 import android.os.Handler;
 
-import com.punuo.sys.app.agedcare.db.MyDatabaseHelper;
 import com.punuo.sys.app.agedcare.model.Cluster;
 import com.punuo.sys.app.agedcare.model.Device;
-import com.punuo.sys.app.agedcare.model.Farmilymember;
-import com.punuo.sys.app.agedcare.model.Music;
-import com.punuo.sys.app.agedcare.request.model.MusicItem;
-import com.punuo.sys.app.agedcare.model.ShortMovie;
 
 import org.zoolu.sip.address.NameAddress;
 import org.zoolu.sip.message.Message;
@@ -119,17 +114,8 @@ public class SipInfo {
     //是否点赞
 
     public static Boolean finish=false;
-    public static String[] localurl;
     public static ArrayList<Device> devList=new ArrayList<>();
     public static ArrayList<String> qinliaouseridList=new ArrayList<>();
-    public static ArrayList<String> pictureList=new ArrayList<>();
- public static ArrayList<MusicItem> musicItems =new ArrayList<>();
-    public static List<Farmilymember> farmilymemberList = new ArrayList<>();
-    public static ArrayList<Music> musics=new ArrayList<>();
-    public static ArrayList<ShortMovie> movies=new ArrayList<>();
-    public static int lastmusictype=0;
-
-    public static MyDatabaseHelper dbHelper;
     //视频信息请求回复
     public static boolean queryResponse;
     //视频请求回复

@@ -106,10 +106,9 @@ public class MusicPlayFragment extends BaseFragment {
         int id = view.getId();
         if (id == R.id.stop) {
             if (!isPlaying) {
-                stop.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.zaiting1));
                 play();
             } else {
-                stop.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.play1));
+
                 pause();
             }
         } else if (id == R.id.kuaijin) {
@@ -137,12 +136,13 @@ public class MusicPlayFragment extends BaseFragment {
     }
 
     //暂停
-    private void pause() {
+    public void pause() {
         if (mMediaPlayer.isPlaying()) {
             mMediaPlayer.pause();
         }
         seekBarProgress = mMediaPlayer.getCurrentPosition();
         isPlaying = false;
+        stop.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.play1));
     }
 
     //播放上一曲
@@ -174,7 +174,7 @@ public class MusicPlayFragment extends BaseFragment {
     }
 
     //播放音乐
-    private void play() {
+    public void play() {
         if (mMusicItems != null && !mMusicItems.isEmpty()) {
             try {
                 if (!mMediaPlayer.isPlaying()) {
@@ -364,6 +364,20 @@ public class MusicPlayFragment extends BaseFragment {
             default:
                 break;
         }
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
     }
 }

@@ -7,14 +7,16 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.punuo.sys.app.agedcare.R;
+import com.punuo.sys.app.router.HomeRouter;
 import com.punuo.sys.sdk.activity.BaseActivity;
 import com.punuo.sys.sdk.view.LoopIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Route(path = HomeRouter.ROUTER_ENTERTAINMENT_ACTIVITY)
 public class EntertainmentActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +26,7 @@ public class EntertainmentActivity extends BaseActivity {
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(new MusicPlayFragment());
         fragments.add(new ShortMovieFragment());
-        loopIndicator.select(fragments.size());
+        loopIndicator.setData(fragments.size());
         loopIndicator.select(0);
         FragAdapter adapter = new FragAdapter(getSupportFragmentManager(), fragments);
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -38,6 +40,9 @@ public class EntertainmentActivity extends BaseActivity {
             @Override
             public void onPageSelected(int position) {
                 loopIndicator.select(position);
+                if (position != 0) {
+                    ((MusicPlayFragment) fragments.get(0)).pause();
+                }
             }
 
             @Override
