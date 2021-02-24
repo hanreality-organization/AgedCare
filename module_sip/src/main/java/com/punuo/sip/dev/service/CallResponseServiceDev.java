@@ -7,6 +7,7 @@ import com.punuo.sip.user.SipUserManager;
 import com.punuo.sip.user.request.SipQueryRequest;
 import com.punuo.sys.sdk.account.AccountManager;
 
+import org.greenrobot.eventbus.EventBus;
 import org.zoolu.sip.message.Message;
 
 /**
@@ -30,12 +31,13 @@ public class CallResponseServiceDev extends NormalDevRequestService<CallResponse
                 SipUserManager.getInstance().addRequest(request);
                 break;
             case "refuse":
-                //目标用户拒绝了 TODO
-                break;
+                //目标用户拒绝了
             case "cancel":
-                //目标用户挂断了 TODO
+                //目标用户挂断了
+                EventBus.getDefault().post(result);
                 break;
         }
+        onResponse(msg);
     }
 
     @Override

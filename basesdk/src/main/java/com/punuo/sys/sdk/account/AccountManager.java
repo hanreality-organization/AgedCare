@@ -2,8 +2,11 @@ package com.punuo.sys.sdk.account;
 
 import android.os.Environment;
 
+import com.punuo.sys.sdk.model.BindUser;
+
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -18,6 +21,16 @@ public class AccountManager {
     private static boolean login = false;
     private static String userIpPhoneNum; //网络IP电话
     private static String targetDevId; //双向视频的目标devId
+    private static String targetUserId; //双向视频的目标userId
+    private static List<BindUser> bindUsers; //绑定该设备的用户信息
+
+    public static void setBindUsers(List<BindUser> bindUsers) {
+        AccountManager.bindUsers = bindUsers;
+    }
+
+    public static List<BindUser> getBindUsers() {
+        return bindUsers;
+    }
 
     public static String getUserId() {
         return userId;
@@ -65,6 +78,14 @@ public class AccountManager {
 
     public static void setTargetDevId(String targetDevId) {
         AccountManager.targetDevId = targetDevId;
+    }
+
+    public static void setTargetUserId(String targetUserId) {
+        AccountManager.targetUserId = targetUserId;
+    }
+
+    public static String getTargetUserId() {
+        return targetUserId;
     }
 
     public static String getGroupPort() {

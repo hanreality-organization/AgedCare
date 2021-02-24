@@ -35,26 +35,22 @@
             android:name=".ui.CodeActivity"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Pn.Translucent" />
-        <activity
-            android:name=".ui.ChsChange"
-            android:screenOrientation="landscape" />
-        <activity android:name=".video.H264Sending" />
-        <activity android:name=".ui.VideoPlay" />
+        <activity android:name=".video.SingleMonitorActivity"
+            android:theme="@style/Theme.Pn.Translucent"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".ui.AlbumActivity"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Pn.Translucent" />
         <activity
             android:name=".ui.VideoCallActivity"
-            android:launchMode="singleTask" />
-        <activity
-            android:name=".ui.VideoStart"
-            android:theme="@android:style/Theme.Translucent" />
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Pn.Video"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".ui.ImagePagerActivity"
             android:theme="@style/Theme.Pn.Translucent" />
 
-        <service android:name=".service.PTTService" />
         <service android:name=".service.NewsService" />
         <service android:name=".service.MediaService" />
 
@@ -68,14 +64,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <receiver
-            android:name=".receiver.MyReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.GLOBAL_BUTTON" />
-            </intent-filter>
-        </receiver>
         <receiver android:name=".receiver.NetworkConnectChangedReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
@@ -97,41 +85,9 @@
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Pn.Translucent" />
 
-        <receiver
-            android:name=".receiver.MyBroadCastReceiver1"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.example.broadcast.CALL_AGREE" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name=".receiver.CallBroadcastReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.example.broadcast.CALL_REQUEST" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name=".receiver.PhoneListener">
-            <intent-filter android:priority="1000">
-                <action android:name="android.intent.action.PHONE_STATE" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </receiver>
-
-        <activity android:name=".ui.VideoReply" />
-        <activity android:name=".ui.EatActivity" />
-        <activity android:name=".ui.PropertyActivity" /> <!-- android:launchMode="singleInstance"/> -->
+        <activity android:name=".ui.VideoReplyActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Pn.Translucent"/>
         <activity android:name=".ui.FamilyCircleActivity"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Pn.Translucent"/>
@@ -140,9 +96,6 @@
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Pn.Translucent" />
-        <activity android:name=".ui.HindebarActivity" />
-        <activity android:name=".ui.MallActivity" />
-        <activity android:name=".ui.CommunityActivity" />
         <activity
             android:name=".ui.FriendCallActivity"
             android:screenOrientation="landscape"
@@ -154,15 +107,12 @@
         <activity
             android:name=".ui.ShortMovieActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="sensor" />
-        <activity android:name=".friendcircle.PublishedActivity" />
-        <activity android:name=".friendcircle.ImageGridActivity" />
-        <activity android:name=".friendcircle.PhotoActivity" />
+            android:theme="@style/Theme.Pn.Translucent"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".ui.ServiceCallActivity"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Pn.Translucent" />
-        <activity android:name=".ui.JiazhengActivity" />
     </application>
 
 </manifest>

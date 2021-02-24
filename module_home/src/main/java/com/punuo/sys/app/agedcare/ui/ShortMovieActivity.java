@@ -8,11 +8,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.punuo.sys.app.agedcare.R;
+import com.punuo.sys.sdk.activity.BaseActivity;
+
 import tcking.github.com.giraffeplayer.GiraffePlayer;
 import tcking.github.com.giraffeplayer.GiraffePlayerActivity;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 
-public class ShortMovieActivity extends HindebarActivity {
+public class ShortMovieActivity extends BaseActivity {
 
     GiraffePlayer player;
 

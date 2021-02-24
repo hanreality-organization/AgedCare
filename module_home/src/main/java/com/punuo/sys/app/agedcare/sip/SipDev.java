@@ -7,11 +7,9 @@ import android.os.PowerManager;
 import android.util.Log;
 
 import com.punuo.sys.app.agedcare.groupvoice.GroupInfo;
-import com.punuo.sys.app.agedcare.model.Device;
-import com.punuo.sys.sdk.event.MessageEvent;
 import com.punuo.sys.app.agedcare.video.VideoInfo;
+import com.punuo.sys.sdk.model.BindUser;
 
-import org.greenrobot.eventbus.EventBus;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
@@ -39,11 +37,9 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import android_serialport_api.SerialPort;
 
-
 import static android.content.Context.MODE_PRIVATE;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.devName;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.isanswering;
-
 import static com.punuo.sys.app.agedcare.sip.SipInfo.ismoniter;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.shareurl;
 import static com.punuo.sys.app.agedcare.sip.SipInfo.userdevid;
@@ -229,7 +225,7 @@ public class SipDev extends SipProvider {
 
                         FromHeader fromHeader = msg.getFromHeader();
                         String userName = fromHeader.getNameAddress().getAddress().getUserName();
-                        for (Device item : SipInfo.devList) {
+                        for (BindUser item : SipInfo.devList) {
                             if (item.getUserid().equals(userName)) {
                                 SipInfo.sipReqFromUser = item.getId();
                                 break;
@@ -309,11 +305,9 @@ public class SipDev extends SipProvider {
                             isanswering=false;
                             Log.d(TAG,"拒绝视频请求");
                             SipInfo.sipDev.sendMessage(SipMessageFactory.createResponse(msg, 200, "Ok", ""));
-                            EventBus.getDefault().post(new MessageEvent("取消"));
                         }else if (response.equals("cancel"))
                         {
                             isanswering=false;
-                            EventBus.getDefault().post(new MessageEvent("取消"));
 
                             Log.d(TAG,"取消拨打");
                         }
@@ -330,7 +324,6 @@ public class SipDev extends SipProvider {
 
                         Intent intent=new Intent("com.example.broadcast.CALL_REQUEST");
                         context.getApplicationContext().sendBroadcast(intent);
-//                        EventBus.getDefault().post(new MessageEvent("视频来电"));
                         isanswering=true;
                         }
                         else if (isanswering=true)
@@ -375,7 +368,7 @@ public class SipDev extends SipProvider {
                         Log.d("wuye111",item+telephone);
                         break;
                     case"stop_monitor":
-                        EventBus.getDefault().post(new MessageEvent("关闭视频"));
+
                         break;
 
                     case "image_share":

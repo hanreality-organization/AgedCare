@@ -8,18 +8,18 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.punuo.sys.app.agedcare.sip.BodyFactory;
 import com.punuo.sys.app.agedcare.sip.SipInfo;
 import com.punuo.sys.app.agedcare.sip.SipMessageFactory;
 import com.punuo.sys.app.agedcare.tools.SipCallMananger;
 import com.punuo.sys.app.agedcare.ui.VideoCallActivity;
-import com.punuo.sys.app.agedcare.video.H264Sending;
+import com.punuo.sys.app.agedcare.video.SingleMonitorActivity;
 import com.punuo.sys.app.agedcare.video.VideoInfo;
 
 import java.text.SimpleDateFormat;
@@ -50,7 +50,7 @@ public class NewsService extends Service {
 //                Date curDate = new Date(System.currentTimeMillis());
 //                VideoInfo.vidieoBegin = formatter.format(curDate);
 //                if (isCameraCanUse()) {
-//                    Intent intent = new Intent(NewsService.this, H264Sending.class);
+//                    Intent intent = new Intent(NewsService.this, SingleMonitorActivity.class);
 //                    SipInfo.inviteResponse = true;
 //                    SipInfo.sipDev.sendMessage(SipMessageFactory.createResponse(SipInfo.msg, 200, "OK", BodyFactory.createMediaResponseBody("MOBILE_S9")));
 //                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -103,7 +103,7 @@ public class NewsService extends Service {
                     Date curDate = new Date(System.currentTimeMillis());
                     VideoInfo.vidieoBegin = formatter.format(curDate);
                     if (isCameraCanUse()) {
-                        Intent intent = new Intent(NewsService.this, H264Sending.class);
+                        Intent intent = new Intent(NewsService.this, SingleMonitorActivity.class);
                         SipInfo.inviteResponse = true;
                         SipInfo.sipDev.sendMessage(SipMessageFactory.createResponse(SipInfo.msg, 200, "OK", BodyFactory.createMediaResponseBody("MOBILE_S9")));
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

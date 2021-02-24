@@ -18,33 +18,26 @@ import com.punuo.sys.app.agedcare.video.VideoInfo;
 import com.punuo.sys.app.agedcare.video.VideoInfoUser;
 import com.punuo.sys.app.agedcare.view.CustomProgressDialog;
 
-import org.zoolu.sip.address.NameAddress;
-import org.zoolu.sip.address.SipURL;
 import org.zoolu.sip.message.Message;
 
 import java.net.SocketException;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-
-import static com.punuo.sys.app.agedcare.sip.SipInfo.groupid;
 
 /**
  * Created by 23578 on 2018/10/10.
  */
 
-public class SipVideoMananger {
+public class SipVideoManager {
     private static final String TAG = "SipCallMananger";
-    static volatile SipVideoMananger instance;
-    SipVideoMananger(){
+    static volatile SipVideoManager instance;
+    SipVideoManager(){
 
     }
 
-    public static final SipVideoMananger getInstance() {
+    public static final SipVideoManager getInstance() {
         if (instance == null) {
-            synchronized (SipVideoMananger.class) {
+            synchronized (SipVideoManager.class) {
                 if (instance == null) {
-                    instance =new SipVideoMananger();
+                    instance =new SipVideoManager();
                 }
             }
         }

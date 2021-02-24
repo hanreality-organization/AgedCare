@@ -3,14 +3,14 @@ package tcking.github.com.giraffeplayer;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Toast;
+
+import com.punuo.sys.sdk.activity.BaseActivity;
+import com.punuo.sys.sdk.event.CloseOtherMediaEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -19,16 +19,17 @@ import org.greenrobot.eventbus.ThreadMode;
 /**
  * Created by tcking on 15/10/27.
  */
-public class GiraffePlayerActivity extends HindebarActivity {
+public class GiraffePlayerActivity extends BaseActivity {
 
     GiraffePlayer player;
-    private  Config config;
+    private Config config;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.giraffe_player);
-         config = getIntent().getParcelableExtra("config");
+        config = getIntent().getParcelableExtra("config");
         EventBus.getDefault().register(this);
         if (config == null || TextUtils.isEmpty(config.url)) {
             Toast.makeText(this, R.string.giraffe_player_url_empty, Toast.LENGTH_SHORT).show();
@@ -37,7 +38,7 @@ public class GiraffePlayerActivity extends HindebarActivity {
             player.setTitle(config.title);
             player.setDefaultRetryTime(config.defaultRetryTime);
             player.setFullScreenOnly(config.fullScreenOnly);
-           player.setScaleType(TextUtils.isEmpty(config.scaleType) ? GiraffePlayer.SCALETYPE_FITPARENT : config.scaleType);
+            player.setScaleType(TextUtils.isEmpty(config.scaleType) ? GiraffePlayer.SCALETYPE_FITPARENT : config.scaleType);
             player.setTitle(TextUtils.isEmpty(config.title) ? "" : config.title);
             player.setShowNavIcon(config.showNavIcon);
             player.play(config.url);
@@ -106,9 +107,9 @@ public class GiraffePlayerActivity extends HindebarActivity {
         private String url;
         private boolean showNavIcon = true;
 
-        private static boolean debug=true;
+        private static boolean debug = true;
 
-        public  Config debug(boolean debug) {
+        public Config debug(boolean debug) {
             Config.debug = debug;
             return this;
         }
@@ -191,24 +192,9 @@ public class GiraffePlayerActivity extends HindebarActivity {
         }
         super.onBackPressed();
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(MessageEvent event) {
-        switch (event.getMessage())
-        {
-            case "等待通话":
-
-                player.pause();
-                break;
-            case "movieplaying":
-
-                player.pause();
-                break;
-            case "callstart":
-
-                player.pause();
-                break;
-
-        }
-
+    public void onMessageEvent(CloseOtherMediaEvent event) {
+        player.pause();
     }
 }

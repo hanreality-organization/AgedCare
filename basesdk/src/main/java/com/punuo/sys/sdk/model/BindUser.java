@@ -1,23 +1,33 @@
-package com.punuo.sys.app.agedcare.model;
+package com.punuo.sys.sdk.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by asus on 2018/1/15.
  */
 
-public class Device implements Parcelable {
-    private String id;
-    private String userid;
-    private String nickname;
-    private String name;
-    private String avatar;
-    private String auth;
-    private String devId;
-    private String devType;
+public class BindUser implements Parcelable {
+    @SerializedName("id")
+    public String id;
+    @SerializedName("userid")
+    public String userid;
+    @SerializedName("nickname")
+    public String nickname;
+    @SerializedName("name")
+    public String name;
+    @SerializedName("avatar")
+    public String avatar;
+    @SerializedName("auth")
+    public String auth;
+    @SerializedName("devId")
+    public String devId;
+    @SerializedName("devType")
+    public String devType;
 
-    protected Device(Parcel in) {
+    protected BindUser(Parcel in) {
         id = in.readString();
         userid = in.readString();
         nickname = in.readString();
@@ -28,15 +38,15 @@ public class Device implements Parcelable {
         devType = in.readString();
     }
 
-    public static final Creator<Device> CREATOR = new Creator<Device>() {
+    public static final Creator<BindUser> CREATOR = new Creator<BindUser>() {
         @Override
-        public Device createFromParcel(Parcel in) {
-            return new Device(in);
+        public BindUser createFromParcel(Parcel in) {
+            return new BindUser(in);
         }
 
         @Override
-        public Device[] newArray(int size) {
-            return new Device[size];
+        public BindUser[] newArray(int size) {
+            return new BindUser[size];
         }
     };
 

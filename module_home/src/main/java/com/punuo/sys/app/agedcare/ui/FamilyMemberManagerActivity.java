@@ -22,9 +22,9 @@ import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.R2;
 import com.punuo.sys.app.agedcare.db.FamilyMember;
 import com.punuo.sys.app.agedcare.db.FamilyMember_Table;
+import com.punuo.sys.app.agedcare.event.FamilyMemberManagerEvent;
 import com.punuo.sys.app.router.HomeRouter;
 import com.punuo.sys.sdk.activity.BaseActivity;
-import com.punuo.sys.sdk.event.MessageEvent;
 import com.punuo.sys.sdk.util.ToastUtils;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
@@ -120,7 +120,7 @@ public class FamilyMemberManagerActivity extends BaseActivity {
                         }
                     }
                 }
-                EventBus.getDefault().post(new MessageEvent("addcompelete"));
+                EventBus.getDefault().post(new FamilyMemberManagerEvent());
                 finish();
             }
         });
@@ -129,7 +129,7 @@ public class FamilyMemberManagerActivity extends BaseActivity {
             SQLite.delete().from(FamilyMember.class)
                     .where(FamilyMember_Table.id.eq(mFamilyMember.id))
                     .execute();
-            EventBus.getDefault().post(new MessageEvent("addcompelete"));
+            EventBus.getDefault().post(new FamilyMemberManagerEvent());
             ToastUtils.showToast("删除成功");
             finish();
         });

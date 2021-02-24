@@ -10,7 +10,7 @@
     android:descendantFocusability="blocksDescendants"
     android:background="@drawable/friend_circle_bg"
     android:orientation="vertical"
-    android:padding="6dp">
+    android:padding="30dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,17 +25,17 @@
                 android:id="@+id/avator"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/defaultavator"
+                tools:src="@tools:sample/avatars"
                 app:riv_corner_radius="100dp"/>
 
             <TextView
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="20dp"
                 android:layout_toRightOf="@+id/avator"
                 android:textColor="#576B95"
-                android:textSize="16sp"
+                android:textSize="25sp"
                 tools:text="昵称"/>
 
             <TextView
@@ -43,42 +43,45 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/name"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@+id/avator"
                 android:gravity="center_vertical"
                 android:textColor="@color/black"
-                android:textSize="14sp"
-                android:layout_marginTop="6dp"
+                android:textSize="22sp"
+                android:layout_marginTop="12dp"
                 tools:text="内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容"/>
 
-            <com.punuo.sys.app.agedcare.friendCircle.adapter.NineGridTestLayout
-                android:id="@+id/layout_nine_grid"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/picture_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/content"
                 android:layout_toRightOf="@+id/avator"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="6dp"
-                app:sapcing="4dp" />
+                android:layout_below="@+id/content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="12dp"
+                tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                tools:spanCount="3"
+                tools:itemCount="1"
+                tools:listitem="@layout/friend_picture_item"/>
 
             <TextView
                 android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/layout_nine_grid"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="6dp"
+                android:layout_below="@+id/picture_recycler"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="12dp"
                 android:layout_toRightOf="@+id/avator"
                 android:textColor="@color/gary"
-                android:textSize="10sp" />
+                android:textSize="20dp" />
 
             <ImageView
                 android:id="@+id/btnIgnore"
-                android:layout_width="30dp"
-                android:layout_height="20dp"
-                android:layout_below="@id/layout_nine_grid"
+                android:layout_width="45dp"
+                android:layout_height="30dp"
+                android:layout_below="@id/picture_recycler"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="24dp"
                 android:src="@drawable/micro_comment" />
 
         </RelativeLayout>
@@ -87,16 +90,20 @@
             android:id="@+id/praise_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
-            android:layout_marginTop="6dp"
-            android:background="@color/lightgary" />
+            android:layout_marginLeft="120dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/lightgary"
+            tools:listitem="@layout/friend_praise_item"
+            tools:itemCount="2"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/friend_comment_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
-            android:layout_marginTop="6dp"
-            android:background="@color/lightgary" />
+            android:layout_marginLeft="120dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/lightgary"
+            tools:listitem="@layout/friend_commit_item"
+            tools:itemCount="2"/>
     </LinearLayout>
 </LinearLayout>

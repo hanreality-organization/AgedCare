@@ -2,6 +2,8 @@ package com.punuo.sys.app.agedcare.video;
 
 import android.util.Log;
 
+import com.punuo.sip.user.H264ConfigUser;
+
 /**
  * Author chzjy
  * Date 2016/12/19.
@@ -15,7 +17,7 @@ public class SendActivePacket extends Thread {
         msg[1] = 0x01;
         msg[2] = 0x00;
         msg[3] = 0x10;
-        System.arraycopy(VideoInfoUser.magic, 0, msg, 4, 16);
+        System.arraycopy(H264ConfigUser.magic, 0, msg, 4, 16);
     }
 
     @Override

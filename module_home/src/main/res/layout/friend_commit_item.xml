@@ -5,24 +5,24 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:paddingLeft="12dp"
-    android:paddingTop="3dp"
+    android:paddingTop="6dp"
     android:paddingRight="12dp"
-    android:paddingBottom="3dp">
+    android:paddingBottom="6dp">
 
     <TextView
         android:id="@+id/friend_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#2C78B8"
-        android:textSize="16sp"
+        android:textSize="20dp"
         tools:text="昵称" />
 
     <TextView
         android:id="@+id/friend_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
+        android:layout_marginLeft="12dp"
         android:textColor="#666666"
-        android:textSize="16sp"
+        android:textSize="20dp"
         tools:text="评论评论" />
 </LinearLayout>

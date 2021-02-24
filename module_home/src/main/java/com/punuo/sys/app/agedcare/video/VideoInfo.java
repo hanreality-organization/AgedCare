@@ -16,11 +16,6 @@ public class VideoInfo {
     public static int height;
     public static int videoType;
 
-    public static String rtpIp;
-    public static int rtpPort;
-
-    public static byte[] magic;
-
     public static NalBuffer[] nalBuffers = new NalBuffer[200];
 
     public static RtpVideo rtpVideo;

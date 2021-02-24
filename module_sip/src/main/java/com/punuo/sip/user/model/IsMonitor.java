@@ -9,6 +9,12 @@ import com.punuo.sys.sdk.model.PNBaseModel;
  **/
 public class IsMonitor extends PNBaseModel {
 
-    @SerializedName("code")
-    public String code;
+    @SerializedName("ismonitor")
+    public boolean isMonitor;
+
+    @SerializedName("devid")
+    public String targetDevId;
+
+    @SerializedName("userid")
+    public String targetUserId;
 }

@@ -14,9 +14,9 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.adapter.PhoneRecyclerViewAdapter;
 import com.punuo.sys.app.agedcare.db.FamilyMember;
+import com.punuo.sys.app.agedcare.event.FamilyMemberManagerEvent;
 import com.punuo.sys.app.router.HomeRouter;
 import com.punuo.sys.sdk.activity.BaseActivity;
-import com.punuo.sys.sdk.event.MessageEvent;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import org.greenrobot.eventbus.EventBus;
@@ -27,6 +27,7 @@ import org.greenrobot.eventbus.ThreadMode;
 public class FriendCallActivity extends BaseActivity {
     private String TAG = "FriendCallActivity";
     private PhoneRecyclerViewAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,10 +38,8 @@ public class FriendCallActivity extends BaseActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(MessageEvent event) {
-        if (event.getMessage().equals("addcompelete")) {
-            getData();
-        }
+    public void onMessageEvent(FamilyMemberManagerEvent event) {
+        getData();
     }
 
     private void getData() {

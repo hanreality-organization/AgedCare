@@ -2,9 +2,9 @@ package com.punuo.sip.dev.service;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.punuo.sip.H264Config;
-import com.punuo.sip.dev.H264ConfigDev;
 import com.punuo.sip.dev.model.OperationData;
 import com.punuo.sip.dev.request.BaseDevSipRequest;
+import com.punuo.sys.sdk.account.AccountManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.zoolu.sip.message.Message;
@@ -22,8 +22,9 @@ public class OperationServiceDev extends NormalDevRequestService<OperationData> 
 
     @Override
     protected void onSuccess(Message msg, OperationData result) {
-        H264Config.monitorType = H264Config.DOUBLE_MONITOR_NEGATIVE;
-        H264ConfigDev.initOperationData(result);
+        H264Config.monitorType = H264Config.DOUBLE_MONITOR_NEGATIVE; //双向视频被动接收
+        AccountManager.setTargetUserId(result.targetUserId);
+        AccountManager.setTargetDevId(result.targetDevId);
         EventBus.getDefault().post(result);
     }
 

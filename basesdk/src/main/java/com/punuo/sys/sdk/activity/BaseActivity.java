@@ -21,7 +21,13 @@ import com.punuo.sys.sdk.view.PNLoadingDialog;
 public class BaseActivity extends AppCompatActivity implements BaseHandler.MessageHandler {
     private PNLoadingDialog mLoadingDialog;
     protected BaseHandler mBaseHandler;
+    //TODO 视频的时候不能开启定时
     private CountDownTimer countDownTimer;
+    private boolean needCountDown = true;
+
+    public void setNeedCountDown(boolean needCountDown) {
+        this.needCountDown = needCountDown;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +112,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHandler.Messa
     protected void onDestroy() {
         super.onDestroy();
         dismissLoadingDialog();
-        if (countDownTimer != null) {
+        if (countDownTimer != null && needCountDown) {
             countDownTimer.cancel();
         }
     }
@@ -114,7 +120,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHandler.Messa
     @Override
     protected void onResume() {
         super.onResume();
-        if (countDownTimer != null) {
+        if (countDownTimer != null && needCountDown) {
             countDownTimer.start();
         }
     }
@@ -122,7 +128,7 @@ public class BaseActivity extends AppCompatActivity implements BaseHandler.Messa
     @Override
     protected void onPause() {
         super.onPause();
-        if (countDownTimer != null) {
+        if (countDownTimer != null && needCountDown) {
             countDownTimer.cancel();
         }
     }
@@ -132,13 +138,15 @@ public class BaseActivity extends AppCompatActivity implements BaseHandler.Messa
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 //有按下动作时取消定时
-                if (countDownTimer != null) {
+                if (countDownTimer != null && needCountDown) {
                     countDownTimer.cancel();
                 }
                 break;
             case MotionEvent.ACTION_UP:
                 //抬起时启动定时
-                startScreenSaver();
+                if (needCountDown) {
+                    startScreenSaver();
+                }
                 break;
         }
         return super.dispatchTouchEvent(ev);

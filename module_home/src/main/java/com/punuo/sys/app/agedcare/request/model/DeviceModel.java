@@ -1,7 +1,7 @@
 package com.punuo.sys.app.agedcare.request.model;
 
 import com.google.gson.annotations.SerializedName;
-import com.punuo.sys.app.agedcare.model.Device;
+import com.punuo.sys.sdk.model.BindUser;
 
 import java.util.List;
 
@@ -11,5 +11,5 @@ import java.util.List;
  **/
 public class DeviceModel {
     @SerializedName("userList")
-    public List<Device> mDevices;
+    public List<BindUser> mBindUsers;
 }

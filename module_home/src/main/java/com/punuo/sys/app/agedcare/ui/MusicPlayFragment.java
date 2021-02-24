@@ -26,7 +26,7 @@ import com.punuo.sys.app.agedcare.request.GetMusicListRequest;
 import com.punuo.sys.app.agedcare.request.model.MusicItem;
 import com.punuo.sys.app.agedcare.request.model.MusicType;
 import com.punuo.sys.sdk.PnApplication;
-import com.punuo.sys.sdk.event.MessageEvent;
+import com.punuo.sys.sdk.event.CloseOtherMediaEvent;
 import com.punuo.sys.sdk.fragment.BaseFragment;
 import com.punuo.sys.sdk.httplib.HttpConfig;
 import com.punuo.sys.sdk.httplib.HttpManager;
@@ -345,25 +345,10 @@ public class MusicPlayFragment extends BaseFragment {
             return mMusicTypes.size();
         }
     }
-
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(MessageEvent event) {
-        switch (event.getMessage()) {
-            case "等待通话":
-                stop.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.play1));
-                pause();
-                break;
-            case "movieplaying":
-                stop.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.play1));
-                pause();
-                break;
-            case "callstart":
-                stop.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.play1));
-                pause();
-                break;
-            default:
-                break;
-        }
+    public void onMessageEvent(CloseOtherMediaEvent event) {
+        stop.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.play1));
+        pause();
     }
 
     @Override

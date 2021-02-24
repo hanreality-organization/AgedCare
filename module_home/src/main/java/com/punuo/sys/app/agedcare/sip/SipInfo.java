@@ -4,8 +4,8 @@ package com.punuo.sys.app.agedcare.sip;
 
 import android.os.Handler;
 
+import com.punuo.sys.sdk.model.BindUser;
 import com.punuo.sys.app.agedcare.model.Cluster;
-import com.punuo.sys.app.agedcare.model.Device;
 
 import org.zoolu.sip.address.NameAddress;
 import org.zoolu.sip.message.Message;
@@ -58,7 +58,7 @@ public class SipInfo {
     //用户真实姓名
     public static String userRealname;
     //网络是否连接
-    public static boolean isNetworkConnected;
+    public static boolean isNetworkConnected = true;
     //用户账号是否存在
     public static boolean isAccountExist;
     //密码错误标志
@@ -88,11 +88,6 @@ public class SipInfo {
     //设备sip对象
     public static SipDev sipDev;
     //用户心跳保活
-    public static KeepAlive keepUserAlive;
-    //设备心跳保活
-    public static KeepAlive keepDevAlive;
-    //用户IP电话号码
-    public static String userPhoneNumber;
     //一次加密种子
     public static String seed;
     //二次加密种子
@@ -114,7 +109,7 @@ public class SipInfo {
     //是否点赞
 
     public static Boolean finish=false;
-    public static ArrayList<Device> devList=new ArrayList<>();
+    public static ArrayList<BindUser> devList=new ArrayList<>();
     public static ArrayList<String> qinliaouseridList=new ArrayList<>();
     //视频信息请求回复
     public static boolean queryResponse;
@@ -131,7 +126,7 @@ public class SipInfo {
     public static boolean isSpeak=false;
     //头像网址
     public static String[] url;
-   public static List<Device> devices=new ArrayList<>();
+   public static List<BindUser> bindUsers =new ArrayList<>();
     public static SimpleDateFormat format;
     //手机端分享的图片地址；
     public static String shareurl;

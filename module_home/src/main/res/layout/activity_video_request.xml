@@ -9,7 +9,7 @@
     <com.punuo.sys.sdk.view.TitleLayout
         android:id="@+id/title_layout"
         android:layout_width="match_parent"
-        android:layout_height="100dp" />
+        android:layout_height="wrap_content" />
 
     <FrameLayout
         android:layout_width="wrap_content"
@@ -38,7 +38,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
         android:textColor="@color/white"
-        android:textSize="50sp"
+        android:textSize="50dp"
         tools:text="名字" />
 
     <Button

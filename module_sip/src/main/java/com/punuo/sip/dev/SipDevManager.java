@@ -7,6 +7,7 @@ import android.util.Log;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.punuo.sip.DirectionControlUtil;
 import com.punuo.sip.SipConfig;
 import com.punuo.sip.dev.request.BaseDevSipRequest;
 import com.punuo.sip.dev.service.SipDevServiceManager;
@@ -41,6 +42,7 @@ public class SipDevManager extends SipProvider {
     private ExecutorService mExecutorService;
     private static volatile SipDevManager sSipDevManager;
     private static HashMap<String, BaseDevSipRequest> mRequestMap;
+    private DirectionControlUtil mDirectionControlUtil;
 
     public static SipDevManager getInstance() {
         if (sContext == null) {
@@ -65,6 +67,11 @@ public class SipDevManager extends SipProvider {
     private SipDevManager(int host_port) {
         super(null, host_port, PROTOCOLS, null);
         mExecutorService = Executors.newFixedThreadPool(3);
+        mDirectionControlUtil = new DirectionControlUtil();
+    }
+
+    public void setData(byte[] writeBytes) {
+        mDirectionControlUtil.sendData(writeBytes);
     }
 
     public void addRequest(BaseDevSipRequest sipRequest) {

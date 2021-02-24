@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,8 +17,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.Util;
 import com.punuo.sys.app.agedcare.friendCircle.adapter.FriendCommentAdapter;
+import com.punuo.sys.app.agedcare.friendCircle.adapter.FriendPictureAdapter;
 import com.punuo.sys.app.agedcare.friendCircle.adapter.FriendPraiseAdapter;
-import com.punuo.sys.app.agedcare.friendCircle.adapter.NineGridTestLayout;
 import com.punuo.sys.app.agedcare.friendCircle.domain.FirstMicroListFriendComment;
 import com.punuo.sys.app.agedcare.friendCircle.domain.FirstMicroListFriendImage;
 import com.punuo.sys.app.agedcare.friendCircle.domain.FirstMicroListFriendPraise;
@@ -38,7 +39,6 @@ import java.util.Locale;
  * Date on 2019-06-05.
  **/
 public class FriendCircleViewHolder extends BaseViewHolder<FriendMicroListData> {
-    private NineGridTestLayout layout9;
     private TextView mTime;
     private ImageView mAvatar;
     private TextView mName;
@@ -46,11 +46,14 @@ public class FriendCircleViewHolder extends BaseViewHolder<FriendMicroListData> 
     private ImageView btnIgnore;
     private Context mContext;
 
-    private RecyclerView mPariseList;
+    private RecyclerView mPraiseList;
     private FriendPraiseAdapter mFriendPraiseAdapter;
 
     private RecyclerView mFriendCommentList;
     private FriendCommentAdapter mFriendCommentAdapter;
+
+    private RecyclerView mPictureList;
+    private FriendPictureAdapter mFriendPictureAdapter;
 
     private PopupWindowUtil mPopupWindowUtil;
 
@@ -61,19 +64,18 @@ public class FriendCircleViewHolder extends BaseViewHolder<FriendMicroListData> 
     }
 
     private void initView(View itemView) {
-        layout9 = itemView.findViewById(R.id.layout_nine_grid);//九宫格图片
         mTime = itemView.findViewById(R.id.time);
         mAvatar = itemView.findViewById(R.id.avator);
         mName = itemView.findViewById(R.id.name);
         mContent = itemView.findViewById(R.id.content);
         btnIgnore = itemView.findViewById(R.id.btnIgnore);
 
-        mPariseList = itemView.findViewById(R.id.praise_list);
+        mPraiseList = itemView.findViewById(R.id.praise_list);
         LinearLayoutManager layoutManager1 = new LinearLayoutManager(mContext);
         layoutManager1.setOrientation(LinearLayoutManager.VERTICAL);
-        mPariseList.setLayoutManager(layoutManager1);
+        mPraiseList.setLayoutManager(layoutManager1);
         mFriendPraiseAdapter = new FriendPraiseAdapter(mContext, new ArrayList<>());
-        mPariseList.setAdapter(mFriendPraiseAdapter);
+        mPraiseList.setAdapter(mFriendPraiseAdapter);
 
         mFriendCommentList = itemView.findViewById(R.id.friend_comment_list);
         LinearLayoutManager layoutManager2 = new LinearLayoutManager(mContext);
@@ -81,6 +83,12 @@ public class FriendCircleViewHolder extends BaseViewHolder<FriendMicroListData> 
         mFriendCommentList.setLayoutManager(layoutManager2);
         mFriendCommentAdapter = new FriendCommentAdapter(mContext, new ArrayList<>());
         mFriendCommentList.setAdapter(mFriendCommentAdapter);
+
+        mPictureList = itemView.findViewById(R.id.picture_recycler);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 3);
+        mPictureList.setLayoutManager(gridLayoutManager);
+        mFriendPictureAdapter = new FriendPictureAdapter(mContext, new ArrayList<>());
+        mPictureList.setAdapter(mFriendPictureAdapter);
 
         mPopupWindowUtil = new PopupWindowUtil(mContext);
 
@@ -116,8 +124,13 @@ public class FriendCircleViewHolder extends BaseViewHolder<FriendMicroListData> 
             }
         }
 
-        layout9.setIsShowAll(true);
-        layout9.setUrlList(urls);
+        if (!urls.isEmpty()) {
+            mFriendPictureAdapter.getData().clear();
+            mFriendPictureAdapter.addAll(urls);
+            mPictureList.setVisibility(View.VISIBLE);
+        } else {
+           mPictureList.setVisibility(View.GONE);
+        }
 
         ViewUtil.setText(mContent, bean.content);
 
@@ -126,9 +139,9 @@ public class FriendCircleViewHolder extends BaseViewHolder<FriendMicroListData> 
         if (friendpraise != null && !friendpraise.isEmpty()) {
             mFriendPraiseAdapter.getData().clear();
             mFriendPraiseAdapter.addAll(friendpraise);
-            mPariseList.setVisibility(View.VISIBLE);
+            mPraiseList.setVisibility(View.VISIBLE);
         } else {
-            mPariseList.setVisibility(View.GONE);
+            mPraiseList.setVisibility(View.GONE);
         }
 
         List<FirstMicroListFriendComment> friendComment = bean.friendComment;

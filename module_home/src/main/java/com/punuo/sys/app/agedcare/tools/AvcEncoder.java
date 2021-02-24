@@ -72,12 +72,6 @@ public class AvcEncoder {
     // called from Camera.setPreviewCallbackWithBuffer(...) in other class
     public byte[] offerEncoder(byte[] input) {
         Log.i("AvcEncoder", "offerEncoder: ");
-        byte[] dstYuv = new byte[previewWidth*previewHeight* 3 / 2];
-        byte[] dstYuv1 = new byte[previewWidth*previewHeight* 3 / 2];
-       //s9设备
-//        NV21ToNV12(input, yuv420, previewWidth,previewHeight);
-//        input=yuv420;
-//        s6设备
         swapYV12toI420(input,previewWidth,previewHeight);
         input = i420bytes;
 

@@ -54,7 +54,7 @@ public class MediaServiceDev extends NormalDevRequestService<MediaData> {
         //TODO 启动视频编码
         if (H264Config.monitorType == H264Config.DOUBLE_MONITOR_NEGATIVE) {
             Log.v(TAG, "响应双向视频");
-            SipQueryRequest request = new SipQueryRequest(H264ConfigDev.targetDevId);
+            SipQueryRequest request = new SipQueryRequest(AccountManager.getTargetDevId());
             SipUserManager.getInstance().addRequest(request);
         } else if (H264Config.monitorType == H264Config.DOUBLE_MONITOR_POSITIVE) {
             Log.v(TAG, "主动双向视频");

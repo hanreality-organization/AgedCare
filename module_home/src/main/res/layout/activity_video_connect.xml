@@ -1,9 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/disetupian1"
-    android:orientation="vertical"
-    android:scaleType="fitXY">
+    android:orientation="vertical">
 
     <com.punuo.sys.sdk.view.TitleLayout
         android:layout_width="match_parent"
@@ -15,22 +16,18 @@
         android:layout_gravity="center"
         android:layout_marginTop="30dp">
 
-        <com.punuo.sys.app.agedcare.view.CircleImageView
-            android:layout_width="320px"
-            android:layout_height="320px"
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:src="@drawable/waiquanliangcen"
+            app:riv_corner_radius="100dp" />
 
-            />
-
-        <com.punuo.sys.app.agedcare.view.CircleImageView
+        <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/CIV_avatar"
-
-            android:layout_width="260px"
-            android:layout_height="260px"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
             android:layout_gravity="center"
-
-
-            />
+            app:riv_corner_radius="80dp" />
     </FrameLayout>
 
     <TextView
@@ -38,29 +35,29 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="名字"
+        android:layout_marginTop="20dp"
         android:textColor="@color/white"
-        android:textSize="100px" />
+        android:textSize="50dp"
+        tools:text="名字" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="45px"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="center"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/bt_accept"
-            android:layout_width="278px"
-            android:layout_height="131px"
-            android:layout_marginLeft="293px"
-
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@drawable/jieting" />
 
         <Button
             android:id="@+id/bt_refuse"
-            android:layout_width="278px"
-            android:layout_height="131px"
-            android:layout_marginLeft="138px"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/cancle" />
     </LinearLayout>
 

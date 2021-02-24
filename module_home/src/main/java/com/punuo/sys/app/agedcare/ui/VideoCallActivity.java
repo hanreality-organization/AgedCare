@@ -8,37 +8,35 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.punuo.sip.dev.event.StartVideoEvent;
+import com.punuo.sip.dev.event.StopVideoEvent;
+import com.punuo.sip.user.SipUserManager;
+import com.punuo.sip.user.request.SipByeRequest;
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.R2;
 import com.punuo.sys.app.agedcare.sip.SipInfo;
-import com.punuo.sys.app.agedcare.sip.SipMessageFactory;
-import com.punuo.sys.app.agedcare.sip.SipUser;
 import com.punuo.sys.app.agedcare.tools.H264decoder;
 import com.punuo.sys.app.agedcare.video.H264SendingManager;
 import com.punuo.sys.app.agedcare.video.VideoInfo;
-import com.punuo.sys.sdk.event.MessageEvent;
+import com.punuo.sys.app.router.HomeRouter;
+import com.punuo.sys.sdk.account.AccountManager;
+import com.punuo.sys.sdk.util.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.zoolu.sip.message.Message;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -46,17 +44,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.punuo.sys.app.agedcare.sip.SipInfo.isanswering;
-import static com.punuo.sys.app.agedcare.sip.SipInfo.toDev;
 
 /**
  * 视频聊天
  */
-public class VideoCallActivity extends HindebarActivity implements SipUser.StopMonitor {
+@Route(path = HomeRouter.ROUTER_VIDEO_CALL_ACTIVITY)
+public class VideoCallActivity extends AppCompatActivity {
     public static final String TAG = "VideoCallActivity";
     private SurfaceHolder shBack;
     private int getNum = 0;
-    private boolean changescreen=false;
-    BufferedOutputStream outputStream;
     Timer timer = new Timer();
     private H264decoder h264decoder;
     AlertDialog dialog;
@@ -72,17 +68,13 @@ public class VideoCallActivity extends HindebarActivity implements SipUser.StopM
     IntentFilter imIntentFilter;
     LocalBroadcastManager mManager;
     BroadcastReceiver mReceiver;
-//    UdpReceiveThread udpReceiveThread;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_call);
-        hideNavigationBar();
         ButterKnife.bind(this);
-        SipInfo.sipUser.setMonitor(this);
         shBack = svBack.getHolder();
         EventBus.getDefault().register(this);
-        //shFront.setFormat(PixelFormat.TRANSPARENT);
         svFront.setZOrderOnTop(true);
         svFront.setZOrderMediaOverlay(true);
         sendingManager = new H264SendingManager(svFront);
@@ -107,14 +99,6 @@ public class VideoCallActivity extends HindebarActivity implements SipUser.StopM
                 closeVideo();
             }
         });
-
-        File f = new File(Environment.getExternalStorageDirectory(), "DCIM/video_decoded2.264");
-        try {
-            outputStream = new BufferedOutputStream(new FileOutputStream(f));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-//        udpReceiveThread.start();
     }
 
 
@@ -139,13 +123,7 @@ public class VideoCallActivity extends HindebarActivity implements SipUser.StopM
                     closeVideo();
                     time = 0;
                 } else {
-                    new Handler(VideoCallActivity.this.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(VideoCallActivity.this, "未收到消息!", Toast.LENGTH_SHORT).show();
-
-                        }
-                    });
+                    ToastUtils.showToast("未收到消息!");
                     time++;
                 }
             } else if (VideoInfo.isrec == 2) {
@@ -189,7 +167,7 @@ public class VideoCallActivity extends HindebarActivity implements SipUser.StopM
 
     private void playVideo() {
         new Thread(Video).start();
-        EventBus.getDefault().post(new MessageEvent("视频开始"));
+        EventBus.getDefault().post(new StartVideoEvent());
     }
 
     Runnable Video = new Runnable() {
@@ -210,12 +188,9 @@ public class VideoCallActivity extends HindebarActivity implements SipUser.StopM
                         byte[] nal = VideoInfo.nalBuffers[getNum].getReadableNalBuf();
                         if (nal != null) {
                             Log.i(TAG, "nalLen:" + nal.length);
-
                             try {
-//                                  outputStream.write(nal);
-                                  Log.i("AvcDecoder", "outputStream initialized");
                                 //硬解码
-                                  h264decoder.onFrame(nal, 0, nal.length);
+                                h264decoder.onFrame(nal, 0, nal.length);
 
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -255,74 +230,15 @@ public class VideoCallActivity extends HindebarActivity implements SipUser.StopM
     }
 
     private void closeVideo() {
-        Message bye = SipMessageFactory.createByeRequest(SipInfo.sipUser, toDev, SipInfo.user_from);
-        //创建结束视频请求
-        SipInfo.sipUser.sendMessage(bye);
+        SipByeRequest byeRequest = new SipByeRequest(AccountManager.getTargetDevId());
+        SipUserManager.getInstance().addRequest(byeRequest);
         isanswering = false;
-        Log.e(TAG,"videoclose");
         finish();
     }
 
-    @Override
-    public void stopVideo() {
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(StopVideoEvent event) {
+        VideoInfo.endView = true;
         closeVideo();
     }
-    //实在去不掉用这个
-    public void hideNavigationBar() {
-        int uiFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                | View.SYSTEM_UI_FLAG_FULLSCREEN; // hide status bar
-
-        if (android.os.Build.VERSION.SDK_INT >= 19) {
-            uiFlags |= View.SYSTEM_UI_FLAG_IMMERSIVE;//0x00001000; // SYSTEM_UI_FLAG_IMMERSIVE_STICKY: hide
-        } else {
-            uiFlags |= View.SYSTEM_UI_FLAG_LOW_PROFILE;
-        }
-
-        try {
-            getWindow().getDecorView().setSystemUiVisibility(uiFlags);
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
-
-    }
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(MessageEvent event) {
-        switch (event.getMessage())
-        {
-            case "callstart":
-                Log.e(TAG,"等待通话");
-                closeVideo();
-                break;
-            default:
-                break;
-        }
-
-    }
-//    public class UdpReceiveThread extends Thread {
-//        private final String TAG = "UdpReceiveThread";
-//
-//        @Override
-//        public void run() {
-//            while (isAlive() ) {
-//                try {
-//                    sleep(1000);
-//                    DatagramSocket socket = new DatagramSocket(VideoInfo.rtpPort); //建立 socket，其中 8888 为端口号
-//                    byte data[] = new byte[1024];
-//                    DatagramPacket packet = new DatagramPacket(data, data.length);
-//                    socket.receive(packet);
-//                    String result = new String(packet.getData(), packet.getOffset(), packet.getLength()); //packet 转换
-//                    Log.e(TAG, "UDP result: " + result);
-//                    socket.close();
-//
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    break; //当 catch 到错误时，跳出循环
-//                }
-//            }
-//        }
-//    }
-
 }

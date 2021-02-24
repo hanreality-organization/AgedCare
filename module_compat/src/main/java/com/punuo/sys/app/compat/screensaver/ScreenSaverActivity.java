@@ -17,10 +17,11 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.bumptech.glide.Glide;
+import com.punuo.sip.dev.event.StartVideoEvent;
 import com.punuo.sys.app.compat.R;
 import com.punuo.sys.app.router.CompatRouter;
 import com.punuo.sys.sdk.PnApplication;
-import com.punuo.sys.sdk.event.MessageEvent;
+import com.punuo.sys.sdk.event.CloseOtherMediaEvent;
 import com.punuo.sys.sdk.task.ImageTask;
 import com.punuo.sys.sdk.util.BaseHandler;
 
@@ -45,6 +46,7 @@ public class ScreenSaverActivity extends AppCompatActivity implements BaseHandle
     private int currentPosition = 0;
     private int size = 0;
     private BaseHandler mBaseHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,19 +101,20 @@ public class ScreenSaverActivity extends AppCompatActivity implements BaseHandle
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(MessageEvent event) {
-        if (event.getMessage().equals("视频开始")) {
-            // 更新界面
-            finish();
-        } else if (event.getMessage().equals("等待通话")) {
-            finish();
-        }
+    public void onMessageEvent(CloseOtherMediaEvent event) {
+        finish();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(StartVideoEvent event) {
+        finish();
     }
 
     private class ImagePagerAdapter extends PagerAdapter {
         private final List<String> imageList = new ArrayList<>();
         private Context context;
         private int mInvalidChildCount = 0;
+
         public ImagePagerAdapter(Context context) {
             this.context = context;
         }

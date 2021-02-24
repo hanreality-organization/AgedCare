@@ -1,10 +1,15 @@
 package com.punuo.sys.app.agedcare.video;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Process;
@@ -12,71 +17,100 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.Button;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.punuo.sip.dev.H264ConfigDev;
+import com.punuo.sip.dev.event.StopVideoEvent;
+import com.punuo.sip.user.SipUserManager;
+import com.punuo.sip.user.request.SipSuspendMonitorRequest;
+import com.punuo.sys.app.agedcare.R;
+import com.punuo.sys.app.agedcare.R2;
 import com.punuo.sys.app.agedcare.groupvoice.G711;
 import com.punuo.sys.app.agedcare.sip.SipInfo;
-import com.punuo.sys.app.agedcare.tools.AECManager;
 import com.punuo.sys.app.agedcare.tools.AvcEncoder;
+import com.punuo.sys.app.router.HomeRouter;
+import com.punuo.sys.sdk.account.AccountManager;
+import com.punuo.sys.sdk.activity.BaseActivity;
+import com.punuo.sys.sdk.event.CloseOtherMediaEvent;
+import com.punuo.sys.sdk.util.ToastUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
-import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+import static com.punuo.sys.app.agedcare.sip.SipInfo.isanswering;
+import static com.punuo.sys.app.agedcare.sip.SipInfo.ismoniter;
+import static com.punuo.sys.app.agedcare.ui.VideoCallActivity.BROADCAST_ACTION;
 
 
-/**
- * Author chzjy
- * Date 2016/12/19.
- */
-public class H264SendingManager implements SurfaceHolder.Callback, Camera.PreviewCallback {
+@Route(path = HomeRouter.ROUTER_SINGLE_MONITOR_ACTIVITY)
+public class SingleMonitorActivity extends BaseActivity implements SurfaceHolder.Callback, Camera.PreviewCallback {
+    @BindView(R2.id.h264suf)
     SurfaceView h264suf;
-    SurfaceHolder m_surfaceHolder;
+    @BindView(R2.id.video_back)
+    Button video_back;
     public static RTPSending rtpsending = null;
-    private String TAG = H264SendingManager.class.getSimpleName();    //取得类名
+    private String TAG = SingleMonitorActivity.class.getSimpleName();    //取得类名
     public static boolean G711Running = true;
     int frameSizeG711 = 160;
-    private final int previewFrameRate = 15;  //演示帧率
-    private final int previewWidth = 640;     //水平像素352
-    private final int previewHeight = 480;     //垂直像素288
-//    private final int previewWidth = 352;     //水平像素352
-//    private final int previewHeight = 288;     //垂直像素288
+    private final int previewFrameRate = 10;  //演示帧率
+    //    private final int previewWidth = 352;     //水平像素
+//    private final int previewHeight = 288;     //垂直像素
+    private final int previewWidth = 640;     //水平像素
+    private final int previewHeight = 480;     //垂直像素
     private AvcEncoder avcEncoder;
-    Camera mCamera;
+    /**
+     * 手机摄像头的个数
+     */
     private int numCamera;
+    /**
+     * 前置摄像头的Id
+     */
     private int cameraId_front = -1;
+    /**
+     * 后置摄像头的Id
+     */
     private int cameraId_back = -1;
     //外置摄像头的Id
     private int cameraId_out = -1;
+    /**
+     * 判断前置摄像头是否存在的标志位
+     */
     private boolean frontExist = false;
+    /**
+     * 打包发送的数组大小定义
+     */
     byte[] rtppkt = new byte[VideoInfo.divide_length + 2];
+    public Camera mCamera;
+    boolean sendppsandsps = true;
     private boolean isStop = false;
+    private byte[] spsandpps = {0x00, 0x00, 0x00, 0x01, 0x67, 0x42, 0x00, 0x29, (byte) 0x8d, (byte) 0x8d, 0x40, (byte) 0x50, 0x1e, (byte) 0xd0, 0x0f, 0x08, (byte) 0x84, 0x53, (byte) 0x80, 0x00, 0x00, 0x00, 0x01, 0x68, (byte) 0xca, 0x43, (byte) 0xc8};
+    private byte[] sps = {0x67, 0x42, (byte) 0x80, 0x1f, (byte) 0xda, (byte) 0x01, 0x40, 0x16, (byte) 0xe8, (byte) 0x06, (byte) 0xd0, (byte) 0xa1, (byte) 0x35};
+    private byte[] pps = {0x68, (byte) 0xCE, 0x06, (byte) 0xE2};
     private long time = System.currentTimeMillis();   //以毫秒形式返回当前系统时间
     private int cameraState = 0;
-    Camera.Parameters parame;
-    private byte[] spsandpps={0x00,0x00,0x00,0x01,0x67,0x42,0x00,0x29,(byte) 0x8d,(byte) 0x8d,0x40,(byte) 0x50,0x1e,(byte)0xd0,0x0f,0x08,(byte)0x84,0x53,(byte)0x80,0x00,0x00,0x00,0x01,0x68,(byte) 0xca,0x43,(byte) 0xc8};
-    public H264SendingManager(SurfaceView h264suf) {
-        this.h264suf = h264suf;
-    }
-    boolean sendppsandsps=true;
+    Camera.Parameters mParameters;
+    LocalBroadcastManager mManager;
+    IntentFilter imIntentFilter;
+    BroadcastReceiver mReceiver;
 
-    public void parameters(Camera camera) {
-        List<Camera.Size> pictureSizes = camera.getParameters().getSupportedPictureSizes();
-        List<Camera.Size> previewSizes = camera.getParameters().getSupportedPreviewSizes();
-        Camera.Size psize;
-        for (int i = 0; i < pictureSizes.size(); i++) {
-            psize = pictureSizes.get(i);
-            Log.i("pictureSize",psize.width+" x "+psize.height);
-        }
-        for (int i = 0; i < previewSizes.size(); i++) {
-            psize = previewSizes.get(i);
-            Log.i("previewSize",psize.width+" x "+psize.height);
-        }
-    }
-    
-    public void init() {
-
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.h264sending);
+        ButterKnife.bind(this);
+        EventBus.getDefault().post(new CloseOtherMediaEvent());
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-
         if (rtpsending != null) {
             rtpsending = null;
         }
@@ -85,7 +119,7 @@ public class H264SendingManager implements SurfaceHolder.Callback, Camera.Previe
         SurfaceHolder holder = h264suf.getHolder();
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         //设置回调函数
-        holder.addCallback(H264SendingManager.this);   //添加回调接口
+        holder.addCallback(SingleMonitorActivity.this);   //添加回调接口
         //设置风格
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         long Ssrc = (H264ConfigDev.magic[15] & 0x000000ff)
@@ -104,8 +138,44 @@ public class H264SendingManager implements SurfaceHolder.Callback, Camera.Previe
         };
         Log.d(TAG, "创建成功");
 
+        //软解码初始化
+//        NativeH264Encoder.InitEncoder(previewWidth, previewHeight, previewFrameRate);
         avcEncoder = new AvcEncoder();
         SipInfo.flag = false;
+        imIntentFilter = new IntentFilter();
+        imIntentFilter.addAction(BROADCAST_ACTION);
+        mManager = LocalBroadcastManager.getInstance(SingleMonitorActivity.this);
+        mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                VideoInfo.nalfirst = 0; //0表示未收到首包，1表示收到
+                VideoInfo.index = 0;
+                VideoInfo.query_response = false;
+                isStop = true;
+                G711Running = false;
+                finish();
+            }
+        };
+        video_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SipSuspendMonitorRequest request = new SipSuspendMonitorRequest(AccountManager.getTargetDevId());
+                SipUserManager.getInstance().addRequest(request);
+                VideoInfo.nalfirst = 0; //0表示未收到首包，1表示收到
+                VideoInfo.index = 0;
+                VideoInfo.query_response = false;
+                isStop = true;
+                G711Running = false;
+                ismoniter = true;
+                finish();
+            }
+        });
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(StopVideoEvent event) {
+        finish();
     }
 
     /**
@@ -130,9 +200,6 @@ public class H264SendingManager implements SurfaceHolder.Callback, Camera.Previe
                 calc2(audioData, 0, numRead);
                 //进行pcmu编码
                 G711.linear2ulaw(audioData, 0, encodeData, numRead);
-                
-                if(rtpsending == null)break;
-                
                 rtpsending.rtpSession2.payloadType(0x45);
                 rtpsending.rtpSession2.sendData(encodeData);
             }
@@ -168,15 +235,26 @@ public class H264SendingManager implements SurfaceHolder.Callback, Camera.Previe
                 AudioFormat.CHANNEL_CONFIGURATION_MONO,
                 AudioFormat.ENCODING_PCM_16BIT,
                 min);
-        if(AECManager.isDeviceSupport()){
-            AECManager.getInstance().initAEC(record.getAudioSessionId());
-        }
         record.startRecording();
         return record;
     }
 
-    public void deInit() {
-        AECManager.getInstance().release();
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mManager.unregisterReceiver(mReceiver);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mManager.registerReceiver(mReceiver, imIntentFilter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        G711Running = false;
         VideoInfo.handler = null;
         if (mCamera != null)  //没有背面摄像头的情况
         {
@@ -189,17 +267,17 @@ public class H264SendingManager implements SurfaceHolder.Callback, Camera.Previe
         rtpsending = null;
         SipInfo.flag = true;
         Log.d(TAG, "onDestroy: ");
+        isanswering = false;
+        EventBus.getDefault().unregister(this);
+
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        Log.e(TAG, "surfaceCreated: ");
-        m_surfaceHolder = holder;
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        Log.e(TAG, "surfaceChanged: ");
         numCamera = Camera.getNumberOfCameras();
         Log.i(TAG, "摄像头个数为" + numCamera);
         Camera.CameraInfo info = new Camera.CameraInfo();
@@ -221,31 +299,27 @@ public class H264SendingManager implements SurfaceHolder.Callback, Camera.Previe
             mCamera = null;
         }
         try {
-            mCamera = Camera.open(frontExist ? cameraId_front : cameraId_out);
+            mCamera = Camera.open(cameraId_out);
             cameraState = cameraId_out;
         } catch (Exception e) {
             try {
                 mCamera = Camera.open(cameraId_back);
                 cameraState = cameraId_back;
             } catch (Exception e1) {
-                e1.printStackTrace();
+                ToastUtils.showToast("摄像头打开失败");
             }
         }
         try {
             if (mCamera == null) return;
-
-            parameters(mCamera);
-            mCamera.setPreviewDisplay(m_surfaceHolder);
+            mCamera.setPreviewDisplay(holder);
             mCamera.setPreviewCallback(this);
-            mCamera.setDisplayOrientation(0);
-            parame = mCamera.getParameters();    //获取配置参数对象
-            parame.setPreviewFrameRate(previewFrameRate);    //设置Camera的演示帧率
-            parame.setPreviewFormat(ImageFormat.YV12);
-            parame.setPreviewSize(previewWidth, previewHeight);    //设置屏幕分辨率
-            //android2.3.3以后无需下步
-            mCamera.setParameters(parame);
-            //开始对演示帧进行捕获和绘图到surface
+            mParameters = mCamera.getParameters();
+            mParameters.setPreviewFpsRange(15000,15000);
+            mParameters.setPreviewFormat(ImageFormat.YV12);
+            mParameters.setPreviewSize(previewWidth, previewHeight);
+            mCamera.setParameters(mParameters);
             mCamera.startPreview();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -253,9 +327,12 @@ public class H264SendingManager implements SurfaceHolder.Callback, Camera.Previe
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        Log.e(TAG, "surfaceDestroyed: ");
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
 
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
@@ -269,12 +346,13 @@ public class H264SendingManager implements SurfaceHolder.Callback, Camera.Previe
                 VideoInfo.endView = false;
                 G711Running = false;
                 isStop = true;
-                H264SendingManager.this.deInit();
+                SingleMonitorActivity.this.finish();
+
+                EventBus.getDefault().post(new StopVideoEvent());
             }
             if (!isStop) {
 //                硬解码
                 byte[] encodeResult = avcEncoder.offerEncoder(data); //进行编码，将编码结果存放进数组
-
                 if (encodeResult != null && encodeResult.length > 0) {
                     Log.e(TAG, "encode len:" + encodeResult.length);//打印编码结果的长度
                     setSSRC_PAYLOAD();
@@ -287,7 +365,9 @@ public class H264SendingManager implements SurfaceHolder.Callback, Camera.Previe
             VideoInfo.query_response = false;
             isStop = true;
             G711Running = false;
-            H264SendingManager.this.deInit();
+            SingleMonitorActivity.this.finish();
+
+            EventBus.getDefault().post(new StopVideoEvent());
         }
     }
 
@@ -323,7 +403,6 @@ public class H264SendingManager implements SurfaceHolder.Callback, Camera.Previe
      * 分片、发送方法
      */
     public void DivideAndSendNal(byte[] h264) {
-
         if (h264.length > 0) {  //有数据才进行分片发送操作
             if (h264.length > VideoInfo.divide_length) {
                 VideoInfo.dividingFrame = true;
@@ -359,11 +438,11 @@ public class H264SendingManager implements SurfaceHolder.Callback, Camera.Previe
         rtpsending.rtpSession1.payloadType(0x62);
 
         //发送打包数据
-        if(sendppsandsps) {
+        if (sendppsandsps) {
             for (int i = 0; i < 3; i++) {
                 rtpsending.rtpSession1.sendData(spsandpps, 936735038);
             }//发送打包数据
-            sendppsandsps=false;
+            sendppsandsps = false;
         }
         try {
             System.arraycopy(h264, 0, rtppkt, 2, VideoInfo.divide_length);
@@ -450,5 +529,26 @@ public class H264SendingManager implements SurfaceHolder.Callback, Camera.Previe
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void hideNavigationBar() {
+        int uiFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+                | View.SYSTEM_UI_FLAG_FULLSCREEN; // hide status bar
+
+        if (android.os.Build.VERSION.SDK_INT >= 19) {
+            uiFlags |= View.SYSTEM_UI_FLAG_IMMERSIVE;//0x00001000; // SYSTEM_UI_FLAG_IMMERSIVE_STICKY: hide
+        } else {
+            uiFlags |= View.SYSTEM_UI_FLAG_LOW_PROFILE;
+        }
+
+        try {
+            getWindow().getDecorView().setSystemUiVisibility(uiFlags);
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+
     }
 }

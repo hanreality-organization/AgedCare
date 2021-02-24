@@ -2,33 +2,34 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000"
     android:gravity="center"
-    android:background="#000"
     android:orientation="vertical">
 
-<FrameLayout
-    android:layout_width="700dp"
-    android:layout_height="match_parent">
-    <SurfaceView
-        android:id="@+id/sv_back"
-        android:layout_gravity="start|bottom"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-    <SurfaceView
-    android:id="@+id/sv_front"
-    android:layout_width="176dp"
-    android:layout_gravity="right"
-    android:layout_margin="5dp"
-    android:layout_height="144dp" />
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/video_back"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="550dp"
-        android:layout_marginTop="680dp"
-        android:background="@drawable/ic_hangup"
-        />
-</FrameLayout>
+        <SurfaceView
+            android:id="@+id/sv_back"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start|bottom" />
+
+        <SurfaceView
+            android:id="@+id/sv_front"
+            android:layout_width="160dp"
+            android:layout_height="120dp"
+            android:layout_gravity="right"
+            android:layout_margin="5dp" />
+
+        <Button
+            android:id="@+id/video_back"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/ic_hangup" />
+    </FrameLayout>
 
 </LinearLayout>

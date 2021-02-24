@@ -5,16 +5,15 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.WindowManager;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -23,13 +22,22 @@ import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.punuo.sip.H264Config;
 import com.punuo.sip.dev.DevHeartBeatHelper;
 import com.punuo.sip.dev.SipDevManager;
 import com.punuo.sip.dev.event.DevLoginFailEvent;
+import com.punuo.sip.dev.event.MonitorEvent;
 import com.punuo.sip.dev.event.ReRegisterDevEvent;
+import com.punuo.sip.dev.model.ImageShare;
 import com.punuo.sip.dev.model.LoginResponseDev;
 import com.punuo.sip.dev.model.OperationData;
 import com.punuo.sip.dev.request.SipDevRegisterRequest;
+import com.punuo.sip.user.H264ConfigUser;
 import com.punuo.sip.user.SipUserManager;
 import com.punuo.sip.user.UserHeartBeatHelper;
 import com.punuo.sip.user.event.ReRegisterUserEvent;
@@ -39,10 +47,15 @@ import com.punuo.sip.user.model.LoginResponseUser;
 import com.punuo.sip.user.request.SipGetUserIdRequest;
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.service.NewsService;
+import com.punuo.sys.app.agedcare.sip.SipInfo;
+import com.punuo.sys.app.agedcare.video.RtpVideo;
+import com.punuo.sys.app.agedcare.video.SendActivePacket;
+import com.punuo.sys.app.agedcare.video.VideoInfo;
 import com.punuo.sys.app.router.CompatRouter;
 import com.punuo.sys.app.router.HomeRouter;
 import com.punuo.sys.sdk.account.UserInfoManager;
 import com.punuo.sys.sdk.activity.BaseActivity;
+import com.punuo.sys.sdk.event.CloseOtherMediaEvent;
 import com.punuo.sys.sdk.view.LoopIndicator;
 
 import org.greenrobot.eventbus.EventBus;
@@ -53,20 +66,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.punuo.sys.app.agedcare.sip.SipInfo.shareurl;
 
 @Route(path = HomeRouter.ROUTER_HOME_ACTIVITY)
 public class HomeActivity extends BaseActivity {
     private boolean userLoginFailed = false;
     private boolean devLoginFailed = false;
     private LoopIndicator mLoopIndicator;
-    private Bitmap bitmap;
     public static String apkPath;
 
     @Override
@@ -117,13 +125,21 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
-    public void screenUpdate() {
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(ImageShare imageShare) {
+        Glide.with(this).asBitmap().load(imageShare.imageUrl)
+                .listener(new RequestListener<Bitmap>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                        return false;
+                    }
 
-//        new Task().execute(shareurl);
-        bitmap = GetImageInputStream(shareurl);
-        Log.d("picture111", shareurl);
-//        SavaImage(bitmap, apkPath);
-        saveImageToGallery(this, bitmap);
+                    @Override
+                    public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                        saveImageToGallery(HomeActivity.this, resource);
+                        return false;
+                    }
+                }).submit();
     }
 
     private void init() {
@@ -162,25 +178,6 @@ public class HomeActivity extends BaseActivity {
 //        });
     }
 
-    public Bitmap GetImageInputStream(String imageurl) {
-        URL url;
-        HttpURLConnection connection;
-        Bitmap bitmap = null;
-        try {
-            url = new URL(imageurl);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setConnectTimeout(6000); //超时设置
-            connection.setDoInput(true);
-            connection.setUseCaches(false); //设置不使用缓存
-            InputStream inputStream = connection.getInputStream();
-            bitmap = BitmapFactory.decodeStream(inputStream);
-            inputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return bitmap;
-    }
-
     public void saveImageToGallery(Context context, Bitmap bmp) {
         // 首先保存图片
         File appDir = new File(apkPath);
@@ -207,7 +204,6 @@ public class HomeActivity extends BaseActivity {
         }
         // 最后通知图库更新
         context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse(file.getAbsolutePath())));
-        Log.d("lujin", apkPath + fileName);
         getContentResolver().delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, MediaStore.Images.Media.DATA + "=?", new String[]{apkPath + fileName});//删除系统缩略图
         file.delete();
     }
@@ -279,6 +275,7 @@ public class HomeActivity extends BaseActivity {
 
     /**
      * 设备Sip服务重新注册事件
+     *
      * @param event event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -293,6 +290,7 @@ public class HomeActivity extends BaseActivity {
 
     /**
      * 设备Sip服务注册失败事件
+     *
      * @param event event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -303,6 +301,7 @@ public class HomeActivity extends BaseActivity {
 
     /**
      * 用户Sip服务重新注册事件
+     *
      * @param event event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -317,6 +316,7 @@ public class HomeActivity extends BaseActivity {
 
     /**
      * 用户Sip服务注册失败事件
+     *
      * @param event event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -327,6 +327,7 @@ public class HomeActivity extends BaseActivity {
 
     /**
      * 用户Sip服务注册成功事件
+     *
      * @param event event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -339,6 +340,7 @@ public class HomeActivity extends BaseActivity {
 
     /**
      * 设备Sip服务注册成功事件
+     *
      * @param event event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -387,7 +389,30 @@ public class HomeActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(OperationData operationData) {
+        EventBus.getDefault().post(new CloseOtherMediaEvent());
+        ARouter.getInstance().build(HomeRouter.ROUTER_VIDEO_REPLY_ACTIVITY).navigation();
+    }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MonitorEvent event) {
+        switch (event.monitorType) {
+            case H264Config.SINGLE_MONITOR:
+                ARouter.getInstance().build(HomeRouter.ROUTER_SINGLE_MONITOR_ACTIVITY).navigation();
+                break;
+            case H264Config.DOUBLE_MONITOR_NEGATIVE:
+                new Thread(() -> {
+                    SipInfo.decoding = true;
+                    try {
+                        VideoInfo.rtpVideo = new RtpVideo(H264ConfigUser.rtpIp, H264ConfigUser.rtpPort);
+                        VideoInfo.sendActivePacket = new SendActivePacket();
+                        VideoInfo.sendActivePacket.startThread();
+                        ARouter.getInstance().build(HomeRouter.ROUTER_VIDEO_CALL_ACTIVITY).navigation();
+                    } catch (SocketException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+                break;
+        }
     }
 
 }

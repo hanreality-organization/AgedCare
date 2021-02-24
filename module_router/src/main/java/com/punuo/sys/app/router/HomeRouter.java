@@ -15,4 +15,7 @@ public class HomeRouter {
     public static final String ROUTER_ALBUM_ACTIVITY = PREFIX + "AlbumActivity";
     public static final String ROUTER_FAMILY_MEMBER_MANAGER_ACTIVITY = PREFIX + "FamilyMemberManagerActivity";
     public static final String ROUTER_FRIEND_CALL_ACTIVITY = PREFIX + "FriendCallActivity";
+    public static final String ROUTER_SINGLE_MONITOR_ACTIVITY = PREFIX + "SingleMonitorActivity";
+    public static final String ROUTER_VIDEO_REPLY_ACTIVITY = PREFIX + "VideoReplyActivity";
+    public static final String ROUTER_VIDEO_CALL_ACTIVITY = PREFIX + "VideoCallActivity";
 }

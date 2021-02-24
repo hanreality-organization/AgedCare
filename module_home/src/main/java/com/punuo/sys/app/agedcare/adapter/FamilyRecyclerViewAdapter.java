@@ -19,7 +19,7 @@ import com.punuo.sip.user.SipUserManager;
 import com.punuo.sip.user.request.SipOperationRequest;
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.Util;
-import com.punuo.sys.app.agedcare.model.Device;
+import com.punuo.sys.sdk.model.BindUser;
 import com.punuo.sys.app.agedcare.request.GetUserDevIdRequest;
 import com.punuo.sys.app.agedcare.request.model.UserDevModel;
 import com.punuo.sys.app.router.HomeRouter;
@@ -40,16 +40,16 @@ import java.util.List;
 
 public class FamilyRecyclerViewAdapter extends RecyclerView.Adapter<FamilyRecyclerViewAdapter.MyViewHolder> {
     private Context mContext;
-    private final List<Device> mDeviceList = new ArrayList<>();
+    private final List<BindUser> mBindUserList = new ArrayList<>();
 
     public FamilyRecyclerViewAdapter(Context mContext) {
         this.mContext = mContext;
     }
 
-    public void appendData(List<Device> list) {
-        mDeviceList.clear();
+    public void appendData(List<BindUser> list) {
+        mBindUserList.clear();
         if (list != null) {
-            mDeviceList.addAll(list);
+            mBindUserList.addAll(list);
         }
         notifyDataSetChanged();
     }
@@ -62,14 +62,14 @@ public class FamilyRecyclerViewAdapter extends RecyclerView.Adapter<FamilyRecycl
 
     @Override
     public void onBindViewHolder(final MyViewHolder myViewHolder, final int i) {
-        final Device device = mDeviceList.get(i);
-        myViewHolder.bindData(device);
+        final BindUser bindUser = mBindUserList.get(i);
+        myViewHolder.bindData(bindUser);
 
     }
 
     @Override
     public int getItemCount() {
-        return mDeviceList.size();
+        return mBindUserList.size();
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -82,20 +82,20 @@ public class FamilyRecyclerViewAdapter extends RecyclerView.Adapter<FamilyRecycl
             textView = itemView.findViewById(R.id.item_nickName);
         }
 
-        public void bindData(Device device) {
+        public void bindData(BindUser bindUser) {
             ViewGroup.LayoutParams layoutParams = itemView.getLayoutParams();
             int size = (CommonUtil.getWidth() - CommonUtil.dip2px(30f) * 4 - CommonUtil.dip2px(60f) -CommonUtil.dip2px(60f)) / 4;
             layoutParams.width = size;
             layoutParams.height = size;
-            Glide.with(itemView.getContext()).load(Util.getImageUrl(device.getId(), device.getAvatar()))
+            Glide.with(itemView.getContext()).load(Util.getImageUrl(bindUser.getId(), bindUser.getAvatar()))
                     .apply(new RequestOptions().override(150, 150)).into(imageView);
-            textView.setText(device.getNickname());
+            textView.setText(bindUser.getNickname());
             imageView.setOnClickListener(v -> {
                 if (itemView.getContext() instanceof BaseActivity) {
                     ((BaseActivity) itemView.getContext()).showLoadingDialog();
                 }
                 GetUserDevIdRequest request = new GetUserDevIdRequest();
-                request.addUrlParam("id", device.getId());
+                request.addUrlParam("id", bindUser.getId());
                 request.addUrlParam("groupid", AccountManager.getGroupId());
                 request.setRequestListener(new RequestListener<UserDevModel>() {
                     @Override
@@ -108,13 +108,14 @@ public class FamilyRecyclerViewAdapter extends RecyclerView.Adapter<FamilyRecycl
                     @Override
                     public void onSuccess(UserDevModel result) {
                         if (!TextUtils.isEmpty(result.devId)) {
+                            AccountManager.setTargetUserId(bindUser.userid);
                             AccountManager.setTargetDevId(result.devId);
-                            H264Config.monitorType = H264Config.DOUBLE_MONITOR_POSITIVE;
+                            H264Config.monitorType = H264Config.DOUBLE_MONITOR_POSITIVE; //双向视频发起端
                             SipOperationRequest operationRequest = new SipOperationRequest();
                             SipUserManager.getInstance().addRequest(operationRequest);
 
                             ARouter.getInstance().build(HomeRouter.ROUTER_VIDEO_REQUEST_ACTIVITY)
-                                    .withParcelable("model", device)
+                                    .withParcelable("model", bindUser)
                                     .navigation();
                         } else {
 
@@ -129,17 +130,5 @@ public class FamilyRecyclerViewAdapter extends RecyclerView.Adapter<FamilyRecycl
                 HttpManager.addRequest(request);
             });
         }
-    }
-
-    /**
-     * 子项点击接口
-     */
-    public interface OnItemClickListener {
-        void onClick(View view, int position);
-
-    }
-
-    interface OnLongItemClickListener {
-        void onLongClick(View view, int position);
     }
 }

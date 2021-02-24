@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshRecyclerView;
+import com.punuo.sip.dev.event.UpdateBindUserEvent;
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.R2;
 import com.punuo.sys.app.agedcare.adapter.FamilyRecyclerViewAdapter;
@@ -18,18 +19,18 @@ import com.punuo.sys.app.agedcare.request.GetAllUserFromGroupRequest;
 import com.punuo.sys.app.agedcare.request.GetDevInfoRequest;
 import com.punuo.sys.app.agedcare.request.model.DevModel;
 import com.punuo.sys.app.agedcare.request.model.DeviceModel;
-import com.punuo.sys.app.agedcare.sip.SipInfo;
 import com.punuo.sys.sdk.account.AccountManager;
 import com.punuo.sys.sdk.fragment.BaseFragment;
 import com.punuo.sys.sdk.httplib.HttpManager;
 import com.punuo.sys.sdk.httplib.RequestListener;
 import com.punuo.sys.sdk.util.HandlerExceptionUtils;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.punuo.sys.app.agedcare.sip.SipInfo.devices;
-import static com.punuo.sys.app.agedcare.sip.SipInfo.url;
 
 public class MemberFragment extends BaseFragment {
     private Context mContext;
@@ -59,6 +60,7 @@ public class MemberFragment extends BaseFragment {
                 getDevInfo();
             }
         });
+        EventBus.getDefault().register(this);
         return view;
     }
 
@@ -96,10 +98,8 @@ public class MemberFragment extends BaseFragment {
 
             @Override
             public void onSuccess(DeviceModel result) {
-                devices = result.mDevices;
-                SipInfo.devList.addAll(devices);
-                url = new String[devices.size()];
-                adapter.appendData(result.mDevices);
+                AccountManager.setBindUsers(result.mBindUsers);
+                adapter.appendData(result.mBindUsers);
             }
 
             @Override
@@ -110,9 +110,14 @@ public class MemberFragment extends BaseFragment {
         HttpManager.addRequest(request);
     }
 
-
-    public void numberUpdate() {
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(UpdateBindUserEvent event) {
         getDevInfo();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
+    }
 }

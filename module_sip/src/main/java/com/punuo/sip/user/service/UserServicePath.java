@@ -16,8 +16,6 @@ public class UserServicePath {
     public static final String PATH_DEV_NOTIFY = "/user/dev_notify";
     public static final String PATH_SESSION_NOTIFY = "/user/session_notify";
     public static final String PATH_ERROR = "/user/error";
-    public static final String PATH_IMAGE_SHARE = "/user/image_share";
-    public static final String PATH_IS_MONITOR = "/user/is_monitor";
 
     public static final HashSet<String> sMapping = new HashSet<>();
 
@@ -30,7 +28,5 @@ public class UserServicePath {
         sMapping.add(PATH_DEV_NOTIFY);
         sMapping.add(PATH_SESSION_NOTIFY);
         sMapping.add(PATH_ERROR);
-        sMapping.add(PATH_IMAGE_SHARE);
-        sMapping.add(PATH_IS_MONITOR);
     }
 }
