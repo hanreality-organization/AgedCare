@@ -52,6 +52,10 @@ public class H264SendingManager implements SurfaceHolder.Callback, Camera.Previe
     private long time = System.currentTimeMillis();   //以毫秒形式返回当前系统时间
     private int cameraState = 0;
     Camera.Parameters parame;
+    private byte[] tempSpsAndPps =
+            {
+                  0x00,0x00,0x00,0x01,0x67,0x42,0x40,0x29,0x73,0x68,0x0a,0x03,0x26,0x01,0x1f,0x10,0x73,0x40,0x00,0x00,0x00,0x01,0x68,0x32,0x01,0x58,0x35,0x38
+            };
     private byte[] spsandpps={0x00,0x00,0x00,0x01,0x67,0x42,0x00,0x29,(byte) 0x8d,(byte) 0x8d,0x40,(byte) 0x50,0x1e,(byte)0xd0,0x0f,0x08,(byte)0x84,0x53,(byte)0x80,0x00,0x00,0x00,0x01,0x68,(byte) 0xca,0x43,(byte) 0xc8};
     public H264SendingManager(SurfaceView h264suf) {
         this.h264suf = h264suf;
@@ -362,6 +366,7 @@ public class H264SendingManager implements SurfaceHolder.Callback, Camera.Previe
         if(sendppsandsps) {
             for (int i = 0; i < 3; i++) {
                 rtpsending.rtpSession1.sendData(spsandpps, 936735038);
+                rtpsending.rtpSession1.sendData(tempSpsAndPps, 936735038);
             }//发送打包数据
             sendppsandsps=false;
         }

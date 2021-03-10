@@ -4,7 +4,7 @@ ext.sdk = [
         versionCode : 2,
         versionName : "1.0.1",
         minSdkVersion          : 21,
-        targetSdkVersion       : 22,
+        targetSdkVersion       : 26,
         compileSdkVersion      : 28,
         buildToolsVersion      : '28.0.3',
         gradlePluginVersion     : '3.4.2',

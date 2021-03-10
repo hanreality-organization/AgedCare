@@ -8,8 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -26,9 +24,9 @@ import com.punuo.sip.user.request.SipByeRequest;
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.R2;
 import com.punuo.sys.app.agedcare.sip.SipInfo;
-import com.punuo.sys.app.agedcare.tools.H264decoder;
 import com.punuo.sys.app.agedcare.video.H264SendingManager;
 import com.punuo.sys.app.agedcare.video.VideoInfo;
+import com.punuo.sys.app.agedcare.video.VideoPlayThread;
 import com.punuo.sys.app.router.HomeRouter;
 import com.punuo.sys.sdk.account.AccountManager;
 import com.punuo.sys.sdk.util.ToastUtils;
@@ -49,12 +47,11 @@ import static com.punuo.sys.app.agedcare.sip.SipInfo.isanswering;
  * 视频聊天
  */
 @Route(path = HomeRouter.ROUTER_VIDEO_CALL_ACTIVITY)
-public class VideoCallActivity extends AppCompatActivity {
+public class VideoCallActivity extends AppCompatActivity implements SurfaceHolder.Callback {
     public static final String TAG = "VideoCallActivity";
     private SurfaceHolder shBack;
     private int getNum = 0;
     Timer timer = new Timer();
-    private H264decoder h264decoder;
     AlertDialog dialog;
     @BindView(R2.id.sv_back)
     SurfaceView svBack;
@@ -68,19 +65,19 @@ public class VideoCallActivity extends AppCompatActivity {
     IntentFilter imIntentFilter;
     LocalBroadcastManager mManager;
     BroadcastReceiver mReceiver;
+    private VideoPlayThread mVideoPlayThread;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_call);
         ButterKnife.bind(this);
         shBack = svBack.getHolder();
+        shBack.addCallback(this);
         EventBus.getDefault().register(this);
         svFront.setZOrderOnTop(true);
         svFront.setZOrderMediaOverlay(true);
         sendingManager = new H264SendingManager(svFront);
         sendingManager.init();
-        h264decoder = new H264decoder();
-        playVideo();
         timer.schedule(task, 0, 5000);
 
         imIntentFilter = new IntentFilter();
@@ -145,69 +142,13 @@ public class VideoCallActivity extends AppCompatActivity {
         SipInfo.decoding = false;
         VideoInfo.rtpVideo.removeParticipant();
         VideoInfo.sendActivePacket.stopThread();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-
         VideoInfo.rtpVideo.endSession();
         VideoInfo.track.stop();
         EventBus.getDefault().unregister(this);
         sendingManager.deInit();
-        System.gc();//系统垃圾回收
+        mVideoPlayThread.stopThread();
         isanswering = false;
     }
-
-    private void playVideo() {
-        new Thread(Video).start();
-        EventBus.getDefault().post(new StartVideoEvent());
-    }
-
-    Runnable Video = new Runnable() {
-        @Override
-        public void run() {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Surface surface = shBack.getSurface();
-            System.out.println(surface);
-
-            if (surface != null) {
-                h264decoder.initDecoder(surface);
-                while (SipInfo.decoding) {
-                    if (SipInfo.isNetworkConnected) {
-                        byte[] nal = VideoInfo.nalBuffers[getNum].getReadableNalBuf();
-                        if (nal != null) {
-                            Log.i(TAG, "nalLen:" + nal.length);
-                            try {
-                                //硬解码
-                                h264decoder.onFrame(nal, 0, nal.length);
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        VideoInfo.nalBuffers[getNum].readLock();
-                        VideoInfo.nalBuffers[getNum].cleanNalBuf();
-                        getNum++;
-                        if (getNum == 200) {
-                            getNum = 0;
-                        }
-                    }
-                }
-            }
-        }
-    };
-
     @Override
     public void onBackPressed() {
         dialog = new AlertDialog.Builder(this)
@@ -240,5 +181,22 @@ public class VideoCallActivity extends AppCompatActivity {
     public void onMessageEvent(StopVideoEvent event) {
         VideoInfo.endView = true;
         closeVideo();
+    }
+
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        mVideoPlayThread = new VideoPlayThread(holder.getSurface());
+        mVideoPlayThread.startThread();
+        EventBus.getDefault().post(new StartVideoEvent());
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+
     }
 }

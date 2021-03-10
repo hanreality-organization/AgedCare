@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:fab="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <com.punuo.sys.sdk.view.TitleLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:view_type="special" />
+
+    <TextView
+        android:id="@+id/local_ip_number"
+        android:layout_width="wrap_content"
+        android:textSize="30sp"
+        android:textColor="@color/white"
+        android:layout_marginLeft="12dp"
+        android:layout_marginBottom="12dp"
+        android:layout_height="wrap_content"
+        tools:text="本机号码"/>
 
     <FrameLayout
         android:layout_width="match_parent"

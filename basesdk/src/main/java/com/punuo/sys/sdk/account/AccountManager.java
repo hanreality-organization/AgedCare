@@ -19,7 +19,6 @@ public class AccountManager {
     private static String groupPort; //集群端口
     private static String groupId;
     private static boolean login = false;
-    private static String userIpPhoneNum; //网络IP电话
     private static String targetDevId; //双向视频的目标devId
     private static String targetUserId; //双向视频的目标userId
     private static List<BindUser> bindUsers; //绑定该设备的用户信息
@@ -62,14 +61,6 @@ public class AccountManager {
 
     public static void setLogin(boolean login) {
         AccountManager.login = login;
-    }
-
-    public static String getUserIpPhoneNum() {
-        return userIpPhoneNum;
-    }
-
-    public static void setUserIpPhoneNum(String userIpPhoneNum) {
-        AccountManager.userIpPhoneNum = userIpPhoneNum;
     }
 
     public static String getTargetDevId() {

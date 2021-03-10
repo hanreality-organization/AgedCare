@@ -23,6 +23,7 @@ import com.punuo.sys.app.agedcare.R2;
 import com.punuo.sys.app.agedcare.db.FamilyMember;
 import com.punuo.sys.app.agedcare.db.FamilyMember_Table;
 import com.punuo.sys.app.agedcare.event.FamilyMemberManagerEvent;
+import com.punuo.sys.app.linphone.LinphoneHelper;
 import com.punuo.sys.app.router.HomeRouter;
 import com.punuo.sys.sdk.activity.BaseActivity;
 import com.punuo.sys.sdk.util.ToastUtils;
@@ -137,6 +138,12 @@ public class FamilyMemberManagerActivity extends BaseActivity {
         callBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!TextUtils.isEmpty(mFamilyMember.phoneNumber)) {
+                    LinphoneHelper.getInstance().call(FamilyMemberManagerActivity.this,
+                            mFamilyMember.phoneNumber, false, 0);
+                } else {
+                    ToastUtils.showToast("电话号码为空");
+                }
             }
         });
 

@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.WindowManager;
 
 import androidx.annotation.Nullable;
@@ -28,6 +30,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.punuo.sip.H264Config;
+import com.punuo.sip.SipConfig;
 import com.punuo.sip.dev.DevHeartBeatHelper;
 import com.punuo.sip.dev.SipDevManager;
 import com.punuo.sip.dev.event.DevLoginFailEvent;
@@ -46,16 +49,17 @@ import com.punuo.sip.user.event.UserReplaceEvent;
 import com.punuo.sip.user.model.LoginResponseUser;
 import com.punuo.sip.user.request.SipGetUserIdRequest;
 import com.punuo.sys.app.agedcare.R;
-import com.punuo.sys.app.agedcare.service.NewsService;
 import com.punuo.sys.app.agedcare.sip.SipInfo;
 import com.punuo.sys.app.agedcare.video.RtpVideo;
 import com.punuo.sys.app.agedcare.video.SendActivePacket;
 import com.punuo.sys.app.agedcare.video.VideoInfo;
+import com.punuo.sys.app.linphone.LinphoneHelper;
 import com.punuo.sys.app.router.CompatRouter;
 import com.punuo.sys.app.router.HomeRouter;
 import com.punuo.sys.sdk.account.UserInfoManager;
 import com.punuo.sys.sdk.activity.BaseActivity;
 import com.punuo.sys.sdk.event.CloseOtherMediaEvent;
+import com.punuo.sys.sdk.util.DeviceHelper;
 import com.punuo.sys.sdk.view.LoopIndicator;
 
 import org.greenrobot.eventbus.EventBus;
@@ -72,6 +76,7 @@ import java.util.List;
 
 @Route(path = HomeRouter.ROUTER_HOME_ACTIVITY)
 public class HomeActivity extends BaseActivity {
+    private static final String TAG = "HomeActivity";
     private boolean userLoginFailed = false;
     private boolean devLoginFailed = false;
     private LoopIndicator mLoopIndicator;
@@ -125,6 +130,21 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
+    private void startLinphone() {
+        Log.i(TAG, "startLinphone: ");
+        LinphoneHelper.getInstance().setDebug(DeviceHelper.isApkInDebug());
+        LinphoneHelper.getInstance().startVoip(this);
+        mBaseHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!TextUtils.isEmpty(UserInfoManager.getUserInfo().ipNumber)) {
+                    LinphoneHelper.getInstance().register(UserInfoManager.getUserInfo().ipNumber, "123456", SipConfig.getServerIp() + ":5000");
+                }
+            }
+        }, 500);
+
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(ImageShare imageShare) {
         Glide.with(this).asBitmap().load(imageShare.imageUrl)
@@ -143,39 +163,7 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void init() {
-
-        startService(new Intent(this, NewsService.class));
-//        SipInfo.loginReplace = new Handler(new Handler.Callback() {
-//            @Override
-//            public boolean handleMessage(android.os.Message msg) {
-//                sipUser.sendMessage(SipMessageFactory.createNotifyRequest(sipUser, SipInfo.user_to,
-//                        SipInfo.user_from, BodyFactory.createLogoutBody()));
-//                SipInfo.sipDev.sendMessage(SipMessageFactory.createNotifyRequest(SipInfo.sipDev, SipInfo.dev_to,
-//                        SipInfo.dev_from, BodyFactory.createLogoutBody()));
-//                //关闭监听服务
-//                stopService(new Intent(HomeActivity.this, NewsService.class));
-//                //关闭PTT监听服务
-//                stopService(new Intent(HomeActivity.this, PTTService.class));
-//                //关闭用户心跳
-//                SipInfo.keepUserAlive.stopThread();
-//                //关闭设备心跳
-//                SipInfo.keepDevAlive.stopThread();
-//                //重置登录状态
-//                SipInfo.userLogined = false;
-//                SipInfo.devLogined = false;
-//                AlertDialog loginReplace = new AlertDialog.Builder(getApplicationContext())
-//                        .setTitle("账号异地登录")
-//                        .setMessage("请重新登录")
-//                        .setPositiveButton("确定", null)
-//                        .create();
-//                loginReplace.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-//                loginReplace.show();
-//                loginReplace.setCancelable(false);
-//                loginReplace.setCanceledOnTouchOutside(false);
-//                ARouter.getInstance().build(CompatRouter.ROUTER_LOGIN_ACTIVITY).navigation();
-//                return false;
-//            }
-//        });
+        startLinphone();
     }
 
     public void saveImageToGallery(Context context, Bitmap bmp) {
@@ -231,20 +219,9 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        SipInfo.loginReplace = null;
-//        SipInfo.keepUserAlive.stopThread();
-//        SipInfo.keepDevAlive.stopThread();
-//        if(!(GroupInfo.wakeLock==null)){
-//            GroupInfo.wakeLock.release();}
-//        GroupInfo.rtpAudio.removeParticipant();
-//        GroupInfo.groupUdpThread.stopThread();
-//        GroupInfo.groupKeepAlive.stopThread();
-//        SipInfo.userLogined = false;
-//        SipInfo.devLogined = false;
-//        //停止PPT监听服务
-//        stopService(new Intent(this, PTTService.class));
-        //关闭监听服务
-        stopService(new Intent(HomeActivity.this, NewsService.class));
+        //停止语音电话服务
+        LinphoneHelper.getInstance().unRegister();
+        LinphoneHelper.getInstance().stopVoip(this);
         mBaseHandler.removeMessages(UserHeartBeatHelper.MSG_HEART_BEAR_VALUE);
         mBaseHandler.removeMessages(DevHeartBeatHelper.MSG_HEART_BEAR_VALUE);
         EventBus.getDefault().unregister(this);

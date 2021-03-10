@@ -88,7 +88,7 @@ dependencies {
     api "com.github.Raizlabs.DBFlow:dbflow-core:$gradle.sdk.dbflow_version"
     api "com.github.Raizlabs.DBFlow:dbflow:$gradle.sdk.dbflow_version"
     api "com.github.Raizlabs.DBFlow:dbflow-sqlcipher:$gradle.sdk.dbflow_version"
-
+//    api "com.github.glumes:EzCameraKit:v0.0.3"
     /////////////
     api 'com.github.open-android:Zxing:v1.0.3'
     api 'com.hjq:xxpermissions:6.2'

@@ -1,0 +1,45 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'com.jakewharton.butterknife'
+
+android {
+    compileSdkVersion gradle.sdk.compileSdkVersion
+    buildToolsVersion gradle.sdk.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion gradle.sdk.minSdkVersion
+        targetSdkVersion gradle.sdk.targetSdkVersion
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    kapt 'com.alibaba:arouter-compiler:1.2.2'
+    kapt 'com.jakewharton:butterknife-compiler:10.0.0'
+    kapt 'org.permissionsdispatcher:permissionsdispatcher-processor:4.6.0'
+    kapt "com.github.Raizlabs.DBFlow:dbflow-processor:$gradle.sdk.dbflow_version"
+    implementation project(':basesdk')
+    implementation 'org.apache.commons:commons-compress:1.16.1'
+
+}

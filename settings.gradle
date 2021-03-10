@@ -5,6 +5,7 @@ include ':module_compat'
 include ':basesdk'
 include ':module_home'
 include ':giraffeplayer'
+include ':linphonesdk'
 
 apply from: './base.gradle'
 gradle.ext {

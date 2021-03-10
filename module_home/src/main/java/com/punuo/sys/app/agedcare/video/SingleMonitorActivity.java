@@ -32,6 +32,7 @@ import com.punuo.sys.app.agedcare.R2;
 import com.punuo.sys.app.agedcare.groupvoice.G711;
 import com.punuo.sys.app.agedcare.sip.SipInfo;
 import com.punuo.sys.app.agedcare.tools.AvcEncoder;
+import com.punuo.sys.app.agedcare.tools.H264VideoEncoder;
 import com.punuo.sys.app.router.HomeRouter;
 import com.punuo.sys.sdk.account.AccountManager;
 import com.punuo.sys.sdk.activity.BaseActivity;
@@ -62,7 +63,7 @@ public class SingleMonitorActivity extends BaseActivity implements SurfaceHolder
     private String TAG = SingleMonitorActivity.class.getSimpleName();    //取得类名
     public static boolean G711Running = true;
     int frameSizeG711 = 160;
-    private final int previewFrameRate = 10;  //演示帧率
+    private final int previewFrameRate = 15;  //演示帧率
     //    private final int previewWidth = 352;     //水平像素
 //    private final int previewHeight = 288;     //垂直像素
     private final int previewWidth = 640;     //水平像素
@@ -93,6 +94,10 @@ public class SingleMonitorActivity extends BaseActivity implements SurfaceHolder
     public Camera mCamera;
     boolean sendppsandsps = true;
     private boolean isStop = false;
+    private byte[] tempSpsAndPps =
+            {
+                    0x00,0x00,0x00,0x01,0x67,0x42,0x40,0x29,0x73,0x68,0x0a,0x03,0x26,0x01,0x1f,0x10,0x73,0x40,0x00,0x00,0x00,0x01,0x68,0x32,0x01,0x58,0x35,0x38
+            };
     private byte[] spsandpps = {0x00, 0x00, 0x00, 0x01, 0x67, 0x42, 0x00, 0x29, (byte) 0x8d, (byte) 0x8d, 0x40, (byte) 0x50, 0x1e, (byte) 0xd0, 0x0f, 0x08, (byte) 0x84, 0x53, (byte) 0x80, 0x00, 0x00, 0x00, 0x01, 0x68, (byte) 0xca, 0x43, (byte) 0xc8};
     private byte[] sps = {0x67, 0x42, (byte) 0x80, 0x1f, (byte) 0xda, (byte) 0x01, 0x40, 0x16, (byte) 0xe8, (byte) 0x06, (byte) 0xd0, (byte) 0xa1, (byte) 0x35};
     private byte[] pps = {0x68, (byte) 0xCE, 0x06, (byte) 0xE2};
@@ -140,7 +145,8 @@ public class SingleMonitorActivity extends BaseActivity implements SurfaceHolder
 
         //软解码初始化
 //        NativeH264Encoder.InitEncoder(previewWidth, previewHeight, previewFrameRate);
-        avcEncoder = new AvcEncoder();
+//        avcEncoder = new AvcEncoder();
+        H264VideoEncoder.getInstance().initEncoder(previewWidth, previewHeight, previewFrameRate);
         SipInfo.flag = false;
         imIntentFilter = new IntentFilter();
         imIntentFilter.addAction(BROADCAST_ACTION);
@@ -263,7 +269,8 @@ public class SingleMonitorActivity extends BaseActivity implements SurfaceHolder
             mCamera.release();   //断开与摄像头的连接，并释放摄像头资源
             mCamera = null;
         }
-        avcEncoder.close();
+        H264VideoEncoder.getInstance().close();
+//        avcEncoder.close();
         rtpsending = null;
         SipInfo.flag = true;
         Log.d(TAG, "onDestroy: ");
@@ -315,7 +322,7 @@ public class SingleMonitorActivity extends BaseActivity implements SurfaceHolder
             mCamera.setPreviewCallback(this);
             mParameters = mCamera.getParameters();
             mParameters.setPreviewFpsRange(15000,15000);
-            mParameters.setPreviewFormat(ImageFormat.YV12);
+            mParameters.setPreviewFormat(ImageFormat.NV21);
             mParameters.setPreviewSize(previewWidth, previewHeight);
             mCamera.setParameters(mParameters);
             mCamera.startPreview();
@@ -352,7 +359,8 @@ public class SingleMonitorActivity extends BaseActivity implements SurfaceHolder
             }
             if (!isStop) {
 //                硬解码
-                byte[] encodeResult = avcEncoder.offerEncoder(data); //进行编码，将编码结果存放进数组
+//                byte[] encodeResult = avcEncoder.offerEncoder(data); //进行编码，将编码结果存放进数组
+                byte[] encodeResult = H264VideoEncoder.getInstance().offerEncode(data);
                 if (encodeResult != null && encodeResult.length > 0) {
                     Log.e(TAG, "encode len:" + encodeResult.length);//打印编码结果的长度
                     setSSRC_PAYLOAD();
@@ -440,7 +448,8 @@ public class SingleMonitorActivity extends BaseActivity implements SurfaceHolder
         //发送打包数据
         if (sendppsandsps) {
             for (int i = 0; i < 3; i++) {
-                rtpsending.rtpSession1.sendData(spsandpps, 936735038);
+//                rtpsending.rtpSession1.sendData(spsandpps, 936735038);
+                rtpsending.rtpSession1.sendData(tempSpsAndPps, 936735038);
             }//发送打包数据
             sendppsandsps = false;
         }

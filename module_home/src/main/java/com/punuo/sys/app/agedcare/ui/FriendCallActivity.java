@@ -4,7 +4,7 @@ package com.punuo.sys.app.agedcare.ui;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +16,7 @@ import com.punuo.sys.app.agedcare.adapter.PhoneRecyclerViewAdapter;
 import com.punuo.sys.app.agedcare.db.FamilyMember;
 import com.punuo.sys.app.agedcare.event.FamilyMemberManagerEvent;
 import com.punuo.sys.app.router.HomeRouter;
+import com.punuo.sys.sdk.account.UserInfoManager;
 import com.punuo.sys.sdk.activity.BaseActivity;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
@@ -59,8 +60,10 @@ public class FriendCallActivity extends BaseActivity {
         recyclerView.addItemDecoration(new FriendCallActivity.RecyclerViewItemDecoration(20, 3));//初始化子项距离和列数
         adapter = new PhoneRecyclerViewAdapter(this);
         recyclerView.setAdapter(adapter);
-        ImageView fab = (ImageView) findViewById(R.id.add);
+        View fab = findViewById(R.id.add);
         fab.setOnClickListener(v -> ARouter.getInstance().build(HomeRouter.ROUTER_FAMILY_MEMBER_MANAGER_ACTIVITY).navigation());
+        TextView localIpNumber = findViewById(R.id.local_ip_number);
+        localIpNumber.setText("本机号码：" + UserInfoManager.getUserInfo().ipNumber);
     }
 
     @Override
