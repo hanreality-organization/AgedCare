@@ -40,7 +40,6 @@ import com.punuo.sip.dev.model.ImageShare;
 import com.punuo.sip.dev.model.LoginResponseDev;
 import com.punuo.sip.dev.model.OperationData;
 import com.punuo.sip.dev.request.SipDevRegisterRequest;
-import com.punuo.sip.user.H264ConfigUser;
 import com.punuo.sip.user.SipUserManager;
 import com.punuo.sip.user.UserHeartBeatHelper;
 import com.punuo.sip.user.event.ReRegisterUserEvent;
@@ -49,10 +48,6 @@ import com.punuo.sip.user.event.UserReplaceEvent;
 import com.punuo.sip.user.model.LoginResponseUser;
 import com.punuo.sip.user.request.SipGetUserIdRequest;
 import com.punuo.sys.app.agedcare.R;
-import com.punuo.sys.app.agedcare.sip.SipInfo;
-import com.punuo.sys.app.agedcare.video.RtpVideo;
-import com.punuo.sys.app.agedcare.video.SendActivePacket;
-import com.punuo.sys.app.agedcare.video.VideoInfo;
 import com.punuo.sys.app.linphone.LinphoneHelper;
 import com.punuo.sys.app.router.CompatRouter;
 import com.punuo.sys.app.router.HomeRouter;
@@ -70,7 +65,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -377,17 +371,7 @@ public class HomeActivity extends BaseActivity {
                 ARouter.getInstance().build(HomeRouter.ROUTER_SINGLE_MONITOR_ACTIVITY).navigation();
                 break;
             case H264Config.DOUBLE_MONITOR_NEGATIVE:
-                new Thread(() -> {
-                    SipInfo.decoding = true;
-                    try {
-                        VideoInfo.rtpVideo = new RtpVideo(H264ConfigUser.rtpIp, H264ConfigUser.rtpPort);
-                        VideoInfo.sendActivePacket = new SendActivePacket();
-                        VideoInfo.sendActivePacket.startThread();
-                        ARouter.getInstance().build(HomeRouter.ROUTER_VIDEO_CALL_ACTIVITY).navigation();
-                    } catch (SocketException e) {
-                        e.printStackTrace();
-                    }
-                }).start();
+                ARouter.getInstance().build(HomeRouter.ROUTER_VIDEO_CALL_ACTIVITY).navigation();
                 break;
         }
     }

@@ -19,16 +19,11 @@ import com.punuo.sip.H264Config;
 import com.punuo.sip.dev.event.MonitorEvent;
 import com.punuo.sip.dev.event.StartVideoEvent;
 import com.punuo.sip.dev.model.CallResponse;
-import com.punuo.sip.user.H264ConfigUser;
 import com.punuo.sip.user.SipUserManager;
 import com.punuo.sip.user.request.SipCallReplyRequest;
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.R2;
 import com.punuo.sys.app.agedcare.Util;
-import com.punuo.sys.app.agedcare.sip.SipInfo;
-import com.punuo.sys.app.agedcare.video.RtpVideo;
-import com.punuo.sys.app.agedcare.video.SendActivePacket;
-import com.punuo.sys.app.agedcare.video.VideoInfo;
 import com.punuo.sys.app.router.HomeRouter;
 import com.punuo.sys.sdk.account.AccountManager;
 import com.punuo.sys.sdk.activity.BaseActivity;
@@ -39,13 +34,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.net.SocketException;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.punuo.sys.app.agedcare.sip.SipInfo.isanswering;
 
 @Route(path = HomeRouter.ROUTER_VIDEO_REQUEST_ACTIVITY)
 public class VideoRequestActivity extends BaseActivity implements View.OnClickListener {
@@ -91,7 +82,6 @@ public class VideoRequestActivity extends BaseActivity implements View.OnClickLi
     @OnClick({R2.id.bt_cancle})
     public void onClick(View view) {
         if (view.getId() == R.id.bt_cancle) {
-            isanswering = false;
             SipCallReplyRequest sipCallReplyRequest = new SipCallReplyRequest("cancel", AccountManager.getTargetDevId());
             SipUserManager.getInstance().addRequest(sipCallReplyRequest);
             finish();
@@ -114,17 +104,7 @@ public class VideoRequestActivity extends BaseActivity implements View.OnClickLi
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MonitorEvent event) {
         if (event.monitorType == H264Config.DOUBLE_MONITOR_POSITIVE) {
-            new Thread(() -> {
-                SipInfo.decoding = true;
-                try {
-                    VideoInfo.rtpVideo = new RtpVideo(H264ConfigUser.rtpIp, H264ConfigUser.rtpPort);
-                    VideoInfo.sendActivePacket = new SendActivePacket();
-                    VideoInfo.sendActivePacket.startThread();
-                    ARouter.getInstance().build(HomeRouter.ROUTER_VIDEO_CALL_ACTIVITY).navigation();
-                } catch (SocketException e) {
-                    e.printStackTrace();
-                }
-            }).start();
+            ARouter.getInstance().build(HomeRouter.ROUTER_VIDEO_CALL_ACTIVITY).navigation();
         }
     }
 

@@ -1,4 +1,4 @@
-package com.punuo.sys.app.agedcare.groupvoice;
+package com.punuo.sys.app.agedcare.audio;
 
 /**
  * G.711 codec. This class provides methods for u-law, A-law and linear PCM

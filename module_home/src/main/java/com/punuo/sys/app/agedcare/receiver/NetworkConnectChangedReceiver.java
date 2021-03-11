@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 
 import com.punuo.sys.app.agedcare.tools.LogUtil;
 import com.punuo.sys.sdk.account.AccountManager;
+import com.punuo.sys.sdk.event.NetworkDisconnectedEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -46,6 +47,7 @@ public class NetworkConnectChangedReceiver extends BroadcastReceiver {
                     }
                 } else {
                     LogUtil.d(TAG, getConnectionType(info.getType()) + "断开");
+                    EventBus.getDefault().post(new NetworkDisconnectedEvent());
                 }
             }
         }

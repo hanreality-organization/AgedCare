@@ -1,10 +1,11 @@
 package com.punuo.sip;
 
+import com.aill.androidserialport.SerialPort;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import android_serialport_api.SerialPort;
 
 /**
  * Created by han.chen.

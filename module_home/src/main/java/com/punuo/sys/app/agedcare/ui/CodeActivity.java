@@ -9,13 +9,11 @@ import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.zxing.common.BitmapUtils;
 import com.punuo.sys.app.agedcare.R;
 import com.punuo.sys.app.agedcare.R2;
-import com.punuo.sys.app.agedcare.sip.SipInfo;
 import com.punuo.sys.app.router.HomeRouter;
 import com.punuo.sys.sdk.account.AccountManager;
 import com.punuo.sys.sdk.activity.BaseActivity;
@@ -26,6 +24,7 @@ import com.punuo.sys.sdk.util.IntentUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 @Route(path = HomeRouter.ROUTER_CODE_ACTIVITY)
 public class CodeActivity extends BaseActivity implements View.OnClickListener {
     private final String TAG = getClass().getName();
@@ -134,12 +133,8 @@ public class CodeActivity extends BaseActivity implements View.OnClickListener {
 
     @OnClick(R2.id.update)
     public void onClick() {
-        if (SipInfo.isNetworkConnected) {
-            Intent intent = new Intent(this, AutoUpdateService.class);
-            intent.putExtra("needToast", true);
-            IntentUtil.startServiceInSafeMode(this, intent);
-        } else {
-            Toast.makeText(this, "当前无网络", Toast.LENGTH_SHORT).show();
-        }
+        Intent intent = new Intent(this, AutoUpdateService.class);
+        intent.putExtra("needToast", true);
+        IntentUtil.startServiceInSafeMode(this, intent);
     }
 }

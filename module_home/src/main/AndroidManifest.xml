@@ -51,9 +51,6 @@
             android:name=".ui.ImagePagerActivity"
             android:theme="@style/Theme.Pn.Translucent" />
 
-        <service android:name=".service.NewsService" />
-        <service android:name=".service.MediaService" />
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

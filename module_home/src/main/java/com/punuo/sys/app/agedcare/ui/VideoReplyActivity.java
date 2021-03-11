@@ -28,8 +28,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.punuo.sys.app.agedcare.sip.SipInfo.isanswering;
-
 @Route(path = HomeRouter.ROUTER_VIDEO_REPLY_ACTIVITY)
 public class VideoReplyActivity extends BaseActivity implements View.OnClickListener {
     @BindView(R2.id.bt_accept)
@@ -69,7 +67,6 @@ public class VideoReplyActivity extends BaseActivity implements View.OnClickList
         } else if (id == R.id.bt_refuse) {
             SipCallReplyRequest replyRequest = new SipCallReplyRequest("refuse", AccountManager.getTargetDevId());
             SipUserManager.getInstance().addRequest(replyRequest);
-            isanswering = false;
             finish();
         }
     }

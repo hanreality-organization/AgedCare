@@ -5,11 +5,17 @@ import android.media.MediaCodecInfo;
 import android.media.MediaFormat;
 import android.os.Environment;
 
+import com.punuo.sip.dev.H264ConfigDev;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.concurrent.ArrayBlockingQueue;
+
+import static android.media.MediaCodec.BUFFER_FLAG_CODEC_CONFIG;
+import static android.media.MediaCodec.BUFFER_FLAG_KEY_FRAME;
 
 /**
  * Created by han.chen.
@@ -18,6 +24,7 @@ import java.nio.ByteBuffer;
 public class H264VideoEncoder {
     private static final String TAG = "H264VideoEncoder";
     private static H264VideoEncoder sH264VideoDecoder;
+    private RTPVideoSendSession mRTPVideoSendSession;
 
     public static H264VideoEncoder getInstance() {
         synchronized (H264VideoEncoder.class) {
@@ -29,30 +36,34 @@ public class H264VideoEncoder {
     }
 
     private MediaCodec mediaCodec;
-    private byte[] yuv420 = null;
-    private byte[] output = null;
-    private byte[] mInfo = null;
     private int mWidth = 0;
     private int mHeight = 0;
+    private int mFrameRate = 15;
+    private final int TIMEOUT_USEC = 12000;
+    public byte[] configByte;
+
+
+    public static ArrayBlockingQueue<byte[]> YUVQueue = new ArrayBlockingQueue<>(10);
 
     public void initEncoder(int width, int height, int frameRate) {
+        YUVQueue.clear();
         mWidth = width;
         mHeight = height;
-        yuv420 = new byte[width * height * 3 / 2];
+        mFrameRate = frameRate;
+        mRTPVideoSendSession = new RTPVideoSendSession(H264ConfigDev.rtpIp, H264ConfigDev.rtpPort);
         MediaFormat mediaFormat = MediaFormat.createVideoFormat("video/avc", width, height);
-        mediaFormat.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatYUV420SemiPlanar);
+        mediaFormat.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatYUV420Planar);
         mediaFormat.setInteger(MediaFormat.KEY_BIT_RATE, width * height * 5);
-        mediaFormat.setInteger(MediaFormat.KEY_FRAME_RATE, frameRate);
+        mediaFormat.setInteger(MediaFormat.KEY_FRAME_RATE, mFrameRate);
         mediaFormat.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 1);
         try {
             mediaCodec = MediaCodec.createEncoderByType("video/avc");
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         mediaCodec.configure(mediaFormat, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
         mediaCodec.start();
-        createFile();
+//        createFile();
     }
 
     private BufferedOutputStream outputStream;
@@ -69,69 +80,129 @@ public class H264VideoEncoder {
         }
     }
 
-    public byte[] offerEncode(byte[] input) {
-        NV21ToNV12(input, yuv420, mWidth, mHeight);
-        try {
-            ByteBuffer[] inputBuffers = mediaCodec.getInputBuffers();
-            ByteBuffer[] outputBuffers = mediaCodec.getOutputBuffers();
-            int inputBufferIndex = mediaCodec.dequeueInputBuffer(-1);
-            if (inputBufferIndex >= 0) {
-                ByteBuffer inputBuffer = inputBuffers[inputBufferIndex];
-                inputBuffer.clear();
-                inputBuffer.put(yuv420);
-                mediaCodec.queueInputBuffer(inputBufferIndex, 0, input.length, 0, 0);
-            }
-            MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
-            int outputBufferIndex = mediaCodec.dequeueOutputBuffer(bufferInfo, 0);
-            while (outputBufferIndex >= 0) {
-                ByteBuffer outputBuffer = outputBuffers[outputBufferIndex];
-                output = new byte[bufferInfo.size];
-                outputBuffer.get(output);
-                outputStream.write(output, 0, output.length);
-                mediaCodec.releaseOutputBuffer(outputBufferIndex, false);
-                outputBufferIndex = mediaCodec.dequeueOutputBuffer(bufferInfo, 0);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public boolean isRuning = false;
 
-        return output;
+    public void startEncoderThread() {
+        Thread EncoderThread = new Thread(() -> {
+            isRuning = true;
+            byte[] input = null;
+
+            while (isRuning) {
+                //访问MainActivity用来缓冲待解码数据的队列
+                if (YUVQueue.size() > 0) {
+                    //从缓冲队列中取出一帧
+                    input = YUVQueue.poll();
+                    byte[] yuv420sp = new byte[mWidth * mHeight * 3 / 2];
+                    //把待编码的视频帧转换为YUV420格式
+                    swapYV12toI420(input,yuv420sp, mWidth, mHeight);
+                    input = yuv420sp;
+                }
+                if (input != null) {
+                    try {
+                        //编码器输入缓冲区
+                        ByteBuffer[] inputBuffers = mediaCodec.getInputBuffers();
+                        //编码器输出缓冲区
+                        ByteBuffer[] outputBuffers = mediaCodec.getOutputBuffers();
+                        int inputBufferIndex = mediaCodec.dequeueInputBuffer(-1);
+                        if (inputBufferIndex >= 0) {
+                            pts = computePresentationTime(generateIndex);
+                            ByteBuffer inputBuffer = inputBuffers[inputBufferIndex];
+                            inputBuffer.clear();
+                            //把转换后的YUV420格式的视频帧放到编码器输入缓冲区中
+                            inputBuffer.put(input);
+                            mediaCodec.queueInputBuffer(inputBufferIndex, 0, input.length, pts, 0);
+                            generateIndex++;
+                        }
+
+                        MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
+                        int outputBufferIndex = mediaCodec.dequeueOutputBuffer(bufferInfo, TIMEOUT_USEC);
+                        while (outputBufferIndex >= 0) {
+                            ByteBuffer outputBuffer = outputBuffers[outputBufferIndex];
+                            byte[] outData = new byte[bufferInfo.size];
+                            outputBuffer.get(outData);
+                            if (bufferInfo.flags == BUFFER_FLAG_CODEC_CONFIG) {
+                                configByte = new byte[bufferInfo.size];
+                                configByte = outData;
+                            } else if (bufferInfo.flags == BUFFER_FLAG_KEY_FRAME) {
+                                byte[] keyframe = new byte[bufferInfo.size + configByte.length];
+                                System.arraycopy(configByte, 0, keyframe, 0, configByte.length);
+                                //把编码后的视频帧从编码器输出缓冲区中拷贝出来
+                                System.arraycopy(outData, 0, keyframe, configByte.length, outData.length);
+                                mRTPVideoSendSession.divideAndSendNal(keyframe);
+//                                outputStream.write(keyframe, 0, keyframe.length);
+                            } else {
+                                //写到文件中
+                                mRTPVideoSendSession.divideAndSendNal(outData);
+//                                outputStream.write(outData, 0, outData.length);
+                            }
+
+                            mediaCodec.releaseOutputBuffer(outputBufferIndex, false);
+                            outputBufferIndex = mediaCodec.dequeueOutputBuffer(bufferInfo, TIMEOUT_USEC);
+                        }
+                        mRTPVideoSendSession.setRtpHeartBeatData();
+
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                    }
+                } else {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        EncoderThread.start();
     }
 
+
+    long pts = 0;
+    long generateIndex = 0;
+
     public void close() {
+        YUVQueue.clear();
+        isRuning = false;
         try {
             mediaCodec.stop();
             mediaCodec.release();
-            outputStream.flush();
-            outputStream.close();
+//            outputStream.flush();
+//            outputStream.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void NV21ToNV12(byte[] nv21,byte[] nv12,int width,int height){
-        if(nv21 == null || nv12 == null)return;
-        int framesize = width*height;
-        int i = 0,j = 0;
-        System.arraycopy(nv21, 0, nv12, 0, framesize);
-        for(i = 0; i < framesize; i++){
+    private void NV21ToNV12(byte[] nv21, byte[] nv12, int width, int height) {
+        if (nv21 == null || nv12 == null) return;
+        int frameSize = width * height;
+        int i = 0, j = 0;
+        System.arraycopy(nv21, 0, nv12, 0, frameSize);
+        for (i = 0; i < frameSize; i++) {
             nv12[i] = nv21[i];
         }
-        for (j = 0; j < framesize/2; j+=2)
-        {
-            nv12[framesize + j-1] = nv21[j+framesize];
+        for (j = 0; j < frameSize / 2; j += 2) {
+            nv12[frameSize + j - 1] = nv21[j + frameSize];
         }
-        for (j = 0; j < framesize/2; j+=2)
-        {
-            nv12[framesize + j] = nv21[j+framesize-1];
+        for (j = 0; j < frameSize / 2; j += 2) {
+            nv12[frameSize + j] = nv21[j + frameSize - 1];
         }
     }
 
-    //yv12 转 yuv420p  yvu -> yuv
-    private void swapYV12toI420(byte[] yv12bytes, byte[] i420bytes, int width, int height) {
-        System.arraycopy(yv12bytes, 0, i420bytes, 0, width * height);
-        int srcPos = width * height + width * height / 4;
-        System.arraycopy(yv12bytes, srcPos, i420bytes, width * height, width * height / 4);
-        System.arraycopy(yv12bytes, width * height, i420bytes, srcPos, width * height / 4);
+    private byte[] swapYV12toI420(byte[] yv12bytes,byte[] i420bytes, int width, int height) {
+        if (i420bytes == null)
+            i420bytes = new byte[yv12bytes.length];
+        for (int i = 0; i < width*height; i++)
+            i420bytes[i] = yv12bytes[i];
+        int size = width * height + (width / 2 * height / 2);
+        for (int i = width*height; i < size; i++)
+            i420bytes[i] = yv12bytes[i + (width/2*height/2)];
+        for (int i = size; i < width*height + 2*(width/2*height/2); i++)
+            i420bytes[i] = yv12bytes[i - (width/2*height/2)];
+        return i420bytes;
+    }
+
+    private long computePresentationTime(long frameIndex) {
+        return 132 + frameIndex * 1000000 / mFrameRate;
     }
 }
