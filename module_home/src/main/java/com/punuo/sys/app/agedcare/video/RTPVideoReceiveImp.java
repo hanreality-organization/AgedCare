@@ -23,23 +23,22 @@ import jlibrtp.RTPAppIntf;
 public class RTPVideoReceiveImp implements RTPAppIntf {
     public static final String TAG = "RTPVideoReceiveImp";
     private final byte[] H264_STREAM_HEAD = {0x00, 0x00, 0x00, 0x01};
-    private final StreamBuf streamBuf;
     private byte[] tempNal = new byte[200000];
-    private int putNum;
+    private int tempNalLength = 0;
     private int preSeq = -1;
     private int state = 0;
     boolean isKeyFrame = false;
 
     private RTPVideoReceiveSession mVideoReceiveSession;
     private SendActivePacketThread mSendActivePacketThread;
+    private final VideoStreamBuffer mVideoStreamBuffer;
+    public final static VideoNalBuffer mVideoNalBuffer = new VideoNalBuffer();
+
     public RTPVideoReceiveImp(String networkAddress, int remoteRtpPort) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        streamBuf = new StreamBuf(500, 10);
-        for (int i = 0; i < VideoInfo.nalBuffers.length; i++) {
-            VideoInfo.nalBuffers[i] = new NalBuffer();
-        }
-        putNum = 0;
+        mVideoStreamBuffer = new VideoStreamBuffer();
+        mVideoNalBuffer.clear();
         AudioRecordManager.getInstance().play();
         mVideoReceiveSession = new RTPVideoReceiveSession(networkAddress, remoteRtpPort, this);
         mSendActivePacketThread = new SendActivePacketThread(mVideoReceiveSession, H264ConfigUser.magic);
@@ -49,16 +48,17 @@ public class RTPVideoReceiveImp implements RTPAppIntf {
     @Override
     public void receiveData(DataFrame frame, Participant participant) {
         if (frame.payloadType() == 98) {
-            StreamBufNode rtpFrameNode = new StreamBufNode(frame);
-            streamBuf.addToBufBySeq(rtpFrameNode);
-            if (streamBuf.isReady()) {
+            mVideoStreamBuffer.appendDateFrame(frame);
+            H264Config.frameReceived = H264Config.FRAME_RECEIVED;
+            if (mVideoStreamBuffer.isReady()) {
                 try {
-                    StreamBufNode streamBufNode = streamBuf.getFromBuf();
-                    int seqNum = streamBufNode.getSeqNum();
-                    byte[] data = streamBufNode.getDataFrame().getConcatenatedData();
-                    int len = streamBufNode.getDataFrame().getTotalLength();
-                    getNalData(data, seqNum, len);
-                    H264Config.frameReceived = H264Config.FRAME_RECEIVED;
+                    DataFrame dataFrame = mVideoStreamBuffer.getDataFrame();
+                    if (dataFrame != null) {
+                        int seqNum = dataFrame.sequenceNumbers()[0];
+                        byte[] data = dataFrame.getConcatenatedData();
+                        int len = dataFrame.getTotalLength();
+                        getNalData(data, seqNum, len);
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -80,6 +80,9 @@ public class RTPVideoReceiveImp implements RTPAppIntf {
         if (mSendActivePacketThread != null) {
             mSendActivePacketThread.stopThread();
         }
+        if (mVideoStreamBuffer != null) {
+            mVideoStreamBuffer.clear();
+        }
     }
 
     @Override
@@ -98,10 +101,11 @@ public class RTPVideoReceiveImp implements RTPAppIntf {
 
     private void handleFirstPacket(byte[] data, int seqNum, int len) {
         tempNal = new byte[200000];
+        tempNalLength = 0;
         try {
             System.arraycopy(H264_STREAM_HEAD, 0, tempNal, 0, H264_STREAM_HEAD.length);
             System.arraycopy(data, 2, tempNal, 4, len - 2);
-            VideoInfo.nalBuffers[putNum].setNalLen(len + 2);
+            tempNalLength = len + 2;
         } catch (Exception e1) {
             e1.printStackTrace();
         }
@@ -117,8 +121,8 @@ public class RTPVideoReceiveImp implements RTPAppIntf {
 
     private void handleMiddlePacket(byte[] data, int seqNum, int len) {
         try {
-            System.arraycopy(data, 2, tempNal, VideoInfo.nalBuffers[putNum].getNalLen(), len - 2);
-            VideoInfo.nalBuffers[putNum].addNalLen(len - 2);
+            System.arraycopy(data, 2, tempNal, tempNalLength, len - 2);
+            tempNalLength += len - 2;
         } catch (Exception e1) {
             e1.printStackTrace();
         }
@@ -132,21 +136,13 @@ public class RTPVideoReceiveImp implements RTPAppIntf {
 
     private void handleLastPacket(byte[] data, int seqNum, int len) {
         try {
-            System.arraycopy(data, 2, tempNal,
-                    VideoInfo.nalBuffers[putNum].getNalLen(), len - 2);
-            VideoInfo.nalBuffers[putNum].addNalLen(len - 2);
-            VideoInfo.nalBuffers[putNum].isWriteable();
-            System.arraycopy(tempNal, 0, VideoInfo.nalBuffers[putNum].getWriteable_Nalbuf(),
-                    0, VideoInfo.nalBuffers[putNum].getNalLen());
-            VideoInfo.nalBuffers[putNum].writeLock();
+            System.arraycopy(data, 2, tempNal, tempNalLength, len - 2);
+            tempNalLength += len - 2;
+            mVideoNalBuffer.offerData(tempNal, tempNalLength);
         } catch (Exception e1) {
             e1.printStackTrace();
         }
         preSeq = seqNum;
-        ++putNum;
-        if (putNum == 200) {
-            putNum = 0;
-        }
         state = 0;
         isKeyFrame = false;
         Log.d(TAG, "handleLastPacket");
@@ -201,29 +197,23 @@ public class RTPVideoReceiveImp implements RTPAppIntf {
 
     private void resetTempNal(int seqNum) {
         tempNal = new byte[200000];
-        VideoInfo.nalBuffers[putNum].setNalLen(0);
+        tempNalLength = 0;
         preSeq = seqNum;
         state = 0;
     }
 
     private void handleCompletePacket(byte[] data, int seqNum, int len) {
-        tempNal = new byte[100000];
+        tempNal = new byte[200000];
+        tempNalLength = 0;
         try {
             System.arraycopy(H264_STREAM_HEAD, 0, tempNal, 0, H264_STREAM_HEAD.length);
             System.arraycopy(data, 0, tempNal, H264_STREAM_HEAD.length, len);
-            VideoInfo.nalBuffers[putNum].setNalLen(len + 4);
-            VideoInfo.nalBuffers[putNum].isWriteable();
-            System.arraycopy(tempNal, 0, VideoInfo.nalBuffers[putNum].getWriteable_Nalbuf(),
-                    0, VideoInfo.nalBuffers[putNum].getNalLen());
-            VideoInfo.nalBuffers[putNum].writeLock();
+            tempNalLength = len + 4;
+            mVideoNalBuffer.offerData(tempNal, tempNalLength);
         } catch (Exception e1) {
             e1.printStackTrace();
         }
         preSeq = seqNum;
-        ++putNum;
-        if (putNum == 200) {
-            putNum = 0;
-        }
         state = 0;
         Log.d(TAG, "handleCompletePacket");
     }

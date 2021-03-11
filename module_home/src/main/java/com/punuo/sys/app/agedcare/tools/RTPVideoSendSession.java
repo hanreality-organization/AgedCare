@@ -1,7 +1,6 @@
 package com.punuo.sys.app.agedcare.tools;
 
 import com.punuo.sip.dev.H264ConfigDev;
-import com.punuo.sys.app.agedcare.video.VideoInfo;
 
 import java.net.DatagramSocket;
 import java.net.SocketException;
@@ -15,11 +14,27 @@ import jlibrtp.RTPSession;
  **/
 public class RTPVideoSendSession implements PnVideoSession {
     public static final String TAG = "RTPVideoSendSession";
+    /**
+     * 每一个新的NAL设置首包打包状态为false，即没有打包首包
+     */
+    public static boolean firstPktReceived = false;
+    /**
+     * 记录打包分片的索引
+     */
+    public static int pktflag = 0;
+    /**
+     * 若未打包到末包，则此状态一直为true
+     */
+    public static boolean status = true;
+    /**
+     * 打包分片长度
+     */
+    public static int DIVIDE_LENGTH = 1000;
     private DatagramSocket mRtpSocket;
     private DatagramSocket mRtcpSocket;
     private RTPSession mRTPSession;
     private long Ssrc;
-    private byte[] rtppkt = new byte[VideoInfo.DIVIDE_LENGTH + 2];
+    private byte[] rtppkt = new byte[DIVIDE_LENGTH + 2];
 
     public RTPVideoSendSession(String ip, int port) {
         try {
@@ -79,16 +94,16 @@ public class RTPVideoSendSession implements PnVideoSession {
             return;
         }
 
-        if (encodeData.length > VideoInfo.DIVIDE_LENGTH) {
-            VideoInfo.status = true;
-            VideoInfo.firstPktReceived = false;
-            VideoInfo.pktflag = 0;
+        if (encodeData.length > DIVIDE_LENGTH) {
+            status = true;
+            firstPktReceived = false;
+            pktflag = 0;
 
-            while (VideoInfo.status) {
-                if (!VideoInfo.firstPktReceived) {  //首包
+            while (status) {
+                if (!firstPktReceived) {  //首包
                     sendFirstPacket(encodeData);
                 } else {
-                    if (encodeData.length - VideoInfo.pktflag > VideoInfo.DIVIDE_LENGTH) {  //中包
+                    if (encodeData.length - pktflag > DIVIDE_LENGTH) {  //中包
                         sendMiddlePacket(encodeData);
                     } else {   //末包
                         sendLastPacket(encodeData);
@@ -108,9 +123,9 @@ public class RTPVideoSendSession implements PnVideoSession {
         rtppkt[0] = (byte) (rtppkt[0] + 0x1c);
         rtppkt[1] = (byte) (0x80 + (encodeData[0] & 0x1f));
         payloadType(0x62);
-        System.arraycopy(encodeData, 0, rtppkt, 2, VideoInfo.DIVIDE_LENGTH);
-        VideoInfo.pktflag = VideoInfo.pktflag + VideoInfo.DIVIDE_LENGTH;
-        VideoInfo.firstPktReceived = true;
+        System.arraycopy(encodeData, 0, rtppkt, 2, DIVIDE_LENGTH);
+        pktflag = pktflag + DIVIDE_LENGTH;
+        firstPktReceived = true;
         //发送打包数据
         sendData(rtppkt);   //发送打包数据
     }
@@ -122,8 +137,8 @@ public class RTPVideoSendSession implements PnVideoSession {
         rtppkt[0] = (byte) (encodeData[0] & 0xe0);
         rtppkt[0] = (byte) (rtppkt[0] + 0x1c);
         rtppkt[1] = (byte) ((encodeData[0] & 0x1f));
-        System.arraycopy(encodeData, VideoInfo.pktflag, rtppkt, 2, VideoInfo.DIVIDE_LENGTH);
-        VideoInfo.pktflag = VideoInfo.pktflag + VideoInfo.DIVIDE_LENGTH;
+        System.arraycopy(encodeData, pktflag, rtppkt, 2, DIVIDE_LENGTH);
+        pktflag = pktflag + DIVIDE_LENGTH;
         //设置RTP包的负载类型为0x62
         payloadType(0x62);
         //发送打包数据
@@ -134,16 +149,16 @@ public class RTPVideoSendSession implements PnVideoSession {
      * 发送末包
      */
     public void sendLastPacket(byte[] encodeData) {
-        byte[] rtppktLast = new byte[encodeData.length - VideoInfo.pktflag + 2];
+        byte[] rtppktLast = new byte[encodeData.length - pktflag + 2];
         rtppktLast[0] = (byte) (encodeData[0] & 0xe0);
         rtppktLast[0] = (byte) (rtppktLast[0] + 0x1c);
         rtppktLast[1] = (byte) (0x40 + (encodeData[0] & 0x1f));
-        System.arraycopy(encodeData, VideoInfo.pktflag, rtppktLast, 2, encodeData.length - VideoInfo.pktflag);
+        System.arraycopy(encodeData, pktflag, rtppktLast, 2, encodeData.length - pktflag);
         //设置RTP包的负载类型为0x62
         payloadType(0x62);
         //发送打包数据
         sendData(rtppktLast);   //发送打包数据  //发送打包数据
-        VideoInfo.status = false;  //打包组包结束，下一步进行解码
+        status = false;  //打包组包结束，下一步进行解码
     }
 
     /**

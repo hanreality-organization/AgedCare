@@ -15,21 +15,17 @@ public class VideoPlayThread extends Thread {
     }
 
     private boolean running = true;
-    private int number = 0;
     @Override
     public void run() {
         while (running) {
-            byte[] nal = VideoInfo.nalBuffers[number].getReadableNalBuf();
-            if (nal != null) {
-                try {
-                    H264VideoDecoder.getInstance().onFrame(nal, 0, nal.length);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            try {
+                VideoNalBuffer.NalBuffer nalBuffer = RTPVideoReceiveImp.mVideoNalBuffer.pollData();
+                if (nalBuffer != null && nalBuffer.nal != null && nalBuffer.nal.length > 0) {
+                    H264VideoDecoder.getInstance().onFrame(nalBuffer.nal, 0, nalBuffer.nal.length);
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            VideoInfo.nalBuffers[number].readLock();
-            VideoInfo.nalBuffers[number].cleanNalBuf();
-            number = ++number % 200;
         }
     }
 
