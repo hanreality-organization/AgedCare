@@ -30,6 +30,7 @@ import butterknife.OnClick;
 
 @Route(path = HomeRouter.ROUTER_VIDEO_REPLY_ACTIVITY)
 public class VideoReplyActivity extends BaseActivity implements View.OnClickListener {
+    private static final String TAG = "VideoReplyActivity";
     @BindView(R2.id.bt_accept)
     Button bt_accept;
     @BindView(R2.id.bt_refuse)
@@ -38,7 +39,6 @@ public class VideoReplyActivity extends BaseActivity implements View.OnClickList
     TextView name;
     @BindView(R2.id.CIV_avatar)
     ImageView CIV_avatar;
-    private static final String TAG = "VideoReplyActivity";
     private MediaPlayer mMediaPlayer;
 
     @Override

@@ -26,7 +26,9 @@ public class FriendPictureViewHolder extends BaseViewHolder<String> {
     public FriendPictureViewHolder(Context context, ViewGroup parent) {
         super(LayoutInflater.from(context).inflate(R.layout.friend_picture_item, parent, false));
         ButterKnife.bind(this, itemView);
-        mPictureImage.getLayoutParams().width = (CommonUtil.getWidth() - CommonUtil.dip2px(300)) / 3;
+        int size = (CommonUtil.getWidth() - CommonUtil.dip2px(300)) / 3;
+        mPictureImage.getLayoutParams().width = size;
+        mPictureImage.getLayoutParams().height = size;
     }
 
     @Override

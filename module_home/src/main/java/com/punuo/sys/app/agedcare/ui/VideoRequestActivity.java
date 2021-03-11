@@ -1,9 +1,7 @@
 package com.punuo.sys.app.agedcare.ui;
 
 
-import android.media.AudioAttributes;
-import android.media.AudioManager;
-import android.media.SoundPool;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -48,11 +46,10 @@ public class VideoRequestActivity extends BaseActivity implements View.OnClickLi
     @BindView(R2.id.name)
     TextView name;
 
-    private SoundPool soundPool;
-    private int streamId;
-
     @Autowired(name = "model")
     BindUser mBindUser;
+
+    private MediaPlayer mMediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,19 +61,14 @@ public class VideoRequestActivity extends BaseActivity implements View.OnClickLi
         Glide.with(this).load(Util.getImageUrl(mBindUser.getId(), mBindUser.getAvatar()))
                 .into(avatar);
         name.setText(mBindUser.getNickname());
-        soundPool = new SoundPool.Builder()
-                .setMaxStreams(10)
-                .setAudioAttributes(new AudioAttributes.Builder().setLegacyStreamType(AudioManager.STREAM_MUSIC).build())
-                .build();
-        final int sourceId = soundPool.load(this, R.raw.videowait, 1);
-        soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
 
-            public void onLoadComplete(
-                    SoundPool soundPool,
-                    int sampleId, int status) {
-                streamId = soundPool.play(sourceId, 1, 1, 0, 4, 1);
-            }
-        });
+        try {
+            mMediaPlayer = MediaPlayer.create(this, R.raw.videowait);
+            mMediaPlayer.setLooping(true);
+            mMediaPlayer.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @OnClick({R2.id.bt_cancle})
@@ -108,14 +100,15 @@ public class VideoRequestActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
-    public void stopSound(int id) {
-        soundPool.stop(id);
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        stopSound(streamId);
+        if (mMediaPlayer != null) {
+            mMediaPlayer.stop();
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
         EventBus.getDefault().unregister(this);
     }
 }
