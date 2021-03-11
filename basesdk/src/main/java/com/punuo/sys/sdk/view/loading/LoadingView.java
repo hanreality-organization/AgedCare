@@ -25,8 +25,8 @@ public class LoadingView extends FrameLayout {
         super(context, attrs);
 
         DisplayMetrics metrics = getResources().getDisplayMetrics();
-        final float defaultDiameter = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 44f, metrics);// 圆圈直径
-        final float defaultStrokeWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2f, metrics);// 圆圈线条宽度
+        final float defaultDiameter = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 88f, metrics);// 圆圈直径
+        final float defaultStrokeWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4f, metrics);// 圆圈线条宽度
 
         LayoutParams circleLp = new LayoutParams((int) defaultDiameter, (int) defaultDiameter);
         circleLp.gravity = Gravity.CENTER;

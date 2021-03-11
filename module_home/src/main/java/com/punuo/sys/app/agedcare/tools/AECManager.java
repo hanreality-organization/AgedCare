@@ -33,9 +33,13 @@ public class AECManager {
     }
 
     public boolean initAEC(int audioSession) {
-        canceler = AcousticEchoCanceler.create(audioSession); 
-        canceler.setEnabled(true);
-        return canceler.getEnabled();
+        canceler = AcousticEchoCanceler.create(audioSession);
+        if (canceler != null) {
+            canceler.setEnabled(true);
+            return canceler.getEnabled();
+        } else {
+            return false;
+        }
     }
 
     /**

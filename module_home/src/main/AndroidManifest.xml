@@ -69,7 +69,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".receiver.SosReceiver"
+            android:name=".receiver.SOSReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

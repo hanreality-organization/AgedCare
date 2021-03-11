@@ -115,7 +115,9 @@ public class VideoCallActivity extends AppCompatActivity {
             @Override
             public void surfaceDestroyed(SurfaceHolder holder) {
                 H264VideoEncoder.getInstance().close();
-
+                if (engine != null) {
+                    engine.stopPreview();
+                }
             }
         });
         mTimer.schedule(new CheckFrameTask(), 0, 10000);
