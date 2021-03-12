@@ -1,7 +1,6 @@
 package com.punuo.sys.app.agedcare.video;
 
 import android.os.StrictMode;
-import android.util.Log;
 
 import com.punuo.sip.H264Config;
 import com.punuo.sip.user.H264ConfigUser;
