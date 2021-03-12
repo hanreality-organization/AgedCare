@@ -1,8 +1,8 @@
 //编译环境的统一
 ext.sdk = [
         packageName : 'com.punuo.sys.app.agedcare',
-        versionCode : 2,
-        versionName : "1.0.1",
+        versionCode : 3,
+        versionName : "2.0.0",
         minSdkVersion          : 21,
         targetSdkVersion       : 26,
         compileSdkVersion      : 28,
