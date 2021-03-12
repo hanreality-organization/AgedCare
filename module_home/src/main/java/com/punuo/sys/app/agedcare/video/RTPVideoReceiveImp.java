@@ -112,7 +112,6 @@ public class RTPVideoReceiveImp implements RTPAppIntf {
 
         preSeq = seqNum;
         state = 1;
-        Log.d(TAG, "handleFirstPacket");
     }
 
     private boolean isMiddlePacket(byte[] data) {
@@ -127,7 +126,6 @@ public class RTPVideoReceiveImp implements RTPAppIntf {
             e1.printStackTrace();
         }
         preSeq = seqNum;
-        Log.d(TAG, "handleMiddlePacket");
     }
 
     private boolean isLastPacket(byte[] data) {
@@ -145,7 +143,6 @@ public class RTPVideoReceiveImp implements RTPAppIntf {
         preSeq = seqNum;
         state = 0;
         isKeyFrame = false;
-        Log.d(TAG, "handleLastPacket");
     }
 
     public void getNalData(byte[] data, int seqNum, int len) {
@@ -215,6 +212,5 @@ public class RTPVideoReceiveImp implements RTPAppIntf {
         }
         preSeq = seqNum;
         state = 0;
-        Log.d(TAG, "handleCompletePacket");
     }
 }
