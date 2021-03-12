@@ -45,9 +45,6 @@ public class SingleMonitorActivity extends BaseActivity implements SurfaceHolder
     SurfaceView mSurfaceView;
     @BindView(R2.id.video_back)
     View videoBack;
-    private final int previewFrameRate = 15;  //演示帧率
-    private final int previewWidth = 640;     //水平像素
-    private final int previewHeight = 480;    //垂直像素
     private EzCamera engine;
     private VoiceEncoderThread mVoiceEncoderThread;
 
@@ -159,8 +156,8 @@ public class SingleMonitorActivity extends BaseActivity implements SurfaceHolder
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        startPreview(holder, previewWidth, previewHeight, previewFrameRate);
-        H264VideoEncoder.getInstance().initEncoder(previewWidth, previewHeight, previewFrameRate);
+        startPreview(holder, H264ConfigDev.VIDEO_WIDTH, H264ConfigDev.VIDEO_HEIGHT, H264ConfigDev.FRAME_RATE);
+        H264VideoEncoder.getInstance().initEncoder(H264ConfigDev.VIDEO_WIDTH, H264ConfigDev.VIDEO_HEIGHT, H264ConfigDev.FRAME_RATE);
         H264VideoEncoder.getInstance().startEncoderThread();
     }
 

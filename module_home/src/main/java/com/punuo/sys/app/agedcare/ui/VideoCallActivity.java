@@ -35,6 +35,7 @@ import com.punuo.sys.app.agedcare.video.VideoPlayThread;
 import com.punuo.sys.app.router.HomeRouter;
 import com.punuo.sys.sdk.account.AccountManager;
 import com.punuo.sys.sdk.event.FrameTimeoutEvent;
+import com.punuo.sys.sdk.util.CommonUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -76,7 +77,8 @@ public class VideoCallActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         //监听视频流
         mRTPVideoReceiveImp = new RTPVideoReceiveImp(H264ConfigUser.rtpIp, H264ConfigUser.rtpPort);
-
+        mSurfaceViewBack.getLayoutParams().height = CommonUtil.getHeight();
+        mSurfaceViewBack.getLayoutParams().width = CommonUtil.getHeight() * H264ConfigUser.VIDEO_WIDTH / H264ConfigUser.VIDEO_HEIGHT;
         mSurfaceViewBack.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
@@ -107,8 +109,8 @@ public class VideoCallActivity extends AppCompatActivity {
 
             @Override
             public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-                startPreview(holder, previewWidth, previewHeight, previewFrameRate);
-                H264VideoEncoder.getInstance().initEncoder(previewWidth, previewHeight, previewFrameRate);
+                startPreview(holder, H264ConfigDev.VIDEO_WIDTH, H264ConfigDev.VIDEO_HEIGHT, H264ConfigDev.FRAME_RATE);
+                H264VideoEncoder.getInstance().initEncoder(H264ConfigDev.VIDEO_WIDTH, H264ConfigDev.VIDEO_HEIGHT, H264ConfigDev.FRAME_RATE);
                 H264VideoEncoder.getInstance().startEncoderThread();
             }
 

@@ -21,17 +21,9 @@ public class H264ConfigDev {
     /**
      * video frame rate
      */
-    public static int FRAME_RATE = 10;
-    /**
-     * video type
-     */
-    public static int VIDEO_TYPE = 2;
-    /**
-     * Default video rtmp address
-     */
-    public static String RTMP_STREAM = "rtmp://101.69.255.130:1936/hls/310023005801930001";
+    public static int FRAME_RATE = 15;
 
-    public static String rtpIp = "101.69.255.134";
+    public static String rtpIp;
     public static int rtpPort;
     public static byte[] magic;
 
