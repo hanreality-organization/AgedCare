@@ -69,7 +69,7 @@ dependencies {
     api 'org.greenrobot:eventbus:3.0.0'
     api 'com.jakewharton:butterknife:10.0.0'
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$gradle.sdk.kotlin_version"
-    api 'com.github.hanreality:SipLib:1.1.0'
+    api 'com.github.hanreality:SipLib:1.2.0'
     api ('com.alibaba:arouter-api:1.5.0') {
         exclude module: 'support-v4'
     }
