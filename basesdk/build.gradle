@@ -47,6 +47,7 @@ dependencies {
     api 'androidx.recyclerview:recyclerview:1.0.0'
     api 'androidx.cardview:cardview:1.0.0'
     api 'androidx.gridlayout:gridlayout:1.0.0'
+    api 'androidx.multidex:multidex:2.0.1'
     api 'com.google.android.material:material:1.0.0'
     api 'com.tencent:mmkv:1.0.22'
     api 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
@@ -90,24 +91,23 @@ dependencies {
     api "com.github.Raizlabs.DBFlow:dbflow-sqlcipher:$gradle.sdk.dbflow_version"
     api 'com.github.hanreality-organization:EzCameraKit:1.0.02'
     api 'com.aill:AndroidSerialPort:1.0.8'
-    /////////////
+    api 'com.tencent.bugly:crashreport:2.8.6.0'
     api 'com.github.open-android:Zxing:v1.0.3'
-    api 'com.hjq:xxpermissions:6.2'
-    api 'com.zhy:okhttputils:2.0.0'
-    api 'org.litepal.android:core:1.4.1'
-    api ('com.jude:rollviewpager:1.2.9'){
-        exclude group: 'com.android.support' , module:'v4'
-    }
-    api 'pub.devrel:easypermissions:0.3.0'
     api 'com.danikula:videocache:2.7.0'
+    /////////////
+//    api 'org.litepal.android:core:1.4.1'
+//    api ('com.jude:rollviewpager:1.2.9'){
+//        exclude group: 'com.android.support' , module:'v4'
+//    }
+//    api 'pub.devrel:easypermissions:0.3.0'
 
 
-    api files('libs/photoview124.jar')
+//    api files('libs/photoview124.jar')
     // 语音交互新增
-    api files('libs/AliRTCSdk.jar')
-    api files('libs/utdid4all-1.5.0-proguard.jar')
-    api files('libs/bdasr_V3_20191210_81acdf5.jar')
-    api files('libs/com.baidu.tts_2.6.1.108.20200217_5adcfb6.jar')
-    api files('libs/Msc.jar')
+//    api files('libs/AliRTCSdk.jar')
+//    api files('libs/utdid4all-1.5.0-proguard.jar')
+//    api files('libs/bdasr_V3_20191210_81acdf5.jar')
+//    api files('libs/com.baidu.tts_2.6.1.108.20200217_5adcfb6.jar')
+//    api files('libs/Msc.jar')
 
 }

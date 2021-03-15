@@ -3,9 +3,12 @@ package com.punuo.sys.sdk;
 import android.app.Application;
 import android.content.Context;
 
+import androidx.multidex.MultiDex;
+
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.punuo.sys.sdk.util.DeviceHelper;
 import com.raizlabs.android.dbflow.config.FlowManager;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.mmkv.MMKV;
 
 
@@ -33,11 +36,28 @@ public class PnApplication extends Application {
         }
         ARouter.init(this);
         FlowManager.init(this);
+        initCrashReport();
     }
 
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MMKV.initialize(base);
+        MultiDex.install(base);
+    }
+
+    public void initCrashReport() {
+        try {
+            if (DeviceHelper.isApkInDebug()) {
+                return;
+            }
+            final Context context = getApplicationContext();
+            CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(context);
+            strategy.setAppChannel("Android"); //渠道
+
+            CrashReport.initCrashReport(context, "78b5d55348", DeviceHelper.isApkInDebug(), strategy);
+        } catch (Throwable ignore) {
+            ignore.printStackTrace();
+        }
     }
 }

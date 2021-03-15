@@ -34,7 +34,7 @@ public class ErrorServiceUser extends NormalUserRequestService<String> {
             if (!AccountManager.isLogin()) {
                 ToastUtils.showToast("账号密码错误");
             }
-        } else if (code == 400) {
+        } else if (code == 400 || code == 402) {
 
         } else {
             HandlerExceptionUtils.handleException(new ErrorTipException(BaseSipResponses.reasonOf(code)));

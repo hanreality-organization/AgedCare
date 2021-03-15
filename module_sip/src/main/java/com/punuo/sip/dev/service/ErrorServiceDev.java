@@ -29,7 +29,7 @@ public class ErrorServiceDev extends NormalDevRequestService<String> {
             return;
         } else if (code == 401) {
             EventBus.getDefault().post(new DevLoginFailEvent());
-        } else if (code == 400) {
+        } else if (code == 400 || code == 402) {
             return;
         } else {
             HandlerExceptionUtils.handleException(new ErrorTipException(BaseSipResponses.reasonOf(code)));
