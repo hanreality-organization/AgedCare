@@ -94,20 +94,5 @@ dependencies {
     api 'com.tencent.bugly:crashreport:2.8.6.0'
     api 'com.github.open-android:Zxing:v1.0.3'
     api 'com.danikula:videocache:2.7.0'
-    /////////////
-//    api 'org.litepal.android:core:1.4.1'
-//    api ('com.jude:rollviewpager:1.2.9'){
-//        exclude group: 'com.android.support' , module:'v4'
-//    }
-//    api 'pub.devrel:easypermissions:0.3.0'
-
-
-//    api files('libs/photoview124.jar')
-    // 语音交互新增
-//    api files('libs/AliRTCSdk.jar')
-//    api files('libs/utdid4all-1.5.0-proguard.jar')
-//    api files('libs/bdasr_V3_20191210_81acdf5.jar')
-//    api files('libs/com.baidu.tts_2.6.1.108.20200217_5adcfb6.jar')
-//    api files('libs/Msc.jar')
 
 }
